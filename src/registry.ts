@@ -1,54 +1,39 @@
-import { BigInt } from "@graphprotocol/graph-ts"
 import {
-  Registry,
-  AdminChanged,
-  BeaconUpgraded,
-  Upgraded
-} from "../generated/Registry/Registry"
-import { ExampleEntity } from "../generated/schema"
+  Initialized as InitializedEvent,
+  ProfileCreated as ProfileCreatedEvent,
+  ProfileMetadataUpdated as ProfileMetadataUpdatedEvent,
+  ProfileNameUpdated as ProfileNameUpdatedEvent,
+  ProfileOwnerUpdated as ProfileOwnerUpdatedEvent,
+  ProfilePendingOwnerUpdated as ProfilePendingOwnerUpdatedEvent,
+  RoleAdminChanged as RoleAdminChangedEvent,
+  RoleGranted as RoleGrantedEvent,
+  RoleRevoked as RoleRevokedEvent,
+} from '../generated/Registry/Registry';
+import { Project } from '../generated/schema';
+import { ProjectMetadata } from '../generated/templates';
+import { BigInt, log } from '@graphprotocol/graph-ts';
 
-export function handleAdminChanged(event: AdminChanged): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from)
+export function handleProfileCreated(event: ProfileCreatedEvent): void {
+  if (event.params.metadata.protocol == BigInt.fromString('103115010001001')) {
+    let entity = new Project(
+      event.transaction.hash.concatI32(event.logIndex.toI32())
+    );
 
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (!entity) {
-    entity = new ExampleEntity(event.transaction.from)
+    entity.profileId = event.params.profileId;
+    entity.nonce = event.params.nonce;
+    entity.name = event.params.name;
+    entity.metadata_protocol = event.params.metadata.protocol;
+    entity.metadata_pointer = event.params.metadata.pointer;
+    entity.metadata = event.params.metadata.pointer;
+    entity.owner = event.params.owner;
+    entity.anchor = event.params.anchor;
 
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
+    entity.blockNumber = event.block.number;
+    entity.blockTimestamp = event.block.timestamp;
+    entity.transactionHash = event.transaction.hash;
+
+    ProjectMetadata.create(event.params.metadata.pointer);
+
+    entity.save();
   }
-
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-
-  // Entity fields can be set based on event parameters
-  entity.previousAdmin = event.params.previousAdmin
-  entity.newAdmin = event.params.newAdmin
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // None
 }
-
-export function handleBeaconUpgraded(event: BeaconUpgraded): void {}
-
-export function handleUpgraded(event: Upgraded): void {}

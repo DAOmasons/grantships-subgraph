@@ -2,7 +2,7 @@ specVersion: 1.0.0
 indexerHints:
   prune: auto
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: Registry
@@ -19,21 +19,21 @@ dataSources:
         - Project
       abis:
         - name: Registry
-          file: ./abis/Registry.json
+          file: Registry/abis/Registry.json
       eventHandlers:
         - event: ProfileCreated(indexed bytes32,uint256,string,(uint256,string),address,address)
           handler: handleProfileCreated
-      file: ./src/registry.ts
+      file: Registry/Registry.wasm
 templates:
   - name: ProjectMetadata
     kind: file/ipfs
     mapping:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/project-metadata.ts
+      file: templates/ProjectMetadata/ProjectMetadata.wasm
       handler: handleProjectMetadata
       entities:
         - ProjectMetadata
       abis:
         - name: ProjectMetadata
-          file: ./abis/EmptyABI.json
+          file: ProjectMetadata/abis/EmptyABI.json
