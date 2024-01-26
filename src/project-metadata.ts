@@ -15,25 +15,16 @@ export function handleProjectMetadata(content: Bytes): void {
     const discord = value.get('discord');
     const telegram = value.get('telegram');
 
-    if (
-      name &&
-      description &&
-      avatarHash_IPFS &&
-      email &&
-      x &&
-      github &&
-      discord &&
-      telegram
-    ) {
-      projectMetadata.name = name.toString();
-      projectMetadata.description = description.toString();
-      projectMetadata.avatarHash_IPFS = avatarHash_IPFS.toString();
-      projectMetadata.email = email.toString();
-      projectMetadata.x = x.toString();
-      projectMetadata.github = github.toString();
-      projectMetadata.discord = discord.toString();
-      projectMetadata.telegram = telegram.toString();
-    }
+    projectMetadata.name = name ? name.toString() : null;
+    projectMetadata.description = description ? description.toString() : null;
+    projectMetadata.avatarHash_IPFS = avatarHash_IPFS
+      ? avatarHash_IPFS.toString()
+      : null;
+    projectMetadata.email = email ? email.toString() : null;
+    projectMetadata.x = x ? x.toString() : null;
+    projectMetadata.github = github ? github.toString() : null;
+    projectMetadata.discord = discord ? discord.toString() : null;
+    projectMetadata.telegram = telegram ? telegram.toString() : null;
 
     projectMetadata.save();
   }

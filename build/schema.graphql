@@ -4,7 +4,8 @@ type Project @entity {
   nonce: BigInt! # uint256
   name: String! # string
   metadata_protocol: BigInt! # uint256
-  metadata_pointer: ProjectMetadata!
+  metadata_pointer: String!
+  metadata: ProjectMetadata! # ProjectMetadata
   owner: Bytes! # address
   anchor: Bytes! # address
   blockNumber: BigInt!
@@ -13,12 +14,12 @@ type Project @entity {
 }
 type ProjectMetadata @entity(immutable: true) {
   id: String!
-  name: String!
-  description: String!
-  avatarHash_IPFS: String!
-  email: String!
-  x: String!
-  github: String!
-  discord: String!
-  telegram: String!
+  name: String
+  description: String
+  avatarHash_IPFS: String
+  email: String
+  x: String
+  github: String
+  discord: String
+  telegram: String
 }

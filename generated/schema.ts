@@ -117,6 +117,19 @@ export class Project extends Entity {
     this.set("metadata_pointer", Value.fromString(value));
   }
 
+  get metadata(): string {
+    let value = this.get("metadata");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set metadata(value: string) {
+    this.set("metadata", Value.fromString(value));
+  }
+
   get owner(): Bytes {
     let value = this.get("owner");
     if (!value || value.kind == ValueKind.NULL) {
@@ -224,107 +237,139 @@ export class ProjectMetadata extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get name(): string {
+  get name(): string | null {
     let value = this.get("name");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set name(value: string) {
-    this.set("name", Value.fromString(value));
+  set name(value: string | null) {
+    if (!value) {
+      this.unset("name");
+    } else {
+      this.set("name", Value.fromString(<string>value));
+    }
   }
 
-  get description(): string {
+  get description(): string | null {
     let value = this.get("description");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set description(value: string) {
-    this.set("description", Value.fromString(value));
+  set description(value: string | null) {
+    if (!value) {
+      this.unset("description");
+    } else {
+      this.set("description", Value.fromString(<string>value));
+    }
   }
 
-  get avatarHash_IPFS(): string {
+  get avatarHash_IPFS(): string | null {
     let value = this.get("avatarHash_IPFS");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set avatarHash_IPFS(value: string) {
-    this.set("avatarHash_IPFS", Value.fromString(value));
+  set avatarHash_IPFS(value: string | null) {
+    if (!value) {
+      this.unset("avatarHash_IPFS");
+    } else {
+      this.set("avatarHash_IPFS", Value.fromString(<string>value));
+    }
   }
 
-  get email(): string {
+  get email(): string | null {
     let value = this.get("email");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set email(value: string) {
-    this.set("email", Value.fromString(value));
+  set email(value: string | null) {
+    if (!value) {
+      this.unset("email");
+    } else {
+      this.set("email", Value.fromString(<string>value));
+    }
   }
 
-  get x(): string {
+  get x(): string | null {
     let value = this.get("x");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set x(value: string) {
-    this.set("x", Value.fromString(value));
+  set x(value: string | null) {
+    if (!value) {
+      this.unset("x");
+    } else {
+      this.set("x", Value.fromString(<string>value));
+    }
   }
 
-  get github(): string {
+  get github(): string | null {
     let value = this.get("github");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set github(value: string) {
-    this.set("github", Value.fromString(value));
+  set github(value: string | null) {
+    if (!value) {
+      this.unset("github");
+    } else {
+      this.set("github", Value.fromString(<string>value));
+    }
   }
 
-  get discord(): string {
+  get discord(): string | null {
     let value = this.get("discord");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set discord(value: string) {
-    this.set("discord", Value.fromString(value));
+  set discord(value: string | null) {
+    if (!value) {
+      this.unset("discord");
+    } else {
+      this.set("discord", Value.fromString(<string>value));
+    }
   }
 
-  get telegram(): string {
+  get telegram(): string | null {
     let value = this.get("telegram");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set telegram(value: string) {
-    this.set("telegram", Value.fromString(value));
+  set telegram(value: string | null) {
+    if (!value) {
+      this.unset("telegram");
+    } else {
+      this.set("telegram", Value.fromString(<string>value));
+    }
   }
 }
