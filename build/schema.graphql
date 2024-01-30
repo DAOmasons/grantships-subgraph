@@ -12,6 +12,7 @@ type Project @entity {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
 type ProjectMetadata @entity(immutable: true) {
   id: String!
   name: String
@@ -22,4 +23,33 @@ type ProjectMetadata @entity(immutable: true) {
   github: String
   discord: String
   telegram: String
+  website: String
+}
+
+type ShipProfile @entity {
+  id: Bytes!
+  profileId: Bytes! # bytes32
+  nonce: BigInt! # uint256
+  name: String! # string
+  metadata_protocol: BigInt! # uint256
+  metadata_pointer: String!
+  metadata: ShipProfileMetadata! # ShipProfileMetadata
+  owner: Bytes! # address
+  anchor: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ShipProfileMetadata @entity(immutable: true) {
+  id: String!
+  name: String
+  mission: String
+  avatarHash_IPFS: String
+  email: String
+  x: String
+  github: String
+  discord: String
+  telegram: String
+  website: String
 }

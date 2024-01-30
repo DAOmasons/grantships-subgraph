@@ -11,3 +11,13 @@ export class ProjectMetadata extends DataSourceTemplate {
     DataSourceTemplate.createWithContext("ProjectMetadata", [cid], context);
   }
 }
+
+export class ShipProfileMetadata extends DataSourceTemplate {
+  static create(cid: string): void {
+    DataSourceTemplate.create("ShipProfileMetadata", [cid]);
+  }
+
+  static createWithContext(cid: string, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext("ShipProfileMetadata", [cid], context);
+  }
+}
