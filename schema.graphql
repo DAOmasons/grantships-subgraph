@@ -11,6 +11,7 @@ type Project @entity {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  members: ProfileMemberGroup
 }
 
 type ProjectMetadata @entity(immutable: true) {
@@ -52,4 +53,9 @@ type ShipProfileMetadata @entity(immutable: true) {
   discord: String
   telegram: String
   website: String
+}
+
+type ProfileMemberGroup @entity {
+  id: Bytes!
+  addresses: [Bytes!]
 }

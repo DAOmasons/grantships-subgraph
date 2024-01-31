@@ -194,6 +194,23 @@ export class Project extends Entity {
   set transactionHash(value: Bytes) {
     this.set("transactionHash", Value.fromBytes(value));
   }
+
+  get members(): Bytes | null {
+    let value = this.get("members");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set members(value: Bytes | null) {
+    if (!value) {
+      this.unset("members");
+    } else {
+      this.set("members", Value.fromBytes(<Bytes>value));
+    }
+  }
 }
 
 export class ProjectMetadata extends Entity {
@@ -771,6 +788,67 @@ export class ShipProfileMetadata extends Entity {
       this.unset("website");
     } else {
       this.set("website", Value.fromString(<string>value));
+    }
+  }
+}
+
+export class ProfileMemberGroup extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set("id", Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save ProfileMemberGroup entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type ProfileMemberGroup must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("ProfileMemberGroup", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static loadInBlock(id: Bytes): ProfileMemberGroup | null {
+    return changetype<ProfileMemberGroup | null>(
+      store.get_in_block("ProfileMemberGroup", id.toHexString()),
+    );
+  }
+
+  static load(id: Bytes): ProfileMemberGroup | null {
+    return changetype<ProfileMemberGroup | null>(
+      store.get("ProfileMemberGroup", id.toHexString()),
+    );
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get addresses(): Array<Bytes> | null {
+    let value = this.get("addresses");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytesArray();
+    }
+  }
+
+  set addresses(value: Array<Bytes> | null) {
+    if (!value) {
+      this.unset("addresses");
+    } else {
+      this.set("addresses", Value.fromBytesArray(<Array<Bytes>>value));
     }
   }
 }

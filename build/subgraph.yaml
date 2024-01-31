@@ -17,12 +17,13 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Project
+        - ProfileMemberGroup
       abis:
         - name: Registry
           file: Registry/abis/Registry.json
       eventHandlers:
         - event: ProfileCreated(indexed bytes32,uint256,string,(uint256,string),address,address)
-          handler: handleProfileCreated
+          handler: handleProfileCreatedEvent
       file: Registry/Registry.wasm
 templates:
   - name: ProjectMetadata
