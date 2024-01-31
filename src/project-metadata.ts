@@ -3,6 +3,7 @@ import { ProjectMetadata } from "../generated/schema";
 
 export function handleProjectMetadata(content: Bytes): void {
   let projectMetadata = new ProjectMetadata(dataSource.stringParam());
+
   const value = json.fromBytes(content).toObject();
 
   if (value) {
@@ -14,6 +15,7 @@ export function handleProjectMetadata(content: Bytes): void {
     const github = value.get("github");
     const discord = value.get("discord");
     const telegram = value.get("telegram");
+    const website = value.get("telegram");
 
     projectMetadata.name = name ? name.toString() : null;
     projectMetadata.description = description ? description.toString() : null;
@@ -25,8 +27,7 @@ export function handleProjectMetadata(content: Bytes): void {
     projectMetadata.github = github ? github.toString() : null;
     projectMetadata.discord = discord ? discord.toString() : null;
     projectMetadata.telegram = telegram ? telegram.toString() : null;
-    projectMetadata.website = telegram ? telegram.toString() : null;
-
+    projectMetadata.website = website ? website.toString() : null;
     projectMetadata.save();
   }
 }

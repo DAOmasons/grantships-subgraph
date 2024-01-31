@@ -24,6 +24,10 @@ dataSources:
       eventHandlers:
         - event: ProfileCreated(indexed bytes32,uint256,string,(uint256,string),address,address)
           handler: handleProfileCreatedEvent
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGrantedEvent
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevokedEvent
       file: Registry/Registry.wasm
 templates:
   - name: ProjectMetadata

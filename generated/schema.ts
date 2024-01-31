@@ -117,17 +117,21 @@ export class Project extends Entity {
     this.set("metadata_pointer", Value.fromString(value));
   }
 
-  get metadata(): string {
+  get metadata(): string | null {
     let value = this.get("metadata");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set metadata(value: string) {
-    this.set("metadata", Value.fromString(value));
+  set metadata(value: string | null) {
+    if (!value) {
+      this.unset("metadata");
+    } else {
+      this.set("metadata", Value.fromString(<string>value));
+    }
   }
 
   get owner(): Bytes {
@@ -592,6 +596,23 @@ export class ShipProfile extends Entity {
 
   set transactionHash(value: Bytes) {
     this.set("transactionHash", Value.fromBytes(value));
+  }
+
+  get alloProfileMembers(): Bytes | null {
+    let value = this.get("alloProfileMembers");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set alloProfileMembers(value: Bytes | null) {
+    if (!value) {
+      this.unset("alloProfileMembers");
+    } else {
+      this.set("alloProfileMembers", Value.fromBytes(<Bytes>value));
+    }
   }
 }
 

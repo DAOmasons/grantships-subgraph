@@ -5,7 +5,7 @@ type Project @entity {
   name: String! # string
   metadata_protocol: BigInt! # uint256
   metadata_pointer: String!
-  metadata: ProjectMetadata! # ProjectMetadata
+  metadata: ProjectMetadata # ProjectMetadata
   owner: Bytes! # address
   anchor: Bytes! # address
   blockNumber: BigInt!
@@ -40,6 +40,7 @@ type ShipProfile @entity {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  alloProfileMembers: ProfileMemberGroup
 }
 
 type ShipProfileMetadata @entity(immutable: true) {

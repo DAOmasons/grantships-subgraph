@@ -14,8 +14,29 @@ import { Project, ShipProfile, ProfileMemberGroup } from "../generated/schema";
 import { ProjectMetadata, ShipProfileMetadata } from "../generated/templates";
 import { BigInt, log } from "@graphprotocol/graph-ts";
 
+export function handleRoleRevokedEvent(event: RoleRevokedEvent): void {
+  let entityId = event.params.role;
+  let memberGroup = ProfileMemberGroup.load(entityId);
+
+  if (memberGroup == null) {
+    return;
+  }
+
+  let tempAddresses = memberGroup.addresses;
+  if (tempAddresses == null) {
+    return;
+  }
+
+  let index = tempAddresses.indexOf(event.params.account);
+  if (index > -1) {
+    tempAddresses.splice(index, 1); // If found, remove it
+  }
+
+  memberGroup.addresses = tempAddresses;
+  memberGroup.save();
+}
+
 export function handleRoleGrantedEvent(event: RoleGrantedEvent): void {
-  log.info("Message to be displayed: {}", ["A"]);
   let entityId = event.params.role;
   let memberGroup = ProfileMemberGroup.load(entityId);
   if (memberGroup == null) {
@@ -35,12 +56,25 @@ export function handleRoleGrantedEvent(event: RoleGrantedEvent): void {
 export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
   let entityId = event.params.profileId;
 
-  if (event.params.metadata.protocol == BigInt.fromString("103115010001000")) {
+  if (
+    event.params.metadata.protocol == BigInt.fromString("103115010001003") ||
+    event.params.metadata.protocol == BigInt.fromString("103115010001000")
+  ) {
     let project = Project.load(entityId);
 
     if (project == null) {
       project = new Project(entityId);
     }
+
+    let memberGroup = ProfileMemberGroup.load(entityId);
+    if (memberGroup == null) {
+      memberGroup = new ProfileMemberGroup(entityId);
+      memberGroup.addresses = [];
+      memberGroup.save();
+    }
+
+    project.members = entityId;
+
     project.profileId = event.params.profileId;
     project.nonce = event.params.nonce;
     project.name = event.params.name;
@@ -67,6 +101,15 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
       shipProfile = new ShipProfile(entityId);
     }
 
+    let memberGroup = ProfileMemberGroup.load(entityId);
+    if (memberGroup == null) {
+      memberGroup = new ProfileMemberGroup(entityId);
+      memberGroup.addresses = [];
+      memberGroup.save();
+    }
+
+    shipProfile.alloProfileMembers = entityId;
+
     shipProfile.profileId = event.params.profileId;
     shipProfile.nonce = event.params.nonce;
     shipProfile.name = event.params.name;
@@ -85,3 +128,13 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     shipProfile.save();
   }
 }
+
+// Check duplicate metadatas?
+// add alloProfileMembers to shipProfile
+// find roleRevoked event in the registry contract
+
+// update the ships
+// theres enough sample data to populate a feed - how do we want to model the feed schema
+// Add the member entities
+
+//find role revoked in those contracts
