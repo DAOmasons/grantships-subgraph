@@ -60,3 +60,10 @@ type ProfileMemberGroup @entity {
   id: Bytes!
   addresses: [Bytes!]
 }
+
+type Transaction @entity {
+  id: ID!
+  blockNumber: BigInt!
+  sender: Bytes! # address
+  txHash: Bytes!
+}
