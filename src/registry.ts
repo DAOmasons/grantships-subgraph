@@ -35,7 +35,7 @@ export function handleRoleRevokedEvent(event: RoleRevokedEvent): void {
 
   memberGroup.addresses = tempAddresses;
   memberGroup.save();
-  // addTransaction(event.block, event.transaction);
+  // Don't need to use addTransaction here, as we are not handling this event on app.
 }
 
 export function handleRoleGrantedEvent(event: RoleGrantedEvent): void {
@@ -54,7 +54,7 @@ export function handleRoleGrantedEvent(event: RoleGrantedEvent): void {
   memberGroup.addresses = tempAddresses;
   memberGroup.save();
 
-  // Don't need to add transaction here, as it's already added in the handleProfileCreatedEvent
+  // Don't need to use addTransaction here, as it's already added in the handleProfileCreatedEvent
 }
 
 export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
@@ -95,7 +95,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     project.save();
     addTransaction(event.block, event.transaction);
   } else if (
-    event.params.metadata.protocol == BigInt.fromString('103115010001002')
+    event.params.metadata.protocol == BigInt.fromString('103115010001004')
   ) {
     let shipProfile = ShipProfile.load(entityId);
 
