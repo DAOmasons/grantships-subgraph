@@ -8,11 +8,12 @@ import {
   RoleAdminChanged as RoleAdminChangedEvent,
   RoleGranted as RoleGrantedEvent,
   RoleRevoked as RoleRevokedEvent,
-} from "../generated/Registry/Registry";
+} from '../generated/Registry/Registry';
 
-import { Project, ShipProfile, ProfileMemberGroup } from "../generated/schema";
-import { ProjectMetadata, ShipProfileMetadata } from "../generated/templates";
-import { BigInt, log } from "@graphprotocol/graph-ts";
+import { Project, ShipProfile, ProfileMemberGroup } from '../generated/schema';
+import { ProjectMetadata, ShipProfileMetadata } from '../generated/templates';
+import { BigInt, log } from '@graphprotocol/graph-ts';
+import { addTransaction } from './utils/addTransaction';
 
 export function handleRoleRevokedEvent(event: RoleRevokedEvent): void {
   let entityId = event.params.role;
@@ -34,6 +35,7 @@ export function handleRoleRevokedEvent(event: RoleRevokedEvent): void {
 
   memberGroup.addresses = tempAddresses;
   memberGroup.save();
+  // Don't need to use addTransaction here, as we are not handling this event on app.
 }
 
 export function handleRoleGrantedEvent(event: RoleGrantedEvent): void {
@@ -51,15 +53,14 @@ export function handleRoleGrantedEvent(event: RoleGrantedEvent): void {
   tempAddresses.push(event.params.account);
   memberGroup.addresses = tempAddresses;
   memberGroup.save();
+
+  // Don't need to use addTransaction here, as it's already added in the handleProfileCreatedEvent
 }
 
 export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
   let entityId = event.params.profileId;
 
-  if (
-    event.params.metadata.protocol == BigInt.fromString("103115010001003") ||
-    event.params.metadata.protocol == BigInt.fromString("103115010001000")
-  ) {
+  if (event.params.metadata.protocol == BigInt.fromString('103115010001003')) {
     let project = Project.load(entityId);
 
     if (project == null) {
@@ -92,8 +93,9 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     ProjectMetadata.create(event.params.metadata.pointer);
 
     project.save();
+    addTransaction(event.block, event.transaction);
   } else if (
-    event.params.metadata.protocol == BigInt.fromString("103115010001002")
+    event.params.metadata.protocol == BigInt.fromString('103115010001004')
   ) {
     let shipProfile = ShipProfile.load(entityId);
 
@@ -126,6 +128,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     ShipProfileMetadata.create(event.params.metadata.pointer);
 
     shipProfile.save();
+    addTransaction(event.block, event.transaction);
   }
 }
 
