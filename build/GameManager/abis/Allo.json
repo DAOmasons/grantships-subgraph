@@ -1,41 +1,165 @@
 [
-  { "inputs": [], "name": "ALLOCATION_ACTIVE", "type": "error" },
-  { "inputs": [], "name": "ALLOCATION_NOT_ACTIVE", "type": "error" },
-  { "inputs": [], "name": "ALLOCATION_NOT_ENDED", "type": "error" },
-  { "inputs": [], "name": "ALREADY_INITIALIZED", "type": "error" },
-  { "inputs": [], "name": "AMOUNT_MISMATCH", "type": "error" },
-  { "inputs": [], "name": "ANCHOR_ERROR", "type": "error" },
-  { "inputs": [], "name": "ARRAY_MISMATCH", "type": "error" },
-  { "inputs": [], "name": "INVALID", "type": "error" },
-  { "inputs": [], "name": "INVALID_ADDRESS", "type": "error" },
-  { "inputs": [], "name": "INVALID_FEE", "type": "error" },
-  { "inputs": [], "name": "INVALID_METADATA", "type": "error" },
-  { "inputs": [], "name": "INVALID_REGISTRATION", "type": "error" },
-  { "inputs": [], "name": "IS_APPROVED_STRATEGY", "type": "error" },
-  { "inputs": [], "name": "MISMATCH", "type": "error" },
-  { "inputs": [], "name": "NONCE_NOT_AVAILABLE", "type": "error" },
-  { "inputs": [], "name": "NOT_APPROVED_STRATEGY", "type": "error" },
-  { "inputs": [], "name": "NOT_ENOUGH_FUNDS", "type": "error" },
-  { "inputs": [], "name": "NOT_IMPLEMENTED", "type": "error" },
-  { "inputs": [], "name": "NOT_INITIALIZED", "type": "error" },
-  { "inputs": [], "name": "NOT_PENDING_OWNER", "type": "error" },
-  { "inputs": [], "name": "NewOwnerIsZeroAddress", "type": "error" },
-  { "inputs": [], "name": "NoHandoverRequest", "type": "error" },
-  { "inputs": [], "name": "POOL_ACTIVE", "type": "error" },
-  { "inputs": [], "name": "POOL_INACTIVE", "type": "error" },
-  { "inputs": [], "name": "RECIPIENT_ALREADY_ACCEPTED", "type": "error" },
+  {
+    "inputs": [],
+    "name": "ALLOCATION_ACTIVE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ALLOCATION_NOT_ACTIVE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ALLOCATION_NOT_ENDED",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ALREADY_INITIALIZED",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AMOUNT_MISMATCH",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ANCHOR_ERROR",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ARRAY_MISMATCH",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "INVALID",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "INVALID_ADDRESS",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "INVALID_FEE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "INVALID_METADATA",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "INVALID_REGISTRATION",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "IS_APPROVED_STRATEGY",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MISMATCH",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NONCE_NOT_AVAILABLE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NOT_APPROVED_STRATEGY",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NOT_ENOUGH_FUNDS",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NOT_IMPLEMENTED",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NOT_INITIALIZED",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NOT_PENDING_OWNER",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NewOwnerIsZeroAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NoHandoverRequest",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "POOL_ACTIVE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "POOL_INACTIVE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RECIPIENT_ALREADY_ACCEPTED",
+    "type": "error"
+  },
   {
     "inputs": [
-      { "internalType": "address", "name": "recipientId", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "recipientId",
+        "type": "address"
+      }
     ],
     "name": "RECIPIENT_ERROR",
     "type": "error"
   },
-  { "inputs": [], "name": "RECIPIENT_NOT_ACCEPTED", "type": "error" },
-  { "inputs": [], "name": "REGISTRATION_NOT_ACTIVE", "type": "error" },
-  { "inputs": [], "name": "UNAUTHORIZED", "type": "error" },
-  { "inputs": [], "name": "Unauthorized", "type": "error" },
-  { "inputs": [], "name": "ZERO_ADDRESS", "type": "error" },
+  {
+    "inputs": [],
+    "name": "RECIPIENT_NOT_ACCEPTED",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "REGISTRATION_NOT_ACTIVE",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "UNAUTHORIZED",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Unauthorized",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZERO_ADDRESS",
+    "type": "error"
+  },
   {
     "anonymous": false,
     "inputs": [
@@ -199,8 +323,16 @@
       },
       {
         "components": [
-          { "internalType": "uint256", "name": "protocol", "type": "uint256" },
-          { "internalType": "string", "name": "pointer", "type": "string" }
+          {
+            "internalType": "uint256",
+            "name": "protocol",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "pointer",
+            "type": "string"
+          }
         ],
         "indexed": false,
         "internalType": "struct Metadata",
@@ -247,8 +379,16 @@
       },
       {
         "components": [
-          { "internalType": "uint256", "name": "protocol", "type": "uint256" },
-          { "internalType": "string", "name": "pointer", "type": "string" }
+          {
+            "internalType": "uint256",
+            "name": "protocol",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "pointer",
+            "type": "string"
+          }
         ],
         "indexed": false,
         "internalType": "struct Metadata",
@@ -389,21 +529,41 @@
   {
     "inputs": [],
     "name": "DEFAULT_ADMIN_ROLE",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "NATIVE",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_poolId", "type": "uint256" },
-      { "internalType": "address", "name": "_manager", "type": "address" }
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_manager",
+        "type": "address"
+      }
     ],
     "name": "addPoolManager",
     "outputs": [],
@@ -412,7 +572,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_strategy", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_strategy",
+        "type": "address"
+      }
     ],
     "name": "addToCloneableStrategies",
     "outputs": [],
@@ -421,8 +585,16 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_poolId", "type": "uint256" },
-      { "internalType": "bytes", "name": "_data", "type": "bytes" }
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_data",
+        "type": "bytes"
+      }
     ],
     "name": "allocate",
     "outputs": [],
@@ -431,8 +603,16 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256[]", "name": "_poolIds", "type": "uint256[]" },
-      { "internalType": "bytes[]", "name": "_datas", "type": "bytes[]" }
+      {
+        "internalType": "uint256[]",
+        "name": "_poolIds",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "_datas",
+        "type": "bytes[]"
+      }
     ],
     "name": "batchAllocate",
     "outputs": [],
@@ -441,8 +621,16 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256[]", "name": "_poolIds", "type": "uint256[]" },
-      { "internalType": "bytes[]", "name": "_data", "type": "bytes[]" }
+      {
+        "internalType": "uint256[]",
+        "name": "_poolIds",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "_data",
+        "type": "bytes[]"
+      }
     ],
     "name": "batchRegisterRecipient",
     "outputs": [
@@ -464,7 +652,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "pendingOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "pendingOwner",
+        "type": "address"
+      }
     ],
     "name": "completeOwnershipHandover",
     "outputs": [],
@@ -473,63 +665,143 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "_profileId", "type": "bytes32" },
-      { "internalType": "address", "name": "_strategy", "type": "address" },
-      { "internalType": "bytes", "name": "_initStrategyData", "type": "bytes" },
-      { "internalType": "address", "name": "_token", "type": "address" },
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" },
+      {
+        "internalType": "bytes32",
+        "name": "_profileId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_strategy",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_initStrategyData",
+        "type": "bytes"
+      },
+      {
+        "internalType": "address",
+        "name": "_token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
       {
         "components": [
-          { "internalType": "uint256", "name": "protocol", "type": "uint256" },
-          { "internalType": "string", "name": "pointer", "type": "string" }
+          {
+            "internalType": "uint256",
+            "name": "protocol",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "pointer",
+            "type": "string"
+          }
         ],
         "internalType": "struct Metadata",
         "name": "_metadata",
         "type": "tuple"
       },
-      { "internalType": "address[]", "name": "_managers", "type": "address[]" }
+      {
+        "internalType": "address[]",
+        "name": "_managers",
+        "type": "address[]"
+      }
     ],
     "name": "createPool",
     "outputs": [
-      { "internalType": "uint256", "name": "poolId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "_profileId", "type": "bytes32" },
-      { "internalType": "address", "name": "_strategy", "type": "address" },
-      { "internalType": "bytes", "name": "_initStrategyData", "type": "bytes" },
-      { "internalType": "address", "name": "_token", "type": "address" },
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" },
+      {
+        "internalType": "bytes32",
+        "name": "_profileId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_strategy",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_initStrategyData",
+        "type": "bytes"
+      },
+      {
+        "internalType": "address",
+        "name": "_token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
       {
         "components": [
-          { "internalType": "uint256", "name": "protocol", "type": "uint256" },
-          { "internalType": "string", "name": "pointer", "type": "string" }
+          {
+            "internalType": "uint256",
+            "name": "protocol",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "pointer",
+            "type": "string"
+          }
         ],
         "internalType": "struct Metadata",
         "name": "_metadata",
         "type": "tuple"
       },
-      { "internalType": "address[]", "name": "_managers", "type": "address[]" }
+      {
+        "internalType": "address[]",
+        "name": "_managers",
+        "type": "address[]"
+      }
     ],
     "name": "createPoolWithCustomStrategy",
     "outputs": [
-      { "internalType": "uint256", "name": "poolId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "poolId",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_poolId", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
       {
         "internalType": "address[]",
         "name": "_recipientIds",
         "type": "address[]"
       },
-      { "internalType": "bytes", "name": "_data", "type": "bytes" }
+      {
+        "internalType": "bytes",
+        "name": "_data",
+        "type": "bytes"
+      }
     ],
     "name": "distribute",
     "outputs": [],
@@ -538,8 +810,16 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_poolId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
     ],
     "name": "fundPool",
     "outputs": [],
@@ -549,7 +829,13 @@
   {
     "inputs": [],
     "name": "getBaseFee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -569,25 +855,43 @@
   {
     "inputs": [],
     "name": "getPercentFee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_poolId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
     ],
     "name": "getPool",
     "outputs": [
       {
         "components": [
-          { "internalType": "bytes32", "name": "profileId", "type": "bytes32" },
+          {
+            "internalType": "bytes32",
+            "name": "profileId",
+            "type": "bytes32"
+          },
           {
             "internalType": "contract IStrategy",
             "name": "strategy",
             "type": "address"
           },
-          { "internalType": "address", "name": "token", "type": "address" },
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
           {
             "components": [
               {
@@ -595,7 +899,11 @@
                 "name": "protocol",
                 "type": "uint256"
               },
-              { "internalType": "string", "name": "pointer", "type": "string" }
+              {
+                "internalType": "string",
+                "name": "pointer",
+                "type": "string"
+              }
             ],
             "internalType": "struct Metadata",
             "name": "metadata",
@@ -606,7 +914,11 @@
             "name": "managerRole",
             "type": "bytes32"
           },
-          { "internalType": "bytes32", "name": "adminRole", "type": "bytes32" }
+          {
+            "internalType": "bytes32",
+            "name": "adminRole",
+            "type": "bytes32"
+          }
         ],
         "internalType": "struct IAllo.Pool",
         "name": "",
@@ -620,26 +932,50 @@
     "inputs": [],
     "name": "getRegistry",
     "outputs": [
-      { "internalType": "contract IRegistry", "name": "", "type": "address" }
+      {
+        "internalType": "contract IRegistry",
+        "name": "",
+        "type": "address"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" }
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      }
     ],
     "name": "getRoleAdmin",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_poolId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      }
     ],
     "name": "getStrategy",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -647,15 +983,27 @@
     "inputs": [],
     "name": "getTreasury",
     "outputs": [
-      { "internalType": "address payable", "name": "", "type": "address" }
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
     ],
     "name": "grantRole",
     "outputs": [],
@@ -664,25 +1012,55 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
     ],
     "name": "hasRole",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_owner", "type": "address" },
-      { "internalType": "address", "name": "_registry", "type": "address" },
+      {
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_registry",
+        "type": "address"
+      },
       {
         "internalType": "address payable",
         "name": "_treasury",
         "type": "address"
       },
-      { "internalType": "uint256", "name": "_percentFee", "type": "uint256" },
-      { "internalType": "uint256", "name": "_baseFee", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_percentFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_baseFee",
+        "type": "uint256"
+      }
     ],
     "name": "initialize",
     "outputs": [],
@@ -691,30 +1069,68 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_strategy", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_strategy",
+        "type": "address"
+      }
     ],
     "name": "isCloneableStrategy",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_poolId", "type": "uint256" },
-      { "internalType": "address", "name": "_address", "type": "address" }
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
     ],
     "name": "isPoolAdmin",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_poolId", "type": "uint256" },
-      { "internalType": "address", "name": "_address", "type": "address" }
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
     ],
     "name": "isPoolManager",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -722,26 +1138,46 @@
     "inputs": [],
     "name": "owner",
     "outputs": [
-      { "internalType": "address", "name": "result", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "result",
+        "type": "address"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "pendingOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "pendingOwner",
+        "type": "address"
+      }
     ],
     "name": "ownershipHandoverExpiresAt",
     "outputs": [
-      { "internalType": "uint256", "name": "result", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "result",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_token", "type": "address" },
-      { "internalType": "address", "name": "_recipient", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      }
     ],
     "name": "recoverFunds",
     "outputs": [],
@@ -750,17 +1186,35 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_poolId", "type": "uint256" },
-      { "internalType": "bytes", "name": "_data", "type": "bytes" }
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_data",
+        "type": "bytes"
+      }
     ],
     "name": "registerRecipient",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_strategy", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_strategy",
+        "type": "address"
+      }
     ],
     "name": "removeFromCloneableStrategies",
     "outputs": [],
@@ -769,8 +1223,16 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_poolId", "type": "uint256" },
-      { "internalType": "address", "name": "_manager", "type": "address" }
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_manager",
+        "type": "address"
+      }
     ],
     "name": "removePoolManager",
     "outputs": [],
@@ -786,8 +1248,16 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
     ],
     "name": "renounceRole",
     "outputs": [],
@@ -803,8 +1273,16 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
-      { "internalType": "address", "name": "account", "type": "address" }
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
     ],
     "name": "revokeRole",
     "outputs": [],
@@ -813,16 +1291,30 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
+      {
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
+      }
     ],
     "name": "supportsInterface",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -831,7 +1323,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_baseFee", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_baseFee",
+        "type": "uint256"
+      }
     ],
     "name": "updateBaseFee",
     "outputs": [],
@@ -840,7 +1336,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_percentFee", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_percentFee",
+        "type": "uint256"
+      }
     ],
     "name": "updatePercentFee",
     "outputs": [],
@@ -849,11 +1349,23 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_poolId", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_poolId",
+        "type": "uint256"
+      },
       {
         "components": [
-          { "internalType": "uint256", "name": "protocol", "type": "uint256" },
-          { "internalType": "string", "name": "pointer", "type": "string" }
+          {
+            "internalType": "uint256",
+            "name": "protocol",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "pointer",
+            "type": "string"
+          }
         ],
         "internalType": "struct Metadata",
         "name": "_metadata",
@@ -867,7 +1379,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_registry", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_registry",
+        "type": "address"
+      }
     ],
     "name": "updateRegistry",
     "outputs": [],

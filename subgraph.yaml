@@ -41,7 +41,7 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - ShipRecipient
+        - GrantShip
         - GameManager
       abis:
         - name: GameManager
@@ -49,6 +49,7 @@ dataSources:
       eventHandlers:
         - event: Registered(indexed address,bytes,address)
           handler: handleRegisteredEvent
+      file: ./src/game-manager.ts
 templates:
   - name: ProjectMetadata
     kind: file/ipfs

@@ -955,7 +955,7 @@ export class Transaction extends Entity {
   }
 }
 
-export class ShipRecipient extends Entity {
+export class GrantShip extends Entity {
   constructor(id: Bytes) {
     super();
     this.set("id", Value.fromBytes(id));
@@ -963,25 +963,25 @@ export class ShipRecipient extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save ShipRecipient entity without an ID");
+    assert(id != null, "Cannot save GrantShip entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.BYTES,
-        `Entities of type ShipRecipient must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+        `Entities of type GrantShip must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`,
       );
-      store.set("ShipRecipient", id.toBytes().toHexString(), this);
+      store.set("GrantShip", id.toBytes().toHexString(), this);
     }
   }
 
-  static loadInBlock(id: Bytes): ShipRecipient | null {
-    return changetype<ShipRecipient | null>(
-      store.get_in_block("ShipRecipient", id.toHexString()),
+  static loadInBlock(id: Bytes): GrantShip | null {
+    return changetype<GrantShip | null>(
+      store.get_in_block("GrantShip", id.toHexString()),
     );
   }
 
-  static load(id: Bytes): ShipRecipient | null {
-    return changetype<ShipRecipient | null>(
-      store.get("ShipRecipient", id.toHexString()),
+  static load(id: Bytes): GrantShip | null {
+    return changetype<GrantShip | null>(
+      store.get("GrantShip", id.toHexString()),
     );
   }
 
@@ -996,6 +996,19 @@ export class ShipRecipient extends Entity {
 
   set id(value: Bytes) {
     this.set("id", Value.fromBytes(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
   }
 }
 

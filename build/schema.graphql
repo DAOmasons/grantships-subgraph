@@ -67,3 +67,12 @@ type Transaction @entity {
   sender: Bytes! # address
   txHash: Bytes!
 }
+
+type GrantShip @entity {
+  id: Bytes!
+  name: String!
+}
+
+type GameManager @entity {
+  id: Bytes!
+}

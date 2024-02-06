@@ -68,8 +68,9 @@ type Transaction @entity {
   txHash: Bytes!
 }
 
-type ShipRecipient @entity {
+type GrantShip @entity {
   id: Bytes!
+  name: String!
 }
 
 type GameManager @entity {
