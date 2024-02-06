@@ -58,7 +58,6 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
 
   if (
     event.params.metadata.protocol == BigInt.fromString("103115010001003") ||
-    event.params.metadata.protocol == BigInt.fromString("103115010001003") ||
     event.params.metadata.protocol == BigInt.fromString("103115010001000")
   ) {
     let project = Project.load(entityId);
