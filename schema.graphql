@@ -67,3 +67,11 @@ type Transaction @entity {
   sender: Bytes! # address
   txHash: Bytes!
 }
+
+type ShipRecipient @entity {
+  id: Bytes!
+}
+
+type GameManager @entity {
+  id: Bytes!
+}

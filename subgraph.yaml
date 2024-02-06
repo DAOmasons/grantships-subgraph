@@ -29,6 +29,26 @@ dataSources:
         - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
           handler: handleRoleRevokedEvent
       file: ./src/registry.ts
+  - kind: ethereum
+    name: GameManager
+    network: arbitrum-sepolia
+    source:
+      address: "0x2D484ee4395C5ec4c5F1dB5f5CdD7BB9DFeef9Ef"
+      abi: GameManager
+      startBlock: 7823400
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ShipRecipient
+        - GameManager
+      abis:
+        - name: GameManager
+          file: ./abis/GameManager.json
+      eventHandlers:
+        - event: Registered(indexed address,bytes,address)
+          handler: handleRegisteredEvent
 templates:
   - name: ProjectMetadata
     kind: file/ipfs
