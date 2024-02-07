@@ -50,6 +50,16 @@ type GrantShip @entity {
   # Game Manager => RecipientRejected/Accepted
   isApproved: Boolean
   applicationReviewReason: RawMetadata
+  # Game Manager => ShipLaunched
+  poolId: BigInt
+  shipContractAddress: Bytes # address
+  shipLaunched: Boolean
+  # Game Manager => Allocated
+  isAllocated: Boolean
+  allocatedAmount: BigInt
+  # Game Manager => Distributed
+  isDistributed: Boolean
+  distributedAmount: BigInt
 }
 
 type GameManager @entity {

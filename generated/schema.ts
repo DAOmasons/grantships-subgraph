@@ -687,6 +687,113 @@ export class GrantShip extends Entity {
       this.set("applicationReviewReason", Value.fromString(<string>value));
     }
   }
+
+  get poolId(): BigInt | null {
+    let value = this.get("poolId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set poolId(value: BigInt | null) {
+    if (!value) {
+      this.unset("poolId");
+    } else {
+      this.set("poolId", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get shipContractAddress(): Bytes | null {
+    let value = this.get("shipContractAddress");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set shipContractAddress(value: Bytes | null) {
+    if (!value) {
+      this.unset("shipContractAddress");
+    } else {
+      this.set("shipContractAddress", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get shipLaunched(): boolean {
+    let value = this.get("shipLaunched");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set shipLaunched(value: boolean) {
+    this.set("shipLaunched", Value.fromBoolean(value));
+  }
+
+  get isAllocated(): boolean {
+    let value = this.get("isAllocated");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isAllocated(value: boolean) {
+    this.set("isAllocated", Value.fromBoolean(value));
+  }
+
+  get allocatedAmount(): BigInt | null {
+    let value = this.get("allocatedAmount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set allocatedAmount(value: BigInt | null) {
+    if (!value) {
+      this.unset("allocatedAmount");
+    } else {
+      this.set("allocatedAmount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get isDistributed(): boolean {
+    let value = this.get("isDistributed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isDistributed(value: boolean) {
+    this.set("isDistributed", Value.fromBoolean(value));
+  }
+
+  get distributedAmount(): BigInt | null {
+    let value = this.get("distributedAmount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set distributedAmount(value: BigInt | null) {
+    if (!value) {
+      this.unset("distributedAmount");
+    } else {
+      this.set("distributedAmount", Value.fromBigInt(<BigInt>value));
+    }
+  }
 }
 
 export class GameManager extends Entity {
