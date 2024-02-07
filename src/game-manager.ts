@@ -10,23 +10,6 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
     grantShip = new GrantShip(entityId);
   }
 
-  let decodedValue = ethereum.decode(
-    '(address,string,(uint256,string))',
-    event.params.data
-  );
-
-  if (decodedValue == null) {
-    grantShip.name = 'Decoded value is null';
-    grantShip.save();
-    return;
-  }
-  let tuple = decodedValue.toTuple();
-
-  if (tuple == null || tuple.length != 3) {
-    grantShip.name = 'Could not decode';
-    grantShip.save();
-    return;
-  }
-  grantShip.name = tuple[1].toString();
+  grantShip.applicationBytesData = event.params.data;
   grantShip.save();
 }

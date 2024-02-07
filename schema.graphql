@@ -70,7 +70,8 @@ type Transaction @entity {
 
 type GrantShip @entity {
   id: Bytes!
-  name: String!
+  name: String
+  applicationBytesData: Bytes
 }
 
 type GameManager @entity {
