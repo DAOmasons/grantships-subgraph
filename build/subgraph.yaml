@@ -51,6 +51,8 @@ dataSources:
           handler: handleRegisteredEvent
         - event: GameManagerInitialized(uint256,address,address,address)
           handler: handleGameManagerInitializedEvent
+        - event: RoundCreated(uint256,uint256)
+          handler: handleRoundCreatedEvent
       file: GameManager/GameManager.wasm
 templates:
   - name: ProjectMetadata

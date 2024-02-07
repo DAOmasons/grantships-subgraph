@@ -1,4 +1,4 @@
-import { BigInt, ethereum } from '@graphprotocol/graph-ts';
+import { BigInt } from '@graphprotocol/graph-ts';
 import {
   Registered as RegisteredEvent,
   GameManagerInitialized as GameManagerInitializedEvent,
@@ -49,6 +49,7 @@ export function handleRoundCreatedEvent(event: RoundCreatedEvent): void {
   gameRound.endTime = BigInt.fromI32(0);
   gameRound.totalRoundAmount = event.params.totalRoundAmount;
   gameRound.gameStatus = 1; // 1 = Pending
+  gameRound.ships = [];
 
   gameRound.save();
 
