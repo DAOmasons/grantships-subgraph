@@ -598,6 +598,19 @@ export class GrantShip extends Entity {
     this.set("transactionHash", Value.fromBytes(value));
   }
 
+  get status(): i32 {
+    let value = this.get("status");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set status(value: i32) {
+    this.set("status", Value.fromI32(value));
+  }
+
   get alloProfileMembers(): Bytes | null {
     let value = this.get("alloProfileMembers");
     if (!value || value.kind == ValueKind.NULL) {
@@ -643,6 +656,36 @@ export class GrantShip extends Entity {
 
   set hasSubmittedApplication(value: boolean) {
     this.set("hasSubmittedApplication", Value.fromBoolean(value));
+  }
+
+  get isApproved(): boolean {
+    let value = this.get("isApproved");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isApproved(value: boolean) {
+    this.set("isApproved", Value.fromBoolean(value));
+  }
+
+  get applicationReviewReason(): string | null {
+    let value = this.get("applicationReviewReason");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set applicationReviewReason(value: string | null) {
+    if (!value) {
+      this.unset("applicationReviewReason");
+    } else {
+      this.set("applicationReviewReason", Value.fromString(<string>value));
+    }
   }
 }
 
@@ -1200,5 +1243,73 @@ export class Transaction extends Entity {
 
   set txHash(value: Bytes) {
     this.set("txHash", Value.fromBytes(value));
+  }
+}
+
+export class RawMetadata extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save RawMetadata entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type RawMetadata must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("RawMetadata", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): RawMetadata | null {
+    return changetype<RawMetadata | null>(
+      store.get_in_block("RawMetadata", id),
+    );
+  }
+
+  static load(id: string): RawMetadata | null {
+    return changetype<RawMetadata | null>(store.get("RawMetadata", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get protocol(): BigInt {
+    let value = this.get("protocol");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set protocol(value: BigInt) {
+    this.set("protocol", Value.fromBigInt(value));
+  }
+
+  get pointer(): string {
+    let value = this.get("pointer");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set pointer(value: string) {
+    this.set("pointer", Value.fromString(value));
   }
 }

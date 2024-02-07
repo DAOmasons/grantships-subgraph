@@ -53,6 +53,20 @@ dataSources:
           handler: handleGameManagerInitializedEvent
         - event: RoundCreated(uint256,uint256)
           handler: handleRoundCreatedEvent
+        - event: ShipLaunched(address,uint256,address,string,(uint256,string))
+          handler: handleShipLaunchedEvent
+        - event: RecipientRejected(address,(uint256,string))
+          handler: handleRecipientRejectedEvent
+        - event: RecipientAccepted(address,(uint256,string))
+          handler: handleRecipientAcceptedEvent
+        - event: GameActive(bool,uint256)
+          handler: handleGameActiveEvent
+        - event: UpdatePosted(indexed string,indexed uint256,indexed address,(uint256,string))
+          handler: handleUpdatePostedEvent
+        - event: Allocated(indexed address,uint256,address,address)
+          handler: handleAllocatedEvent
+        - event: Distributed(indexed address,address,uint256,address)
+          handler: handleDistributedEvent
       file: GameManager/GameManager.wasm
 templates:
   - name: ProjectMetadata

@@ -3,8 +3,21 @@ import {
   Registered as RegisteredEvent,
   GameManagerInitialized as GameManagerInitializedEvent,
   RoundCreated as RoundCreatedEvent,
+  RecipientRejected as RecipientRejectedEvent,
+  RecipientAccepted as RecipientAcceptedEvent,
+  ShipLaunched as ShipLaunchedEvent,
+  GameActive as GameActiveEvent,
+  UpdatePosted as UpdatePostedEvent,
+  Allocated as AllocatedEvent,
+  Distributed as DistributedEvent,
 } from '../generated/GameManager/GameManager';
-import { GrantShip, GameManager, GameRound } from '../generated/schema';
+import {
+  GrantShip,
+  GameManager,
+  GameRound,
+  RawMetadata,
+} from '../generated/schema';
+import { createRawMetadata } from './utils/rawMetadata';
 
 export function handleGameManagerInitializedEvent(
   event: GameManagerInitializedEvent
@@ -31,6 +44,7 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
 
   grantShip.shipApplicationBytesData = event.params.data;
   grantShip.hasSubmittedApplication = true;
+  grantShip.status = 1;
   grantShip.save();
 }
 
@@ -55,3 +69,57 @@ export function handleRoundCreatedEvent(event: RoundCreatedEvent): void {
 
   gameManager.currentRound = entityId.toString();
 }
+
+export function handleRecipientRejectedEvent(
+  event: RecipientRejectedEvent
+): void {
+  let entityId = event.params.recipientAddress;
+
+  let grantShip = GrantShip.load(entityId);
+
+  if (grantShip == null) {
+    return;
+  }
+
+  grantShip.status = 3; // 3 = Rejected
+  grantShip.isApproved = false;
+
+  grantShip.applicationReviewReason = createRawMetadata(
+    event.params.reason.protocol,
+    event.params.reason.pointer
+  );
+
+  grantShip.save();
+}
+
+export function handleRecipientAcceptedEvent(
+  event: RecipientAcceptedEvent
+): void {
+  let entityId = event.params.recipientAddress;
+
+  let grantShip = GrantShip.load(entityId);
+
+  if (grantShip == null) {
+    return;
+  }
+
+  grantShip.status = 2; // 2 = Accepted
+  grantShip.isApproved = true;
+
+  grantShip.applicationReviewReason = createRawMetadata(
+    event.params.reason.protocol,
+    event.params.reason.pointer
+  );
+
+  grantShip.save();
+}
+
+export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {}
+
+export function handleGameActiveEvent(event: GameActiveEvent): void {}
+
+export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {}
+
+export function handleAllocatedEvent(event: AllocatedEvent): void {}
+
+export function handleDistributedEvent(event: DistributedEvent): void {}

@@ -120,6 +120,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     grantShip.metadata = event.params.metadata.pointer;
     grantShip.owner = event.params.owner;
     grantShip.anchor = event.params.anchor;
+    grantShip.status = 0;
 
     grantShip.blockNumber = event.block.number;
     grantShip.blockTimestamp = event.block.timestamp;
