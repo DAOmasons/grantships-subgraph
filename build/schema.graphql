@@ -41,11 +41,25 @@ type GrantShip @entity {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  status: Int!
   # Registry => Role Granted
   alloProfileMembers: ProfileMemberGroup
   # Game Manager => Registered
   shipApplicationBytesData: Bytes
   hasSubmittedApplication: Boolean
+  # Game Manager => RecipientRejected/Accepted
+  isApproved: Boolean
+  applicationReviewReason: RawMetadata
+  # Game Manager => ShipLaunched
+  poolId: BigInt
+  shipContractAddress: Bytes # address
+  shipLaunched: Boolean
+  # Game Manager => Allocated
+  isAllocated: Boolean
+  allocatedAmount: BigInt
+  # Game Manager => Distributed
+  isDistributed: Boolean
+  distributedAmount: BigInt
 }
 
 type GameManager @entity {
@@ -91,4 +105,10 @@ type Transaction @entity {
   blockNumber: BigInt!
   sender: Bytes! # address
   txHash: Bytes!
+}
+
+type RawMetadata @entity {
+  id: String!
+  protocol: BigInt!
+  pointer: String!
 }

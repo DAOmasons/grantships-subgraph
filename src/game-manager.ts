@@ -137,91 +137,69 @@ export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {
 }
 export function handleAllocatedEvent(event: AllocatedEvent): void {
   let shipId = event.params.recipientId;
-
   let grantShip = GrantShip.load(shipId);
   let gameManager = GameManager.load(event.address);
-
-  if (grantShip == null) {
+  if (grantShip == null || gameManager == null) {
     return;
   }
-
   grantShip.status = GameStatus.Allocated; // 4 = Allocated
   grantShip.isAllocated = true;
   grantShip.allocatedAmount = event.params.amount;
   grantShip.save();
-
-  if (gameManager?.currentRound == null) {
+  if (gameManager.currentRound == null) {
     return;
   }
-
-  let currentRound = GameRound.load(gameManager.currentRound?.toString());
-
+  let currentRound = GameRound.load(gameManager.currentRound!);
   if (currentRound == null) {
     return;
   }
-
   currentRound.ships.push(shipId);
   currentRound.gameStatus = GameStatus.Allocated; // 5 = Allocated
   currentRound.totalRoundAmount = currentRound.totalRoundAmount.plus(
     event.params.amount
   );
-
   currentRound.save();
 }
 
 export function handleDistributedEvent(event: DistributedEvent): void {
   let shipId = event.params.recipientId;
-
   let grantShip = GrantShip.load(shipId);
   let gameManager = GameManager.load(event.address);
-
-  if (grantShip == null) {
+  if (grantShip == null || gameManager == null) {
     return;
   }
-
   grantShip.status = GameStatus.Funded;
   grantShip.isDistributed = true;
   grantShip.distributedAmount = event.params.amount;
   grantShip.status = GameStatus.Active;
-  if (grantShip.allocatedAmount != null) {
-    grantShip.allocatedAmount = grantShip.allocatedAmount.minus(
+  if (grantShip.allocatedAmount) {
+    grantShip.allocatedAmount = grantShip.allocatedAmount!.minus(
       event.params.amount
     );
   }
-
   grantShip.save();
-
-  if (gameManager?.currentRound == null) {
+  if (gameManager.currentRound == null) {
     return;
   }
-
-  let currentRound = GameRound.load(gameManager.currentRound?.toString());
-
+  let currentRound = GameRound.load(gameManager.currentRound!);
   if (currentRound == null) {
     return;
   }
-
   currentRound.ships.push(shipId);
   currentRound.gameStatus = GameStatus.Funded;
-
   // Todo: Will need to track pool funded on Allo contract in order track the pool balance here.
-
   // Todo: Distributed event doesn't track start and stop times for the round
   // Will need to redeploy with relevant data
-
   currentRound.save();
 }
 
 export function handleGameActiveEvent(event: GameActiveEvent): void {
-  let gameManager = GameManager.load(event.address);
-
-  if (gameManager == null) {
-    return;
-  }
-
-  gameManager.currentRoundId = event.params.gameIndex;
-
-  gameManager.save();
+  // let gameManager = GameManager.load(event.address);
+  // if (gameManager == null) {
+  //   return;
+  // }
+  // gameManager.currentRoundId = event.params.gameIndex;
+  // gameManager.save();
 }
 
 export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {}
