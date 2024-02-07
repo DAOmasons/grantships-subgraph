@@ -49,6 +49,8 @@ dataSources:
       eventHandlers:
         - event: Registered(indexed address,bytes,address)
           handler: handleRegisteredEvent
+        - event: GameManagerInitialized(uint256,address,address,address)
+          handler: handleGameManagerInitializedEvent
       file: GameManager/GameManager.wasm
 templates:
   - name: ProjectMetadata

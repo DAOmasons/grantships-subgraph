@@ -48,6 +48,26 @@ type GrantShip @entity {
   hasSubmittedApplication: Boolean
 }
 
+type GameManager @entity {
+  # GameManager => GameManagerInitialized
+  id: Bytes!
+  gameFacilitatorId: BigInt!
+  rootAccount: Bytes! # address
+  tokenAddress: Bytes! # address
+  currentRoundId: BigInt!
+  # GameManager => CreateRound
+  currentRound: GameRound
+}
+
+type GameRound @entity {
+  id: ID!
+  startTime: BigInt!
+  endTime: BigInt!
+  totalRoundAmount: BigInt!
+  gameStatus: BigInt!
+  ships: [GrantShip!]!
+}
+
 type ShipProfileMetadata @entity(immutable: true) {
   id: String!
   name: String
@@ -71,8 +91,4 @@ type Transaction @entity {
   blockNumber: BigInt!
   sender: Bytes! # address
   txHash: Bytes!
-}
-
-type GameManager @entity {
-  id: Bytes!
 }

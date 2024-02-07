@@ -49,6 +49,10 @@ dataSources:
       eventHandlers:
         - event: Registered(indexed address,bytes,address)
           handler: handleRegisteredEvent
+        - event: GameManagerInitialized(uint256,address,address,address)
+          handler: handleGameManagerInitializedEvent
+        - event: RoundCreated(uint256,uint256)
+          handler: handleRoundCreatedEvent
       file: ./src/game-manager.ts
 templates:
   - name: ProjectMetadata

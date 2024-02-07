@@ -49,10 +49,23 @@ type GrantShip @entity {
 }
 
 type GameManager @entity {
+  # GameManager => GameManagerInitialized
   id: Bytes!
   gameFacilitatorId: BigInt!
   rootAccount: Bytes! # address
   tokenAddress: Bytes! # address
+  currentRoundId: BigInt!
+  # GameManager => CreateRound
+  currentRound: GameRound
+}
+
+type GameRound @entity {
+  id: ID!
+  startTime: BigInt!
+  endTime: BigInt!
+  totalRoundAmount: BigInt!
+  gameStatus: Int!
+  ships: [GrantShip!]!
 }
 
 type ShipProfileMetadata @entity(immutable: true) {
