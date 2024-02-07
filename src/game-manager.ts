@@ -6,10 +6,13 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
   // anchorAddress:
   let entityId = event.params.recipientId;
   let grantShip = GrantShip.load(entityId);
+
   if (grantShip == null) {
-    grantShip = new GrantShip(entityId);
+    // not sure if we should actually create a new entity at this point
+    return;
   }
 
-  grantShip.applicationBytesData = event.params.data;
+  grantShip.shipApplicationBytesData = event.params.data;
+  grantShip.hasSubmittedApplication = true;
   grantShip.save();
 }

@@ -10,7 +10,7 @@ import {
   RoleRevoked as RoleRevokedEvent,
 } from '../generated/Registry/Registry';
 
-import { Project, ShipProfile, ProfileMemberGroup } from '../generated/schema';
+import { Project, GrantShip, ProfileMemberGroup } from '../generated/schema';
 import { ProjectMetadata, ShipProfileMetadata } from '../generated/templates';
 import { BigInt, log } from '@graphprotocol/graph-ts';
 import { addTransaction } from './utils/addTransaction';
@@ -58,9 +58,8 @@ export function handleRoleGrantedEvent(event: RoleGrantedEvent): void {
 }
 
 export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
-  let entityId = event.params.profileId;
-
   if (event.params.metadata.protocol == BigInt.fromString('103115010001003')) {
+    let entityId = event.params.profileId;
     let project = Project.load(entityId);
 
     if (project == null) {
@@ -97,37 +96,38 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
   } else if (
     event.params.metadata.protocol == BigInt.fromString('103115010001004')
   ) {
-    let shipProfile = ShipProfile.load(entityId);
+    let entityId = event.params.anchor;
+    let grantShip = GrantShip.load(entityId);
 
-    if (shipProfile == null) {
-      shipProfile = new ShipProfile(entityId);
+    if (grantShip == null) {
+      grantShip = new GrantShip(entityId);
     }
 
-    let memberGroup = ProfileMemberGroup.load(entityId);
+    let memberGroup = ProfileMemberGroup.load(event.params.profileId);
     if (memberGroup == null) {
-      memberGroup = new ProfileMemberGroup(entityId);
+      memberGroup = new ProfileMemberGroup(event.params.profileId);
       memberGroup.addresses = [];
       memberGroup.save();
     }
 
-    shipProfile.alloProfileMembers = entityId;
+    grantShip.alloProfileMembers = event.params.profileId;
 
-    shipProfile.profileId = event.params.profileId;
-    shipProfile.nonce = event.params.nonce;
-    shipProfile.name = event.params.name;
-    shipProfile.metadata_protocol = event.params.metadata.protocol;
-    shipProfile.metadata_pointer = event.params.metadata.pointer;
-    shipProfile.metadata = event.params.metadata.pointer;
-    shipProfile.owner = event.params.owner;
-    shipProfile.anchor = event.params.anchor;
+    grantShip.profileId = event.params.profileId;
+    grantShip.nonce = event.params.nonce;
+    grantShip.name = event.params.name;
+    grantShip.metadata_protocol = event.params.metadata.protocol;
+    grantShip.metadata_pointer = event.params.metadata.pointer;
+    grantShip.metadata = event.params.metadata.pointer;
+    grantShip.owner = event.params.owner;
+    grantShip.anchor = event.params.anchor;
 
-    shipProfile.blockNumber = event.block.number;
-    shipProfile.blockTimestamp = event.block.timestamp;
-    shipProfile.transactionHash = event.transaction.hash;
+    grantShip.blockNumber = event.block.number;
+    grantShip.blockTimestamp = event.block.timestamp;
+    grantShip.transactionHash = event.transaction.hash;
 
     ShipProfileMetadata.create(event.params.metadata.pointer);
 
-    shipProfile.save();
+    grantShip.save();
     addTransaction(event.block, event.transaction);
   }
 }

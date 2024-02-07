@@ -27,7 +27,8 @@ type ProjectMetadata @entity(immutable: true) {
   website: String
 }
 
-type ShipProfile @entity {
+type GrantShip @entity {
+  # Registry => ProfileCreated
   id: Bytes!
   profileId: Bytes! # bytes32
   nonce: BigInt! # uint256
@@ -40,7 +41,18 @@ type ShipProfile @entity {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  # Registry => Role Granted
   alloProfileMembers: ProfileMemberGroup
+  # Game Manager => Registered
+  shipApplicationBytesData: Bytes
+  hasSubmittedApplication: Boolean
+}
+
+type GameManager @entity {
+  id: Bytes!
+  gameFacilitatorId: BigInt!
+  rootAccount: Bytes! # address
+  tokenAddress: Bytes! # address
 }
 
 type ShipProfileMetadata @entity(immutable: true) {
@@ -66,14 +78,4 @@ type Transaction @entity {
   blockNumber: BigInt!
   sender: Bytes! # address
   txHash: Bytes!
-}
-
-type GrantShip @entity {
-  id: Bytes!
-  name: String
-  applicationBytesData: Bytes
-}
-
-type GameManager @entity {
-  id: Bytes!
 }

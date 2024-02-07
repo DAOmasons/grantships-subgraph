@@ -412,7 +412,7 @@ export class ProjectMetadata extends Entity {
   }
 }
 
-export class ShipProfile extends Entity {
+export class GrantShip extends Entity {
   constructor(id: Bytes) {
     super();
     this.set("id", Value.fromBytes(id));
@@ -420,25 +420,25 @@ export class ShipProfile extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save ShipProfile entity without an ID");
+    assert(id != null, "Cannot save GrantShip entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.BYTES,
-        `Entities of type ShipProfile must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+        `Entities of type GrantShip must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`,
       );
-      store.set("ShipProfile", id.toBytes().toHexString(), this);
+      store.set("GrantShip", id.toBytes().toHexString(), this);
     }
   }
 
-  static loadInBlock(id: Bytes): ShipProfile | null {
-    return changetype<ShipProfile | null>(
-      store.get_in_block("ShipProfile", id.toHexString()),
+  static loadInBlock(id: Bytes): GrantShip | null {
+    return changetype<GrantShip | null>(
+      store.get_in_block("GrantShip", id.toHexString()),
     );
   }
 
-  static load(id: Bytes): ShipProfile | null {
-    return changetype<ShipProfile | null>(
-      store.get("ShipProfile", id.toHexString()),
+  static load(id: Bytes): GrantShip | null {
+    return changetype<GrantShip | null>(
+      store.get("GrantShip", id.toHexString()),
     );
   }
 
@@ -613,6 +613,36 @@ export class ShipProfile extends Entity {
     } else {
       this.set("alloProfileMembers", Value.fromBytes(<Bytes>value));
     }
+  }
+
+  get shipApplicationBytesData(): Bytes | null {
+    let value = this.get("shipApplicationBytesData");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set shipApplicationBytesData(value: Bytes | null) {
+    if (!value) {
+      this.unset("shipApplicationBytesData");
+    } else {
+      this.set("shipApplicationBytesData", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get hasSubmittedApplication(): boolean {
+    let value = this.get("hasSubmittedApplication");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set hasSubmittedApplication(value: boolean) {
+    this.set("hasSubmittedApplication", Value.fromBoolean(value));
   }
 }
 
@@ -952,84 +982,6 @@ export class Transaction extends Entity {
 
   set txHash(value: Bytes) {
     this.set("txHash", Value.fromBytes(value));
-  }
-}
-
-export class GrantShip extends Entity {
-  constructor(id: Bytes) {
-    super();
-    this.set("id", Value.fromBytes(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save GrantShip entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.BYTES,
-        `Entities of type GrantShip must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`,
-      );
-      store.set("GrantShip", id.toBytes().toHexString(), this);
-    }
-  }
-
-  static loadInBlock(id: Bytes): GrantShip | null {
-    return changetype<GrantShip | null>(
-      store.get_in_block("GrantShip", id.toHexString()),
-    );
-  }
-
-  static load(id: Bytes): GrantShip | null {
-    return changetype<GrantShip | null>(
-      store.get("GrantShip", id.toHexString()),
-    );
-  }
-
-  get id(): Bytes {
-    let value = this.get("id");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set id(value: Bytes) {
-    this.set("id", Value.fromBytes(value));
-  }
-
-  get name(): string | null {
-    let value = this.get("name");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set name(value: string | null) {
-    if (!value) {
-      this.unset("name");
-    } else {
-      this.set("name", Value.fromString(<string>value));
-    }
-  }
-
-  get applicationBytesData(): Bytes | null {
-    let value = this.get("applicationBytesData");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set applicationBytesData(value: Bytes | null) {
-    if (!value) {
-      this.unset("applicationBytesData");
-    } else {
-      this.set("applicationBytesData", Value.fromBytes(<Bytes>value));
-    }
   }
 }
 
