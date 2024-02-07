@@ -11,12 +11,7 @@ import {
   Allocated as AllocatedEvent,
   Distributed as DistributedEvent,
 } from '../generated/GameManager/GameManager';
-import {
-  GrantShip,
-  GameManager,
-  GameRound,
-  RawMetadata,
-} from '../generated/schema';
+import { GrantShip, GameManager, GameRound } from '../generated/schema';
 import { createRawMetadata } from './utils/rawMetadata';
 
 export function handleGameManagerInitializedEvent(
