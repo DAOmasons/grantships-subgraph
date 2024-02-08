@@ -1,4 +1,4 @@
-import { BigInt } from '@graphprotocol/graph-ts';
+import { ethereum, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import {
   Registered as RegisteredEvent,
   GameManagerInitialized as GameManagerInitializedEvent,
@@ -10,9 +10,14 @@ import {
   UpdatePosted as UpdatePostedEvent,
   Allocated as AllocatedEvent,
   Distributed as DistributedEvent,
-} from '../generated/GameManager/GameManager';
-import { GrantShip, GameManager, GameRound } from '../generated/schema';
-import { createRawMetadata } from './utils/rawMetadata';
+} from "../generated/GameManager/GameManager";
+import {
+  GrantShip,
+  GameManager,
+  GameRound,
+  FeedEvent,
+} from "../generated/schema";
+import { createRawMetadata } from "./utils/rawMetadata";
 
 enum GameStatus {
   None = 0,
@@ -36,6 +41,12 @@ export function handleGameManagerInitializedEvent(
   gameManager.currentRoundId = BigInt.fromI32(0);
 
   gameManager.save();
+
+  createFeedEvent(
+    event.params.rootAccount,
+    event.block.number,
+    "Game was initialized by " + event.params.gameFacilitatorId.toString()
+  );
 }
 
 export function handleRegisteredEvent(event: RegisteredEvent): void {
@@ -203,3 +214,26 @@ export function handleGameActiveEvent(event: GameActiveEvent): void {
 }
 
 export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {}
+
+//This was floating after merge, leaving it until I know what it is.
+// if (tuple == null || tuple.length != 3) {
+//   grantShip.name = "Could not decode";
+//   grantShip.save();
+//   return;
+// }
+// grantShip.name = tuple[1].toString();
+// grantShip.save();
+
+export function createFeedEvent(
+  entityId: Bytes,
+  blockNumber: BigInt,
+  message: string
+): void {
+  let feedEvent = FeedEvent.load(entityId);
+  if (feedEvent == null) {
+    feedEvent = new FeedEvent(entityId);
+  }
+  feedEvent.blockNumber = blockNumber;
+  feedEvent.message = message;
+  feedEvent.save();
+}

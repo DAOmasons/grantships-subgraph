@@ -66,7 +66,7 @@ dataSources:
         - event: Allocated(indexed address,uint256,address,address)
           handler: handleAllocatedEvent
         - event: Distributed(indexed address,address,uint256,address)
-          handler: handleDistributedEvent     
+          handler: handleDistributedEvent
       file: ./src/game-manager.ts
   - kind: ethereum
     name: Allo

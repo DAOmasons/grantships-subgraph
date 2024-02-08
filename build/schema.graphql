@@ -115,3 +115,9 @@ type RawMetadata @entity {
   protocol: BigInt!
   pointer: String!
 }
+
+type FeedEvent @entity {
+  id: Bytes!
+  message: String!
+  blockNumber: BigInt!
+}
