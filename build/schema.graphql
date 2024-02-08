@@ -3,8 +3,6 @@ type Project @entity {
   profileId: Bytes! # bytes32
   nonce: BigInt! # uint256
   name: String! # string
-  metadata_protocol: BigInt! # uint256
-  metadata_pointer: String!
   metadata: RawMetadata # ProjectMetadata
   owner: Bytes! # address
   anchor: Bytes! # address

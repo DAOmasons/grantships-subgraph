@@ -91,32 +91,6 @@ export class Project extends Entity {
     this.set("name", Value.fromString(value));
   }
 
-  get metadata_protocol(): BigInt {
-    let value = this.get("metadata_protocol");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set metadata_protocol(value: BigInt) {
-    this.set("metadata_protocol", Value.fromBigInt(value));
-  }
-
-  get metadata_pointer(): string {
-    let value = this.get("metadata_pointer");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set metadata_pointer(value: string) {
-    this.set("metadata_pointer", Value.fromString(value));
-  }
-
   get metadata(): string | null {
     let value = this.get("metadata");
     if (!value || value.kind == ValueKind.NULL) {

@@ -11,8 +11,7 @@ import {
 } from '../generated/Registry/Registry';
 
 import { Project, GrantShip, ProfileMemberGroup } from '../generated/schema';
-import { ProjectMetadata, ShipProfileMetadata } from '../generated/templates';
-import { BigInt, log } from '@graphprotocol/graph-ts';
+import { BigInt } from '@graphprotocol/graph-ts';
 import { addTransaction } from './utils/addTransaction';
 import { createRawMetadata } from './utils/rawMetadata';
 
