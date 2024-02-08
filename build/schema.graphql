@@ -3,8 +3,6 @@ type Project @entity {
   profileId: Bytes! # bytes32
   nonce: BigInt! # uint256
   name: String! # string
-  metadata_protocol: BigInt! # uint256
-  metadata_pointer: String!
   metadata: RawMetadata # ProjectMetadata
   owner: Bytes! # address
   anchor: Bytes! # address
@@ -60,9 +58,9 @@ type GrantShip @entity {
   distributedAmount: BigInt
 }
 
-type ProfileIdToAnchor @entity {
-  id: Bytes! # profileId
-  anchor: Bytes! # address
+type PoolIdLookup @entity {
+  id: ID! # profileId
+  entityId: Bytes! # address
 }
 
 type GameManager @entity {
@@ -74,6 +72,7 @@ type GameManager @entity {
   currentRoundId: BigInt!
   # GameManager => CreateRound
   currentRound: GameRound
+  poolFunds: BigInt!
 }
 
 type GameRound @entity {

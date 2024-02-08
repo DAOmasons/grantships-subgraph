@@ -10,14 +10,8 @@ import {
   RoleRevoked as RoleRevokedEvent,
 } from '../generated/Registry/Registry';
 
-import {
-  Project,
-  GrantShip,
-  ProfileMemberGroup,
-  ProfileIdToAnchor,
-} from '../generated/schema';
-import { ProjectMetadata, ShipProfileMetadata } from '../generated/templates';
-import { BigInt, log } from '@graphprotocol/graph-ts';
+import { Project, GrantShip, ProfileMemberGroup } from '../generated/schema';
+import { BigInt } from '@graphprotocol/graph-ts';
 import { addTransaction } from './utils/addTransaction';
 import { createRawMetadata } from './utils/rawMetadata';
 
@@ -98,11 +92,6 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     // Graph IPFS file-data-source API isn't ready for prime-time
     // ProjectMetadata.create(event.params.metadata.pointer);
 
-    // Join lookup entity so we can track Profile & pool events on Allo contract
-    const profileIdToAnchor = new ProfileIdToAnchor(event.params.profileId);
-    profileIdToAnchor.anchor = event.params.anchor;
-    profileIdToAnchor.save();
-
     project.save();
     addTransaction(event.block, event.transaction);
   } else if (
@@ -139,11 +128,6 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     grantShip.blockNumber = event.block.number;
     grantShip.blockTimestamp = event.block.timestamp;
     grantShip.transactionHash = event.transaction.hash;
-
-    // Join lookup entity so we can track Profile & pool events on Allo contract
-    const profileIdToAnchor = new ProfileIdToAnchor(event.params.profileId);
-    profileIdToAnchor.anchor = event.params.anchor;
-    profileIdToAnchor.save();
 
     // Graph IPFS file-data-source API isn't ready for prime-time
     // ShipProfileMetadata.create(event.params.metadata.pointer);
