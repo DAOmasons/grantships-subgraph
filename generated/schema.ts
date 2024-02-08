@@ -575,51 +575,49 @@ export class GrantShip extends Entity {
   }
 }
 
-export class ProfileIdToAnchor extends Entity {
-  constructor(id: Bytes) {
+export class PoolIdLookup extends Entity {
+  constructor(id: string) {
     super();
-    this.set("id", Value.fromBytes(id));
+    this.set("id", Value.fromString(id));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save ProfileIdToAnchor entity without an ID");
+    assert(id != null, "Cannot save PoolIdLookup entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.BYTES,
-        `Entities of type ProfileIdToAnchor must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+        id.kind == ValueKind.STRING,
+        `Entities of type PoolIdLookup must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
       );
-      store.set("ProfileIdToAnchor", id.toBytes().toHexString(), this);
+      store.set("PoolIdLookup", id.toString(), this);
     }
   }
 
-  static loadInBlock(id: Bytes): ProfileIdToAnchor | null {
-    return changetype<ProfileIdToAnchor | null>(
-      store.get_in_block("ProfileIdToAnchor", id.toHexString()),
+  static loadInBlock(id: string): PoolIdLookup | null {
+    return changetype<PoolIdLookup | null>(
+      store.get_in_block("PoolIdLookup", id),
     );
   }
 
-  static load(id: Bytes): ProfileIdToAnchor | null {
-    return changetype<ProfileIdToAnchor | null>(
-      store.get("ProfileIdToAnchor", id.toHexString()),
-    );
+  static load(id: string): PoolIdLookup | null {
+    return changetype<PoolIdLookup | null>(store.get("PoolIdLookup", id));
   }
 
-  get id(): Bytes {
+  get id(): string {
     let value = this.get("id");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set id(value: Bytes) {
-    this.set("id", Value.fromBytes(value));
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
   }
 
-  get anchor(): Bytes {
-    let value = this.get("anchor");
+  get entityId(): Bytes {
+    let value = this.get("entityId");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
@@ -627,8 +625,8 @@ export class ProfileIdToAnchor extends Entity {
     }
   }
 
-  set anchor(value: Bytes) {
-    this.set("anchor", Value.fromBytes(value));
+  set entityId(value: Bytes) {
+    this.set("entityId", Value.fromBytes(value));
   }
 }
 

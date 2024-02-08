@@ -11,7 +11,12 @@ import {
   Allocated as AllocatedEvent,
   Distributed as DistributedEvent,
 } from '../generated/GameManager/GameManager';
-import { GrantShip, GameManager, GameRound } from '../generated/schema';
+import {
+  GrantShip,
+  GameManager,
+  GameRound,
+  PoolIdLookup,
+} from '../generated/schema';
 import { createRawMetadata } from './utils/rawMetadata';
 
 enum GameStatus {
@@ -134,6 +139,11 @@ export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {
   grantShip.shipLaunched = true;
 
   grantShip.save();
+
+  let poolIdLookup = new PoolIdLookup(event.params.shipPoolId.toString());
+  poolIdLookup.entityId = entityId;
+
+  poolIdLookup.save();
 }
 export function handleAllocatedEvent(event: AllocatedEvent): void {
   let shipId = event.params.recipientId;

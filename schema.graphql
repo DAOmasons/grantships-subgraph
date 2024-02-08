@@ -60,9 +60,9 @@ type GrantShip @entity {
   distributedAmount: BigInt
 }
 
-type ProfileIdToAnchor @entity {
-  id: Bytes! # profileId
-  anchor: Bytes! # address
+type PoolIdLookup @entity {
+  id: ID! # profileId
+  entityId: Bytes! # address
 }
 
 type GameManager @entity {
