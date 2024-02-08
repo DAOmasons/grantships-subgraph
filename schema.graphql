@@ -76,3 +76,9 @@ type GrantShip @entity {
 type GameManager @entity {
   id: Bytes!
 }
+
+type FeedEvent @entity {
+  id: Bytes!
+  message: String!
+  blockNumber: BigInt!
+}
