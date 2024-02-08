@@ -98,6 +98,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     // Graph IPFS file-data-source API isn't ready for prime-time
     // ProjectMetadata.create(event.params.metadata.pointer);
 
+    // Join lookup entity so we can track Profile & pool events on Allo contract
     const profileIdToAnchor = new ProfileIdToAnchor(event.params.profileId);
     profileIdToAnchor.anchor = event.params.anchor;
     profileIdToAnchor.save();
@@ -139,6 +140,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     grantShip.blockTimestamp = event.block.timestamp;
     grantShip.transactionHash = event.transaction.hash;
 
+    // Join lookup entity so we can track Profile & pool events on Allo contract
     const profileIdToAnchor = new ProfileIdToAnchor(event.params.profileId);
     profileIdToAnchor.anchor = event.params.anchor;
     profileIdToAnchor.save();
