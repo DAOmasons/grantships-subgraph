@@ -10,10 +10,16 @@ import {
   RoleRevoked as RoleRevokedEvent,
 } from '../generated/Registry/Registry';
 
-import { Project, GrantShip, ProfileMemberGroup } from '../generated/schema';
+import {
+  Project,
+  GrantShip,
+  ProfileMemberGroup,
+  ProfileIdToAnchor,
+} from '../generated/schema';
 import { ProjectMetadata, ShipProfileMetadata } from '../generated/templates';
 import { BigInt, log } from '@graphprotocol/graph-ts';
 import { addTransaction } from './utils/addTransaction';
+import { createRawMetadata } from './utils/rawMetadata';
 
 export function handleRoleRevokedEvent(event: RoleRevokedEvent): void {
   let entityId = event.params.role;
@@ -78,9 +84,10 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     project.profileId = event.params.profileId;
     project.nonce = event.params.nonce;
     project.name = event.params.name;
-    project.metadata_protocol = event.params.metadata.protocol;
-    project.metadata_pointer = event.params.metadata.pointer;
-    project.metadata = event.params.metadata.pointer;
+    project.metadata = createRawMetadata(
+      event.params.metadata.protocol,
+      event.params.metadata.pointer
+    );
     project.owner = event.params.owner;
     project.anchor = event.params.anchor;
 
@@ -88,8 +95,12 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     project.blockTimestamp = event.block.timestamp;
     project.transactionHash = event.transaction.hash;
 
-    //TODO: Check if this duplicates metadata
-    ProjectMetadata.create(event.params.metadata.pointer);
+    // Graph IPFS file-data-source API isn't ready for prime-time
+    // ProjectMetadata.create(event.params.metadata.pointer);
+
+    const profileIdToAnchor = new ProfileIdToAnchor(event.params.profileId);
+    profileIdToAnchor.anchor = event.params.anchor;
+    profileIdToAnchor.save();
 
     project.save();
     addTransaction(event.block, event.transaction);
@@ -104,6 +115,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     }
 
     let memberGroup = ProfileMemberGroup.load(event.params.profileId);
+
     if (memberGroup == null) {
       memberGroup = new ProfileMemberGroup(event.params.profileId);
       memberGroup.addresses = [];
@@ -115,9 +127,10 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     grantShip.profileId = event.params.profileId;
     grantShip.nonce = event.params.nonce;
     grantShip.name = event.params.name;
-    grantShip.metadata_protocol = event.params.metadata.protocol;
-    grantShip.metadata_pointer = event.params.metadata.pointer;
-    grantShip.metadata = event.params.metadata.pointer;
+    grantShip.profileMetadata = createRawMetadata(
+      event.params.metadata.protocol,
+      event.params.metadata.pointer
+    );
     grantShip.owner = event.params.owner;
     grantShip.anchor = event.params.anchor;
     grantShip.status = 0;
@@ -126,7 +139,12 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     grantShip.blockTimestamp = event.block.timestamp;
     grantShip.transactionHash = event.transaction.hash;
 
-    ShipProfileMetadata.create(event.params.metadata.pointer);
+    const profileIdToAnchor = new ProfileIdToAnchor(event.params.profileId);
+    profileIdToAnchor.anchor = event.params.anchor;
+    profileIdToAnchor.save();
+
+    // Graph IPFS file-data-source API isn't ready for prime-time
+    // ShipProfileMetadata.create(event.params.metadata.pointer);
 
     grantShip.save();
     addTransaction(event.block, event.transaction);

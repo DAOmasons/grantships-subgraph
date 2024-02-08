@@ -5,7 +5,7 @@ type Project @entity {
   name: String! # string
   metadata_protocol: BigInt! # uint256
   metadata_pointer: String!
-  metadata: ProjectMetadata # ProjectMetadata
+  metadata: RawMetadata # ProjectMetadata
   owner: Bytes! # address
   anchor: Bytes! # address
   blockNumber: BigInt!
@@ -14,18 +14,18 @@ type Project @entity {
   members: ProfileMemberGroup
 }
 
-type ProjectMetadata @entity(immutable: true) {
-  id: String!
-  name: String
-  description: String
-  avatarHash_IPFS: String
-  email: String
-  x: String
-  github: String
-  discord: String
-  telegram: String
-  website: String
-}
+# type ProjectMetadata @entity(immutable: true) {
+#   id: String!
+#   name: String
+#   description: String
+#   avatarHash_IPFS: String
+#   email: String
+#   x: String
+#   github: String
+#   discord: String
+#   telegram: String
+#   website: String
+# }
 
 type GrantShip @entity {
   # Registry => ProfileCreated
@@ -33,9 +33,7 @@ type GrantShip @entity {
   profileId: Bytes! # bytes32
   nonce: BigInt! # uint256
   name: String! # string
-  metadata_protocol: BigInt! # uint256
-  metadata_pointer: String!
-  metadata: ShipProfileMetadata! # ShipProfileMetadata
+  profileMetadata: RawMetadata! # ShipProfileMetadata
   owner: Bytes! # address
   anchor: Bytes! # address
   blockNumber: BigInt!
@@ -62,6 +60,11 @@ type GrantShip @entity {
   distributedAmount: BigInt
 }
 
+type ProfileIdToAnchor @entity {
+  id: Bytes! # profileId
+  anchor: Bytes! # address
+}
+
 type GameManager @entity {
   # GameManager => GameManagerInitialized
   id: Bytes!
@@ -82,18 +85,18 @@ type GameRound @entity {
   ships: [GrantShip!]!
 }
 
-type ShipProfileMetadata @entity(immutable: true) {
-  id: String!
-  name: String
-  mission: String
-  avatarHash_IPFS: String
-  email: String
-  x: String
-  github: String
-  discord: String
-  telegram: String
-  website: String
-}
+# type ShipProfileMetadata @entity(immutable: true) {
+#   id: String!
+#   name: String
+#   mission: String
+#   avatarHash_IPFS: String
+#   email: String
+#   x: String
+#   github: String
+#   discord: String
+#   telegram: String
+#   website: String
+# }
 
 type ProfileMemberGroup @entity {
   id: Bytes!
