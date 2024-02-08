@@ -74,6 +74,7 @@ type GameManager @entity {
   currentRoundId: BigInt!
   # GameManager => CreateRound
   currentRound: GameRound
+  poolFunds: BigInt!
 }
 
 type GameRound @entity {
