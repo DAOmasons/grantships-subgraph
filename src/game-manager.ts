@@ -18,6 +18,7 @@ import {
   PoolIdLookup,
 } from '../generated/schema';
 import { createRawMetadata } from './utils/rawMetadata';
+import { addTransaction } from './utils/addTransaction';
 
 enum GameStatus {
   None = 0,
@@ -40,6 +41,7 @@ export function handleGameManagerInitializedEvent(
   gameManager.currentRoundId = BigInt.fromI32(0);
   gameManager.poolFunds = BigInt.fromI32(0);
   gameManager.save();
+  addTransaction(event.block, event.transaction);
 }
 
 export function handleRegisteredEvent(event: RegisteredEvent): void {
@@ -54,6 +56,7 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
   grantShip.hasSubmittedApplication = true;
   grantShip.status = GameStatus.Pending;
   grantShip.save();
+  addTransaction(event.block, event.transaction);
 }
 
 export function handleRoundCreatedEvent(event: RoundCreatedEvent): void {
@@ -71,6 +74,7 @@ export function handleRoundCreatedEvent(event: RoundCreatedEvent): void {
   gameRound.save();
   gameManager.currentRound = entityId.toString();
   gameManager.save();
+  addTransaction(event.block, event.transaction);
 }
 
 export function handleRecipientRejectedEvent(
@@ -88,6 +92,7 @@ export function handleRecipientRejectedEvent(
     event.params.reason.pointer
   );
   grantShip.save();
+  addTransaction(event.block, event.transaction);
 }
 
 export function handleRecipientAcceptedEvent(
@@ -105,6 +110,7 @@ export function handleRecipientAcceptedEvent(
     event.params.reason.pointer
   );
   grantShip.save();
+  addTransaction(event.block, event.transaction);
 }
 
 export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {
@@ -117,6 +123,7 @@ export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {
   grantShip.shipContractAddress = event.params.shipAddress;
   grantShip.shipLaunched = true;
   grantShip.save();
+  addTransaction(event.block, event.transaction);
 }
 export function handleAllocatedEvent(event: AllocatedEvent): void {
   let shipId = event.params.recipientId;
@@ -142,6 +149,7 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {
     event.params.amount
   );
   currentRound.save();
+  addTransaction(event.block, event.transaction);
 }
 
 export function handleDistributedEvent(event: DistributedEvent): void {
@@ -174,6 +182,7 @@ export function handleDistributedEvent(event: DistributedEvent): void {
   // Todo: Distributed event doesn't track start and stop times for the round
   // Will need to redeploy with relevant data
   currentRound.save();
+  addTransaction(event.block, event.transaction);
 }
 
 export function handleGameActiveEvent(event: GameActiveEvent): void {

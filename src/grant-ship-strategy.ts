@@ -1,7 +1,7 @@
 import { dataSource } from '@graphprotocol/graph-ts';
 import { Initialized as InitializedEvent } from '../generated/templates/GrantShipStrategyContract/GrantShipStrategy';
 import { GrantShip, Log } from '../generated/schema';
-import { log } from '@wagmi/cli/dist/types/logger';
+import { addTransaction } from './utils/addTransaction';
 
 export function handleInitializeEvent(event: InitializedEvent): void {
   let anchorAddress = dataSource.context().getBytes('anchorAddress');
@@ -24,8 +24,10 @@ export function handleInitializeEvent(event: InitializedEvent): void {
     'GrantShip Name: ' +
     grantShip.name +
     ' GrantShip Status: ' +
-    grantShip.status;
+    grantShip.status.toString();
   log2.type = 'Debug';
 
   log2.save();
+
+  addTransaction(event.block, event.transaction);
 }
