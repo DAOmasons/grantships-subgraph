@@ -89,6 +89,26 @@ dataSources:
         - event: PoolFunded(indexed uint256,uint256,uint256)
           handler: handlePoolFundedEvent
       file: Allo/Allo.wasm
+  - kind: ethereum
+    name: GrantShipFactory
+    network: arbitrum-sepolia
+    source:
+      address: "0xB6f1d31D7e9f980c080b4d40FA36d90791275A9f"
+      abi: GrantShipFactory
+      startBlock: 7823400
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - GrantShip
+      abis:
+        - name: GrantShipFactory
+          file: GrantShipFactory/abis/GrantShipFactory.json
+      eventHandlers:
+        - event: ShipCreated(address,address,address)
+          handler: handleShipCreatedEvent
+      file: GrantShipFactory/GrantShipFactory.wasm
 templates:
   - kind: ethereum/contract
     name: GrantShipStrategyContract

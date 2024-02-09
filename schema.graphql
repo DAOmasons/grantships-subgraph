@@ -50,6 +50,8 @@ type GrantShip @entity {
   poolId: BigInt
   shipContractAddress: Bytes # address
   shipLaunched: Boolean
+  #
+
   # Game Manager => Allocated
   isAllocated: Boolean
   allocatedAmount: BigInt
@@ -118,4 +120,11 @@ type RawMetadata @entity {
   id: String!
   protocol: BigInt!
   pointer: String!
+}
+
+type Log @entity {
+  id: ID!
+  message: String!
+  description: String
+  type: String!
 }
