@@ -90,27 +90,21 @@ dataSources:
           handler: handlePoolFundedEvent
       file: Allo/Allo.wasm
 templates:
-  - name: ProjectMetadata
-    kind: file/ipfs
+  - kind: ethereum/contract
+    name: GrantShipStrategyContract
+    network: arbitrum-sepolia
+    source:
+      abi: GrantShipStrategy
     mapping:
+      kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: templates/ProjectMetadata/ProjectMetadata.wasm
-      handler: handleProjectMetadata
       entities:
-        - ProjectMetadata
+        - GrantShip
       abis:
-        - name: ProjectMetadata
-          file: ProjectMetadata/abis/EmptyABI.json
-  - name: ShipProfileMetadata
-    kind: file/ipfs
-    mapping:
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      file: templates/ShipProfileMetadata/ShipProfileMetadata.wasm
-      handler: handleShipProfileMetadata
-      entities:
-        - ShipProfileMetadata
-      abis:
-        - name: ShipProfileMetadata
-          file: ShipProfileMetadata/abis/EmptyABI.json
+        - name: GrantShipStrategy
+          file: GrantShipStrategyContract/abis/GrantShipStrategy.json
+      eventHandlers:
+        - event: Initialized(uint256,bytes)
+          handler: handleGrantShipEvent
+      file: templates/GrantShipStrategyContract/GrantShipStrategyContract.wasm

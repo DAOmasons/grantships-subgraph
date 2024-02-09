@@ -58,6 +58,11 @@ type GrantShip @entity {
   distributedAmount: BigInt
 }
 
+type GrantShipLookup @entity {
+  id: Bytes! # anchor
+  anchorAddress: Bytes! # address
+}
+
 type PoolIdLookup @entity {
   id: ID! # profileId
   entityId: Bytes! # address

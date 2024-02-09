@@ -89,28 +89,42 @@ dataSources:
         - event: PoolFunded(indexed uint256,uint256,uint256)
           handler: handlePoolFundedEvent
       file: ./src/allo.ts
+  - kind: ethereum
+    name: GrantShipFactory
+    network: arbitrum-sepolia
+    source:
+      address: "0xB6f1d31D7e9f980c080b4d40FA36d90791275A9f"
+      abi: GrantShipFactory
+      startBlock: 7823400
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - GrantShip
+      abis:
+        - name: GrantShipFactory
+          file: ./abis/GrantShipFactory.json
+      eventHandlers:
+        - event: ShipCreated(address,address,address)
+          handler: handleShipCreatedEvent
+      file: ./src/grant-ship-factory.ts    
 templates:
-  - name: ProjectMetadata
-    kind: file/ipfs
+  - kind: ethereum/contract
+    name: GrantShipStrategyContract
+    network: arbitrum-sepolia
+    source: 
+      abi: GrantShipStrategy
     mapping:
+      kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/project-metadata.ts
-      handler: handleProjectMetadata
       entities:
-        - ProjectMetadata
+        - GrantShip
       abis:
-        - name: ProjectMetadata
-          file: ./abis/EmptyABI.json
-  - name: ShipProfileMetadata
-    kind: file/ipfs
-    mapping:
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      file: ./src/ship-profile-metadata.ts
-      handler: handleShipProfileMetadata
-      entities:
-        - ShipProfileMetadata
-      abis:
-        - name: ShipProfileMetadata
-          file: ./abis/EmptyABI.json
+        - name: GrantShipStrategy
+          file: ./abis/GrantShipStrategy.json
+      eventHandlers: 
+        - event: Initialized(uint256,bytes)
+          handler: handleGrantShipEvent
+      file: ./src/grant-ship-strategy.ts

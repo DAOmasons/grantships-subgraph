@@ -117,9 +117,6 @@ export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {
   grantShip.shipContractAddress = event.params.shipAddress;
   grantShip.shipLaunched = true;
   grantShip.save();
-  let poolIdLookup = new PoolIdLookup(event.params.shipPoolId.toString());
-  poolIdLookup.entityId = entityId;
-  poolIdLookup.save();
 }
 export function handleAllocatedEvent(event: AllocatedEvent): void {
   let shipId = event.params.recipientId;
