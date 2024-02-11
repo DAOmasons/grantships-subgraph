@@ -11,24 +11,19 @@ import {
   Allocated as AllocatedEvent,
   Distributed as DistributedEvent,
 } from '../generated/GameManager/GameManager';
-import {
-  GrantShip,
-  GameManager,
-  GameRound,
-  PoolIdLookup,
-} from '../generated/schema';
+import { GrantShip, GameManager, GameRound } from '../generated/schema';
 import { createRawMetadata } from './utils/rawMetadata';
 import { addTransaction } from './utils/addTransaction';
 
 enum GameStatus {
   None = 0,
   Pending = 1,
-  Accepted = 3,
-  Rejected = 4,
-  Allocated = 5,
-  Funded = 6,
-  Active = 7,
-  Completed = 8,
+  Accepted = 2,
+  Rejected = 3,
+  Allocated = 4,
+  Funded = 5,
+  Active = 6,
+  Completed = 7,
 }
 
 export function handleGameManagerInitializedEvent(
@@ -54,6 +49,12 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
   }
   grantShip.shipApplicationBytesData = event.params.data;
   grantShip.hasSubmittedApplication = true;
+  grantShip.isAwaitingApproval = true;
+  grantShip.applicationSubmittedTime = event.block.timestamp;
+  // resets isApproved and isRejected in case of re-submission
+  grantShip.isApproved = false;
+  grantShip.isRejected = false;
+
   grantShip.status = GameStatus.Pending;
   grantShip.save();
   addTransaction(event.block, event.transaction);
@@ -86,7 +87,9 @@ export function handleRecipientRejectedEvent(
     return;
   }
   grantShip.status = GameStatus.Rejected; // 3 = Rejected
-  grantShip.isApproved = false;
+  grantShip.isRejected = true;
+  grantShip.isAwaitingApproval = false;
+  grantShip.rejectedTime = event.block.timestamp;
   grantShip.applicationReviewReason = createRawMetadata(
     event.params.reason.protocol,
     event.params.reason.pointer
@@ -105,6 +108,8 @@ export function handleRecipientAcceptedEvent(
   }
   grantShip.status = GameStatus.Accepted; // 2 = Accepted
   grantShip.isApproved = true;
+  grantShip.isAwaitingApproval = false;
+  grantShip.approvedTime = event.block.timestamp;
   grantShip.applicationReviewReason = createRawMetadata(
     event.params.reason.protocol,
     event.params.reason.pointer

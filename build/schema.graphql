@@ -3,7 +3,7 @@ type Project @entity {
   profileId: Bytes! # bytes32
   nonce: BigInt! # uint256
   name: String! # string
-  metadata: RawMetadata # ProjectMetadata
+  metadata: RawMetadata! # ProjectMetadata
   owner: Bytes! # address
   anchor: Bytes! # address
   blockNumber: BigInt!
@@ -42,9 +42,14 @@ type GrantShip @entity {
   alloProfileMembers: ProfileMemberGroup
   # Game Manager => Registered
   shipApplicationBytesData: Bytes
+  applicationSubmittedTime: BigInt
+  isAwaitingApproval: Boolean
   hasSubmittedApplication: Boolean
   # Game Manager => RecipientRejected/Accepted
   isApproved: Boolean
+  approvedTime: BigInt
+  isRejected: Boolean
+  rejectedTime: BigInt
   applicationReviewReason: RawMetadata
   # Game Manager => ShipLaunched
   poolId: BigInt

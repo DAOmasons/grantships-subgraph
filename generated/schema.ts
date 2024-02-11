@@ -91,21 +91,17 @@ export class Project extends Entity {
     this.set("name", Value.fromString(value));
   }
 
-  get metadata(): string | null {
+  get metadata(): string {
     let value = this.get("metadata");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toString();
     }
   }
 
-  set metadata(value: string | null) {
-    if (!value) {
-      this.unset("metadata");
-    } else {
-      this.set("metadata", Value.fromString(<string>value));
-    }
+  set metadata(value: string) {
+    this.set("metadata", Value.fromString(value));
   }
 
   get owner(): Bytes {
@@ -398,6 +394,36 @@ export class GrantShip extends Entity {
     }
   }
 
+  get applicationSubmittedTime(): BigInt | null {
+    let value = this.get("applicationSubmittedTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set applicationSubmittedTime(value: BigInt | null) {
+    if (!value) {
+      this.unset("applicationSubmittedTime");
+    } else {
+      this.set("applicationSubmittedTime", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get isAwaitingApproval(): boolean {
+    let value = this.get("isAwaitingApproval");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isAwaitingApproval(value: boolean) {
+    this.set("isAwaitingApproval", Value.fromBoolean(value));
+  }
+
   get hasSubmittedApplication(): boolean {
     let value = this.get("hasSubmittedApplication");
     if (!value || value.kind == ValueKind.NULL) {
@@ -422,6 +448,53 @@ export class GrantShip extends Entity {
 
   set isApproved(value: boolean) {
     this.set("isApproved", Value.fromBoolean(value));
+  }
+
+  get approvedTime(): BigInt | null {
+    let value = this.get("approvedTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set approvedTime(value: BigInt | null) {
+    if (!value) {
+      this.unset("approvedTime");
+    } else {
+      this.set("approvedTime", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get isRejected(): boolean {
+    let value = this.get("isRejected");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isRejected(value: boolean) {
+    this.set("isRejected", Value.fromBoolean(value));
+  }
+
+  get rejectedTime(): BigInt | null {
+    let value = this.get("rejectedTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set rejectedTime(value: BigInt | null) {
+    if (!value) {
+      this.unset("rejectedTime");
+    } else {
+      this.set("rejectedTime", Value.fromBigInt(<BigInt>value));
+    }
   }
 
   get applicationReviewReason(): string | null {
