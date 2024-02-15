@@ -11,9 +11,11 @@ import {
 } from '../generated/Registry/Registry';
 
 import { Project, GrantShip, ProfileMemberGroup } from '../generated/schema';
-import { BigInt } from '@graphprotocol/graph-ts';
+import { BigInt, ethereum } from '@graphprotocol/graph-ts';
 import { addTransaction } from './utils/addTransaction';
 import { createRawMetadata } from './utils/rawMetadata';
+import { AlloStatus, GameStatus } from './utils/constants';
+import { addFeedItem } from './utils/feed';
 
 export function handleRoleRevokedEvent(event: RoleRevokedEvent): void {
   let entityId = event.params.role;
@@ -82,6 +84,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
       event.params.metadata.protocol,
       event.params.metadata.pointer
     );
+    project.status = AlloStatus.None;
     project.owner = event.params.owner;
     project.anchor = event.params.anchor;
 
@@ -94,6 +97,21 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
 
     project.save();
     addTransaction(event.block, event.transaction);
+    addFeedItem({
+      timestamp: event.block.timestamp,
+      tx: event.transaction,
+      content: `Project ${project.name} has created a Grant Ships profile`,
+      subject: {
+        id: project.id.toString(),
+        type: 'project',
+        name: project.name,
+      },
+      object: null,
+      embed: null,
+      details: null,
+      tag: 'project-profile-created',
+      postIndex: 0,
+    });
   } else if (
     event.params.metadata.protocol == BigInt.fromString('103115010001004')
   ) {
@@ -134,6 +152,21 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
 
     grantShip.save();
     addTransaction(event.block, event.transaction);
+    addFeedItem({
+      tx: event.transaction,
+      timestamp: event.block.timestamp,
+      content: `Grant Ship ${grantShip.name} has created a Grant Ships profile`,
+      subject: {
+        id: grantShip.id.toHexString(),
+        type: 'ship',
+        name: grantShip.name,
+      },
+      object: null,
+      embed: null,
+      details: null,
+      tag: 'ship-profile-created',
+      postIndex: 0,
+    });
   }
 }
 

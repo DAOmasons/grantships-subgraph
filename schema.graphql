@@ -1,6 +1,7 @@
 type Project @entity {
   id: Bytes!
   profileId: Bytes! # bytes32
+  status: Int! # uint8
   nonce: BigInt! # uint256
   name: String! # string
   metadata: RawMetadata! # ProjectMetadata
@@ -10,6 +11,33 @@ type Project @entity {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
   members: ProfileMemberGroup
+}
+
+type FeedItem @entity {
+  # Derived from "feedItem" + txHash + index of feed Items created in that call
+  id: ID!
+  timestamp: BigInt
+  content: String!
+  sender: Bytes! # address
+  tag: String!
+  subject: FeedItemEntity!
+  object: FeedItemEntity
+  embed: FeedItemEmbed
+  details: String
+}
+
+type FeedItemEntity @entity {
+  id: ID!
+  name: String!
+  type: String!
+}
+
+type FeedItemEmbed @entity {
+  id: ID!
+  key: String
+  pointer: String
+  protocol: BigInt
+  content: String
 }
 
 # type ProjectMetadata @entity(immutable: true) {

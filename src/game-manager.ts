@@ -14,17 +14,7 @@ import {
 import { GrantShip, GameManager, GameRound } from '../generated/schema';
 import { createRawMetadata } from './utils/rawMetadata';
 import { addTransaction } from './utils/addTransaction';
-
-enum GameStatus {
-  None = 0,
-  Pending = 1,
-  Accepted = 2,
-  Rejected = 3,
-  Allocated = 4,
-  Funded = 5,
-  Active = 6,
-  Completed = 7,
-}
+import { GameStatus } from './utils/constants';
 
 export function handleGameManagerInitializedEvent(
   event: GameManagerInitializedEvent

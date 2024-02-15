@@ -65,6 +65,19 @@ export class Project extends Entity {
     this.set("profileId", Value.fromBytes(value));
   }
 
+  get status(): i32 {
+    let value = this.get("status");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set status(value: i32) {
+    this.set("status", Value.fromI32(value));
+  }
+
   get nonce(): BigInt {
     let value = this.get("nonce");
     if (!value || value.kind == ValueKind.NULL) {
@@ -183,6 +196,344 @@ export class Project extends Entity {
       this.unset("members");
     } else {
       this.set("members", Value.fromBytes(<Bytes>value));
+    }
+  }
+}
+
+export class FeedItem extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save FeedItem entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type FeedItem must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("FeedItem", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): FeedItem | null {
+    return changetype<FeedItem | null>(store.get_in_block("FeedItem", id));
+  }
+
+  static load(id: string): FeedItem | null {
+    return changetype<FeedItem | null>(store.get("FeedItem", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get timestamp(): BigInt | null {
+    let value = this.get("timestamp");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set timestamp(value: BigInt | null) {
+    if (!value) {
+      this.unset("timestamp");
+    } else {
+      this.set("timestamp", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get content(): string {
+    let value = this.get("content");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set content(value: string) {
+    this.set("content", Value.fromString(value));
+  }
+
+  get sender(): Bytes {
+    let value = this.get("sender");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set sender(value: Bytes) {
+    this.set("sender", Value.fromBytes(value));
+  }
+
+  get tag(): string {
+    let value = this.get("tag");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set tag(value: string) {
+    this.set("tag", Value.fromString(value));
+  }
+
+  get subject(): string {
+    let value = this.get("subject");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set subject(value: string) {
+    this.set("subject", Value.fromString(value));
+  }
+
+  get object(): string | null {
+    let value = this.get("object");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set object(value: string | null) {
+    if (!value) {
+      this.unset("object");
+    } else {
+      this.set("object", Value.fromString(<string>value));
+    }
+  }
+
+  get embed(): string | null {
+    let value = this.get("embed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set embed(value: string | null) {
+    if (!value) {
+      this.unset("embed");
+    } else {
+      this.set("embed", Value.fromString(<string>value));
+    }
+  }
+
+  get details(): string | null {
+    let value = this.get("details");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set details(value: string | null) {
+    if (!value) {
+      this.unset("details");
+    } else {
+      this.set("details", Value.fromString(<string>value));
+    }
+  }
+}
+
+export class FeedItemEntity extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save FeedItemEntity entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type FeedItemEntity must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("FeedItemEntity", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): FeedItemEntity | null {
+    return changetype<FeedItemEntity | null>(
+      store.get_in_block("FeedItemEntity", id),
+    );
+  }
+
+  static load(id: string): FeedItemEntity | null {
+    return changetype<FeedItemEntity | null>(store.get("FeedItemEntity", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get type(): string {
+    let value = this.get("type");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set type(value: string) {
+    this.set("type", Value.fromString(value));
+  }
+}
+
+export class FeedItemEmbed extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save FeedItemEmbed entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type FeedItemEmbed must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("FeedItemEmbed", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): FeedItemEmbed | null {
+    return changetype<FeedItemEmbed | null>(
+      store.get_in_block("FeedItemEmbed", id),
+    );
+  }
+
+  static load(id: string): FeedItemEmbed | null {
+    return changetype<FeedItemEmbed | null>(store.get("FeedItemEmbed", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get key(): string | null {
+    let value = this.get("key");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set key(value: string | null) {
+    if (!value) {
+      this.unset("key");
+    } else {
+      this.set("key", Value.fromString(<string>value));
+    }
+  }
+
+  get pointer(): string | null {
+    let value = this.get("pointer");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set pointer(value: string | null) {
+    if (!value) {
+      this.unset("pointer");
+    } else {
+      this.set("pointer", Value.fromString(<string>value));
+    }
+  }
+
+  get protocol(): BigInt | null {
+    let value = this.get("protocol");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set protocol(value: BigInt | null) {
+    if (!value) {
+      this.unset("protocol");
+    } else {
+      this.set("protocol", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get content(): string | null {
+    let value = this.get("content");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set content(value: string | null) {
+    if (!value) {
+      this.unset("content");
+    } else {
+      this.set("content", Value.fromString(<string>value));
     }
   }
 }
