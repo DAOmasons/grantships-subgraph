@@ -20,6 +20,8 @@ type FeedItem @entity {
   content: String!
   sender: Bytes! # address
   tag: String!
+  subjectId: String!
+  objectId: String
   subject: FeedItemEntity!
   object: FeedItemEntity
   embed: FeedItemEmbed

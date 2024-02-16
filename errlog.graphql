@@ -1,0 +1,28 @@
+{
+  indexingStatuses(subgraphs: ["Deployed Subgraph CID"]) {
+    subgraph
+    synced
+    health
+    entityCount
+    fatalError {
+      handler
+      message
+      deterministic
+      block {
+        hash
+        number
+      }
+    }
+    chains {
+      chainHeadBlock {
+        number
+      }
+      earliestBlock {
+        number
+      }
+      latestBlock {
+        number
+      }
+    }
+  }
+}

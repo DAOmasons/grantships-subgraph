@@ -20,7 +20,7 @@ class FeedObject {
 class Embed {
   key: string | null;
   pointer: string | null;
-  protocol: string | null;
+  protocol: BigInt | null;
   content: string | null;
 }
 
@@ -48,11 +48,13 @@ export const addFeedItem = (feedArgs: FeedItemArgs): void => {
   feedItem.details = feedArgs.details || null;
 
   let subjectEntity = new FeedItemEntity(entityId);
+
   let subject = feedArgs.subject;
   subjectEntity.id = subject.id;
   subjectEntity.type = subject.type;
   subjectEntity.name = subject.name;
   feedItem.subject = subject.id;
+  feedItem.subjectId = subject.id;
   subjectEntity.save();
 
   let object = feedArgs.object;
@@ -75,4 +77,8 @@ export const addFeedItem = (feedArgs: FeedItemArgs): void => {
     embed.save();
   }
   feedItem.save();
+};
+
+export const inWeiMarker = (value: BigInt): string => {
+  return `##IN-WEI${value}##`;
 };

@@ -15,6 +15,7 @@ import { GrantShip, GameManager, GameRound } from '../generated/schema';
 import { createRawMetadata } from './utils/rawMetadata';
 import { addTransaction } from './utils/addTransaction';
 import { GameStatus } from './utils/constants';
+import { addFeedItem, inWeiMarker } from './utils/feed';
 
 export function handleGameManagerInitializedEvent(
   event: GameManagerInitializedEvent
@@ -25,8 +26,26 @@ export function handleGameManagerInitializedEvent(
   gameManager.tokenAddress = event.params.token;
   gameManager.currentRoundId = BigInt.fromI32(0);
   gameManager.poolFunds = BigInt.fromI32(0);
+
   gameManager.save();
+
   addTransaction(event.block, event.transaction);
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `Facilitator Crew Initialized the Game Manager Contract`,
+    subject: {
+      id: event.address.toHexString(),
+      type: 'facilitators',
+      name: 'Facilitator Crew',
+    },
+    object: null,
+    embed: null,
+    details: null,
+    tag: 'gm-initialized',
+    postIndex: 0,
+  });
 }
 
 export function handleRegisteredEvent(event: RegisteredEvent): void {
@@ -48,6 +67,22 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
   grantShip.status = GameStatus.Pending;
   grantShip.save();
   addTransaction(event.block, event.transaction);
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `Ship ${grantShip.name} submitted an application to become a Grant Ship`,
+    subject: {
+      id: grantShip.id.toHexString(),
+      type: 'ship',
+      name: grantShip.name,
+    },
+    object: null,
+    embed: null,
+    details: null,
+    tag: 'ship-registered',
+    postIndex: 0,
+  });
 }
 
 export function handleRoundCreatedEvent(event: RoundCreatedEvent): void {
@@ -66,6 +101,22 @@ export function handleRoundCreatedEvent(event: RoundCreatedEvent): void {
   gameManager.currentRound = entityId.toString();
   gameManager.save();
   addTransaction(event.block, event.transaction);
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `Facilitator Crew created a new Game Round`,
+    subject: {
+      id: event.address.toHexString(),
+      type: 'facilitators',
+      name: 'Facilitator Crew',
+    },
+    object: null,
+    embed: null,
+    details: null,
+    tag: 'gm-round-created',
+    postIndex: 0,
+  });
 }
 
 export function handleRecipientRejectedEvent(
@@ -86,6 +137,31 @@ export function handleRecipientRejectedEvent(
   );
   grantShip.save();
   addTransaction(event.block, event.transaction);
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `Facilitator Crew rejected Grant Ship application for ${grantShip.name}`,
+    subject: {
+      id: event.address.toHexString(),
+      type: 'facilitators',
+      name: 'Facilitator Crew',
+    },
+    object: {
+      id: event.address.toHexString(),
+      type: 'ship',
+      name: grantShip.name,
+    },
+    embed: {
+      key: 'reason',
+      pointer: event.params.reason.pointer,
+      protocol: event.params.reason.protocol,
+      content: null,
+    },
+    details: null,
+    tag: 'ship-rejected',
+    postIndex: 0,
+  });
 }
 
 export function handleRecipientAcceptedEvent(
@@ -106,6 +182,31 @@ export function handleRecipientAcceptedEvent(
   );
   grantShip.save();
   addTransaction(event.block, event.transaction);
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `Facilitator Crew approved Grant Ship application for ${grantShip.name}`,
+    subject: {
+      id: event.address.toHexString(),
+      type: 'facilitators',
+      name: 'Facilitator Crew',
+    },
+    object: {
+      id: event.address.toHexString(),
+      type: 'ship',
+      name: grantShip.name,
+    },
+    embed: {
+      key: 'reason',
+      pointer: event.params.reason.pointer,
+      protocol: event.params.reason.protocol,
+      content: null,
+    },
+    details: null,
+    tag: 'ship-accepted',
+    postIndex: 0,
+  });
 }
 
 export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {
@@ -119,6 +220,22 @@ export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {
   grantShip.shipLaunched = true;
   grantShip.save();
   addTransaction(event.block, event.transaction);
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `${grantShip.name} has launched a Grant Ship contract! 🚀`,
+    subject: {
+      id: grantShip.id.toHexString(),
+      type: 'ship',
+      name: grantShip.name,
+    },
+    object: null,
+    embed: null,
+    details: null,
+    tag: 'ship-launched',
+    postIndex: 0,
+  });
 }
 export function handleAllocatedEvent(event: AllocatedEvent): void {
   let shipId = event.params.recipientId;
@@ -145,6 +262,28 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {
   );
   currentRound.save();
   addTransaction(event.block, event.transaction);
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `Facilitator Crew allocated ${inWeiMarker(
+      event.params.amount
+    )} to ${grantShip.name}`,
+    subject: {
+      id: event.address.toHexString(),
+      type: 'facilitators',
+      name: 'Facilitator Crew',
+    },
+    object: {
+      id: grantShip.id.toHexString(),
+      type: 'ship',
+      name: grantShip.name,
+    },
+    embed: null,
+    details: null,
+    tag: 'ship-allocated',
+    postIndex: 0,
+  });
 }
 
 export function handleDistributedEvent(event: DistributedEvent): void {
@@ -178,6 +317,28 @@ export function handleDistributedEvent(event: DistributedEvent): void {
   // Will need to redeploy with relevant data
   currentRound.save();
   addTransaction(event.block, event.transaction);
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `Facilitator Crew distributed ${inWeiMarker(
+      event.params.amount
+    )} to ${grantShip.name}`,
+    subject: {
+      id: event.address.toHexString(),
+      type: 'facilitators',
+      name: 'Facilitator Crew',
+    },
+    object: {
+      id: grantShip.id.toHexString(),
+      type: 'ship',
+      name: grantShip.name,
+    },
+    embed: null,
+    details: null,
+    tag: 'ship-distributed',
+    postIndex: 0,
+  });
 }
 
 export function handleGameActiveEvent(event: GameActiveEvent): void {

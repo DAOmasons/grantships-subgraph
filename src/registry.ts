@@ -96,18 +96,25 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     // ProjectMetadata.create(event.params.metadata.pointer);
 
     project.save();
+
     addTransaction(event.block, event.transaction);
+
     addFeedItem({
       timestamp: event.block.timestamp,
       tx: event.transaction,
       content: `Project ${project.name} has created a Grant Ships profile`,
       subject: {
-        id: project.id.toString(),
+        id: project.id.toHexString(),
         type: 'project',
         name: project.name,
       },
       object: null,
-      embed: null,
+      embed: {
+        key: 'description',
+        pointer: event.params.metadata.pointer,
+        protocol: event.params.metadata.protocol,
+        content: null,
+      },
       details: null,
       tag: 'project-profile-created',
       postIndex: 0,
@@ -151,7 +158,9 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     // ShipProfileMetadata.create(event.params.metadata.pointer);
 
     grantShip.save();
+
     addTransaction(event.block, event.transaction);
+
     addFeedItem({
       tx: event.transaction,
       timestamp: event.block.timestamp,
