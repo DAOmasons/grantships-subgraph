@@ -41,6 +41,7 @@ export const addFeedItem = (feedArgs: FeedItemArgs): void => {
   let entityId = `${feedArgs.tag}-${feedArgs.tx.hash.toHex()}-${
     feedArgs.postIndex
   }`;
+
   let feedItem = new FeedItem(entityId);
   feedItem.timestamp = feedArgs.timestamp;
   feedItem.sender = feedArgs.tx.from;
@@ -48,9 +49,14 @@ export const addFeedItem = (feedArgs: FeedItemArgs): void => {
   feedItem.content = feedArgs.content;
   feedItem.details = feedArgs.details || null;
   feedItem.subjectMetadataPointer = feedArgs.subjectMetadataPointer;
-  let subjectEntity = new FeedItemEntity(entityId);
-
   let subject = feedArgs.subject;
+
+  let subjectEntity = FeedItemEntity.load(subject.id);
+
+  if (subjectEntity === null) {
+    subjectEntity = new FeedItemEntity(subject.id);
+  }
+
   subjectEntity.id = subject.id;
   subjectEntity.type = subject.type;
   subjectEntity.name = subject.name;
@@ -58,23 +64,29 @@ export const addFeedItem = (feedArgs: FeedItemArgs): void => {
   subjectEntity.save();
 
   let object = feedArgs.object;
+
   if (object) {
-    let objectEntity = new FeedItemEntity(entityId);
+    let objectEntity = FeedItemEntity.load(object.id);
+
+    if (objectEntity === null) {
+      objectEntity = new FeedItemEntity(entityId);
+    }
     objectEntity.id = object.id;
     objectEntity.type = object.type;
     objectEntity.name = object.name;
     feedItem.object = object.id;
     objectEntity.save();
   }
+
   let embed = feedArgs.embed;
   if (embed) {
-    let embed = new FeedItemEmbed(entityId);
-    embed.key = embed.key;
-    embed.pointer = embed.pointer;
-    embed.protocol = embed.protocol;
-    embed.content = embed.content;
-    feedItem.embed = embed.id;
-    embed.save();
+    let embedEntity = new FeedItemEmbed(`feed-embed-${entityId}`);
+    embedEntity.key = embed.key;
+    embedEntity.pointer = embed.pointer;
+    embedEntity.protocol = embed.protocol;
+    embedEntity.content = embed.content;
+    feedItem.embed = embedEntity.id;
+    embedEntity.save();
   }
   feedItem.save();
 };
