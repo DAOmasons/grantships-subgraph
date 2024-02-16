@@ -47,7 +47,7 @@ export const addFeedItem = (feedArgs: FeedItemArgs): void => {
   feedItem.tag = (feedArgs.tag !== null ? feedArgs.tag : 'general') as string;
   feedItem.content = feedArgs.content;
   feedItem.details = feedArgs.details || null;
-
+  feedItem.subjectMetadataPointer = feedArgs.subjectMetadataPointer;
   let subjectEntity = new FeedItemEntity(entityId);
 
   let subject = feedArgs.subject;

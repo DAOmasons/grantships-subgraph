@@ -152,7 +152,7 @@ export function handleRecipientRejectedEvent(
       name: 'Facilitator Crew',
     },
     object: {
-      id: event.address.toHexString(),
+      id: grantShip.id.toHexString(),
       type: 'ship',
       name: grantShip.name,
     },
@@ -198,7 +198,7 @@ export function handleRecipientAcceptedEvent(
       name: 'Facilitator Crew',
     },
     object: {
-      id: event.address.toHexString(),
+      id: grantShip.id.toHexString(),
       type: 'ship',
       name: grantShip.name,
     },
