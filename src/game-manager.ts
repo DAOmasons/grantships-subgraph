@@ -35,6 +35,7 @@ export function handleGameManagerInitializedEvent(
     timestamp: event.block.timestamp,
     tx: event.transaction,
     content: `Facilitator Crew Initialized the Game Manager Contract`,
+    subjectMetadataPointer: 'facilitators',
     subject: {
       id: event.address.toHexString(),
       type: 'facilitators',
@@ -72,6 +73,7 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
     timestamp: event.block.timestamp,
     tx: event.transaction,
     content: `Ship ${grantShip.name} submitted an application to become a Grant Ship`,
+    subjectMetadataPointer: grantShip.profileMetadata,
     subject: {
       id: grantShip.id.toHexString(),
       type: 'ship',
@@ -106,6 +108,7 @@ export function handleRoundCreatedEvent(event: RoundCreatedEvent): void {
     timestamp: event.block.timestamp,
     tx: event.transaction,
     content: `Facilitator Crew created a new Game Round`,
+    subjectMetadataPointer: 'facilitators',
     subject: {
       id: event.address.toHexString(),
       type: 'facilitators',
@@ -142,6 +145,7 @@ export function handleRecipientRejectedEvent(
     timestamp: event.block.timestamp,
     tx: event.transaction,
     content: `Facilitator Crew rejected Grant Ship application for ${grantShip.name}`,
+    subjectMetadataPointer: 'facilitators',
     subject: {
       id: event.address.toHexString(),
       type: 'facilitators',
@@ -172,7 +176,7 @@ export function handleRecipientAcceptedEvent(
   if (grantShip == null) {
     return;
   }
-  grantShip.status = GameStatus.Accepted; // 2 = Accepted
+  grantShip.status = GameStatus.Accepted;
   grantShip.isApproved = true;
   grantShip.isAwaitingApproval = false;
   grantShip.approvedTime = event.block.timestamp;
@@ -187,6 +191,7 @@ export function handleRecipientAcceptedEvent(
     timestamp: event.block.timestamp,
     tx: event.transaction,
     content: `Facilitator Crew approved Grant Ship application for ${grantShip.name}`,
+    subjectMetadataPointer: 'facilitators',
     subject: {
       id: event.address.toHexString(),
       type: 'facilitators',
@@ -225,6 +230,7 @@ export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {
     timestamp: event.block.timestamp,
     tx: event.transaction,
     content: `${grantShip.name} has launched a Grant Ship contract! 🚀`,
+    subjectMetadataPointer: grantShip.profileMetadata,
     subject: {
       id: grantShip.id.toHexString(),
       type: 'ship',
@@ -269,6 +275,7 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {
     content: `Facilitator Crew allocated ${inWeiMarker(
       event.params.amount
     )} to ${grantShip.name}`,
+    subjectMetadataPointer: 'facilitators',
     subject: {
       id: event.address.toHexString(),
       type: 'facilitators',
@@ -324,6 +331,7 @@ export function handleDistributedEvent(event: DistributedEvent): void {
     content: `Facilitator Crew distributed ${inWeiMarker(
       event.params.amount
     )} to ${grantShip.name}`,
+    subjectMetadataPointer: 'facilitators',
     subject: {
       id: event.address.toHexString(),
       type: 'facilitators',

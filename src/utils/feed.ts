@@ -29,7 +29,8 @@ class FeedItemArgs {
   timestamp: BigInt;
   content: string;
   postIndex: number; // Assuming i32 is the integer type you're using, nullable if necessary
-  tag: string | null;
+  tag: string;
+  subjectMetadataPointer: string;
   details: string | null;
   subject: FeedSubject;
   object: FeedObject | null;
@@ -37,8 +38,8 @@ class FeedItemArgs {
 }
 
 export const addFeedItem = (feedArgs: FeedItemArgs): void => {
-  let entityId = `feed-item-${feedArgs.tx.hash.toHex()}-${
-    feedArgs.postIndex || 0
+  let entityId = `${feedArgs.tag}-${feedArgs.tx.hash.toHex()}-${
+    feedArgs.postIndex
   }`;
   let feedItem = new FeedItem(entityId);
   feedItem.timestamp = feedArgs.timestamp;
@@ -54,7 +55,6 @@ export const addFeedItem = (feedArgs: FeedItemArgs): void => {
   subjectEntity.type = subject.type;
   subjectEntity.name = subject.name;
   feedItem.subject = subject.id;
-  feedItem.subjectId = subject.id;
   subjectEntity.save();
 
   let object = feedArgs.object;

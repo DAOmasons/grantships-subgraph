@@ -103,6 +103,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
       timestamp: event.block.timestamp,
       tx: event.transaction,
       content: `Project ${project.name} has created a Grant Ships profile`,
+      subjectMetadataPointer: event.params.metadata.pointer,
       subject: {
         id: project.id.toHexString(),
         type: 'project',
@@ -165,6 +166,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
       tx: event.transaction,
       timestamp: event.block.timestamp,
       content: `Grant Ship ${grantShip.name} has created a Grant Ships profile`,
+      subjectMetadataPointer: event.params.metadata.pointer,
       subject: {
         id: grantShip.id.toHexString(),
         type: 'ship',

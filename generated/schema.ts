@@ -295,8 +295,8 @@ export class FeedItem extends Entity {
     this.set("tag", Value.fromString(value));
   }
 
-  get subjectId(): string {
-    let value = this.get("subjectId");
+  get subjectMetadataPointer(): string {
+    let value = this.get("subjectMetadataPointer");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
@@ -304,25 +304,8 @@ export class FeedItem extends Entity {
     }
   }
 
-  set subjectId(value: string) {
-    this.set("subjectId", Value.fromString(value));
-  }
-
-  get objectId(): string | null {
-    let value = this.get("objectId");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set objectId(value: string | null) {
-    if (!value) {
-      this.unset("objectId");
-    } else {
-      this.set("objectId", Value.fromString(<string>value));
-    }
+  set subjectMetadataPointer(value: string) {
+    this.set("subjectMetadataPointer", Value.fromString(value));
   }
 
   get subject(): string {
