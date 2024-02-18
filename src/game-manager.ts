@@ -11,7 +11,7 @@ import {
   Allocated as AllocatedEvent,
   Distributed as DistributedEvent,
 } from '../generated/GameManager/GameManager';
-import { GrantShip, GameManager, GameRound } from '../generated/schema';
+import { GrantShip, GameManager, GameRound, Log } from '../generated/schema';
 import { createRawMetadata } from './utils/rawMetadata';
 import { addTransaction } from './utils/addTransaction';
 import { GameStatus } from './utils/constants';
@@ -91,12 +91,17 @@ export function handleRoundCreatedEvent(event: RoundCreatedEvent): void {
   let entityId = event.params.gameIndex;
   let gameManager = GameManager.load(event.address);
   if (gameManager == null) {
+    let log = new Log('Game Manager Not Found');
+    log.message = 'Game Manager not found';
+    log.type = 'Error';
+    log.save();
     return;
   }
   let gameRound = new GameRound(entityId.toString());
   gameRound.startTime = BigInt.fromI32(0);
   gameRound.endTime = BigInt.fromI32(0);
   gameRound.totalRoundAmount = event.params.totalRoundAmount;
+  gameRound.totalAllocatedAmount = BigInt.fromI32(0);
   gameRound.gameStatus = GameStatus.Pending; // 1 = Pending
   gameRound.ships = [];
   gameRound.save();
@@ -263,7 +268,7 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {
   }
   currentRound.ships.push(shipId);
   currentRound.gameStatus = GameStatus.Allocated; // 5 = Allocated
-  currentRound.totalRoundAmount = currentRound.totalRoundAmount.plus(
+  currentRound.totalAllocatedAmount = currentRound.totalAllocatedAmount.plus(
     event.params.amount
   );
   currentRound.save();
@@ -288,7 +293,7 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {
     },
     embed: null,
     details: null,
-    tag: 'ship-allocated',
+    tag: `${grantShip.id}-allocated`,
     postIndex: 0,
   });
 }

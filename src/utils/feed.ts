@@ -58,6 +58,7 @@ export const addFeedItem = (feedArgs: FeedItemArgs): void => {
   }
 
   subjectEntity.id = subject.id;
+  feedItem.subjectId = subject.id;
   subjectEntity.type = subject.type;
   subjectEntity.name = subject.name;
   feedItem.subject = subject.id;
@@ -72,6 +73,7 @@ export const addFeedItem = (feedArgs: FeedItemArgs): void => {
       objectEntity = new FeedItemEntity(entityId);
     }
     objectEntity.id = object.id;
+    feedItem.objectId = object.id;
     objectEntity.type = object.type;
     objectEntity.name = object.name;
     feedItem.object = object.id;

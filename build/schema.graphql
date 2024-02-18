@@ -21,6 +21,8 @@ type FeedItem @entity {
   sender: Bytes! # address
   tag: String!
   subjectMetadataPointer: String!
+  subjectId: ID!
+  objectId: ID
   subject: FeedItemEntity!
   object: FeedItemEntity
   embed: FeedItemEmbed
@@ -121,6 +123,7 @@ type GameRound @entity {
   startTime: BigInt!
   endTime: BigInt!
   totalRoundAmount: BigInt!
+  totalAllocatedAmount: BigInt!
   gameStatus: Int!
   ships: [GrantShip!]!
 }

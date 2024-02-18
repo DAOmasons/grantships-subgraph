@@ -308,6 +308,36 @@ export class FeedItem extends Entity {
     this.set("subjectMetadataPointer", Value.fromString(value));
   }
 
+  get subjectId(): string {
+    let value = this.get("subjectId");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set subjectId(value: string) {
+    this.set("subjectId", Value.fromString(value));
+  }
+
+  get objectId(): string | null {
+    let value = this.get("objectId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set objectId(value: string | null) {
+    if (!value) {
+      this.unset("objectId");
+    } else {
+      this.set("objectId", Value.fromString(<string>value));
+    }
+  }
+
   get subject(): string {
     let value = this.get("subject");
     if (!value || value.kind == ValueKind.NULL) {
@@ -1300,6 +1330,19 @@ export class GameRound extends Entity {
 
   set totalRoundAmount(value: BigInt) {
     this.set("totalRoundAmount", Value.fromBigInt(value));
+  }
+
+  get totalAllocatedAmount(): BigInt {
+    let value = this.get("totalAllocatedAmount");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalAllocatedAmount(value: BigInt) {
+    this.set("totalAllocatedAmount", Value.fromBigInt(value));
   }
 
   get gameStatus(): i32 {

@@ -173,7 +173,12 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
         name: grantShip.name,
       },
       object: null,
-      embed: null,
+      embed: {
+        pointer: event.params.metadata.pointer,
+        key: 'mission',
+        protocol: event.params.metadata.protocol,
+        content: null,
+      },
       details: null,
       tag: 'ship-profile-created',
       postIndex: 0,
