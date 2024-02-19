@@ -125,6 +125,32 @@ templates:
         - name: GrantShipStrategy
           file: GrantShipStrategyContract/abis/GrantShipStrategy.json
       eventHandlers:
-        - event: Initialized(uint256,bytes)
-          handler: handleGrantShipEvent
+        - event: PoolFunded(uint256,uint256,uint256)
+          handler: handlePoolFundedEvent
+        - event: RecipientStatusChanged(address,uint8,(uint256,string))
+          handler: handleRecipientStatusChangedEvent
+        - event: MilestoneSubmitted(address,uint256,(uint256,string))
+          handler: handleMilestoneSubmittedEvent
+        - event: MilestoneStatusChanged(address,uint256,uint8)
+          handler: handleMilestoneStatusChangedEvent
+        - event: MilestoneRejected(address,uint256,(uint256,string))
+          handler: handleMilestoneRejectedEvent
+        - event: MilestonesSet(address,uint256)
+          handler: handleMilestonesSetEvent
+        - event: FlagIssued(uint256,uint8,(uint256,string))
+          handler: handleFlagIssuedEvent
+        - event: FlagResolved(uint256,(uint256,string))
+          handler: handleFlagResolvedEvent
+        - event: MilestonesReviewed(address,uint8,(uint256,string))
+          handler: handleMilestonesReviewedEvent
+        - event: PoolWithdraw(uint256)
+          handler: handlePoolWithdrawEvent
+        - event: UpdatePosted(string,uint256,address,(uint256,string))
+          handler: handleUpdatePostedEvent
+        - event: Registered(indexed address,bytes,address)
+          handler: handleRegisteredEvent
+        - event: Allocated(indexed address,uint256,address,address)
+          handler: handleAllocatedEvent
+        - event: Distributed(indexed address,address,uint256,address)
+          handler: handleDistributedEvent
       file: templates/GrantShipStrategyContract/GrantShipStrategyContract.wasm
