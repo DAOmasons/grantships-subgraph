@@ -43,19 +43,6 @@ type FeedItemEmbed @entity {
   content: String
 }
 
-# type ProjectMetadata @entity(immutable: true) {
-#   id: String!
-#   name: String
-#   description: String
-#   avatarHash_IPFS: String
-#   email: String
-#   x: String
-#   github: String
-#   discord: String
-#   telegram: String
-#   website: String
-# }
-
 type GrantShip @entity {
   # Registry => ProfileCreated
   id: Bytes!
@@ -86,7 +73,6 @@ type GrantShip @entity {
   poolId: BigInt
   shipContractAddress: Bytes # address
   shipLaunched: Boolean
-  #
 
   # Game Manager => Allocated
   isAllocated: Boolean
@@ -116,6 +102,7 @@ type GameManager @entity {
   # GameManager => CreateRound
   currentRound: GameRound
   poolFunds: BigInt!
+  # GameManager => GameActive
 }
 
 type GameRound @entity {
@@ -124,22 +111,13 @@ type GameRound @entity {
   endTime: BigInt!
   totalRoundAmount: BigInt!
   totalAllocatedAmount: BigInt!
+  totalDistributedAmount: BigInt!
   gameStatus: Int!
   ships: [GrantShip!]!
+  isGameActive: Boolean!
+  realStartTime: BigInt
+  realEndTime: BigInt
 }
-
-# type ShipProfileMetadata @entity(immutable: true) {
-#   id: String!
-#   name: String
-#   mission: String
-#   avatarHash_IPFS: String
-#   email: String
-#   x: String
-#   github: String
-#   discord: String
-#   telegram: String
-#   website: String
-# }
 
 type ProfileMemberGroup @entity {
   id: Bytes!
@@ -165,3 +143,28 @@ type Log @entity {
   description: String
   type: String!
 }
+# type ProjectMetadata @entity(immutable: true) {
+#   id: String!
+#   name: String
+#   description: String
+#   avatarHash_IPFS: String
+#   email: String
+#   x: String
+#   github: String
+#   discord: String
+#   telegram: String
+#   website: String
+# }
+
+# type ShipProfileMetadata @entity(immutable: true) {
+#   id: String!
+#   name: String
+#   mission: String
+#   avatarHash_IPFS: String
+#   email: String
+#   x: String
+#   github: String
+#   discord: String
+#   telegram: String
+#   website: String
+# }

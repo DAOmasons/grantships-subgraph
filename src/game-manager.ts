@@ -102,6 +102,7 @@ export function handleRoundCreatedEvent(event: RoundCreatedEvent): void {
   gameRound.endTime = BigInt.fromI32(0);
   gameRound.totalRoundAmount = event.params.totalRoundAmount;
   gameRound.totalAllocatedAmount = BigInt.fromI32(0);
+  gameRound.totalDistributedAmount = BigInt.fromI32(0);
   gameRound.gameStatus = GameStatus.Pending; // 1 = Pending
   gameRound.ships = [];
   gameRound.save();
@@ -309,11 +310,7 @@ export function handleDistributedEvent(event: DistributedEvent): void {
   grantShip.isDistributed = true;
   grantShip.distributedAmount = event.params.amount;
   grantShip.status = GameStatus.Active;
-  if (grantShip.allocatedAmount) {
-    grantShip.allocatedAmount = grantShip.allocatedAmount!.minus(
-      event.params.amount
-    );
-  }
+
   grantShip.save();
   if (gameManager.currentRound == null) {
     return;
@@ -324,6 +321,9 @@ export function handleDistributedEvent(event: DistributedEvent): void {
   }
   currentRound.ships.push(shipId);
   currentRound.gameStatus = GameStatus.Funded;
+  currentRound.totalDistributedAmount =
+    currentRound.totalDistributedAmount.plus(event.params.amount);
+
   // Todo: Will need to track pool funded on Allo contract in order track the pool balance here.
   // Todo: Distributed event doesn't track start and stop times for the round
   // Will need to redeploy with relevant data
@@ -349,18 +349,71 @@ export function handleDistributedEvent(event: DistributedEvent): void {
     },
     embed: null,
     details: null,
-    tag: 'ship-distributed',
+    tag: `${grantShip.id}-ship-distributed`,
     postIndex: 0,
   });
 }
 
 export function handleGameActiveEvent(event: GameActiveEvent): void {
-  // let gameManager = GameManager.load(event.address);
-  // if (gameManager == null) {
-  //   return;
-  // }
-  // gameManager.currentRoundId = event.params.gameIndex;
-  // gameManager.save();
+  let gameManager = GameManager.load(event.address);
+  if (gameManager == null) {
+    return;
+  }
+
+  let currentRound = GameRound.load(gameManager.currentRound!);
+
+  if (currentRound == null) {
+    return;
+  }
+
+  // Is start game
+  if (event.params.active === true) {
+    currentRound.gameStatus = GameStatus.Active;
+    currentRound.realStartTime = event.block.timestamp;
+    currentRound.isGameActive = true;
+    addFeedItem({
+      timestamp: event.block.timestamp,
+      tx: event.transaction,
+      content: `Facilitator Crew has started round 0 of the Grant Ships game! 🚀`,
+      subjectMetadataPointer: 'facilitators',
+      subject: {
+        id: event.address.toHexString(),
+        type: 'facilitators',
+        name: 'Facilitator Crew',
+      },
+      object: null,
+      embed: null,
+      details: null,
+      tag: 'gm-game-active',
+      postIndex: 0,
+    });
+  }
+  // Is stop game
+  if (event.params.active === false) {
+    currentRound.gameStatus = GameStatus.Completed;
+    currentRound.realEndTime = event.block.timestamp;
+    gameManager.currentRoundId = event.params.gameIndex;
+    currentRound.isGameActive = false;
+    addFeedItem({
+      timestamp: event.block.timestamp,
+      tx: event.transaction,
+      content: `Facilitator Crew has ended round 0 of the Grant Ships game! 🚀`,
+      subjectMetadataPointer: 'facilitators',
+      subject: {
+        id: event.address.toHexString(),
+        type: 'facilitators',
+        name: 'Facilitator Crew',
+      },
+      object: null,
+      embed: null,
+      details: null,
+      tag: 'gm-game-inactive',
+      postIndex: 0,
+    });
+  }
+  currentRound.save();
+  gameManager.save();
+  addTransaction(event.block, event.transaction);
 }
 
 export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {}

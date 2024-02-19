@@ -1345,6 +1345,19 @@ export class GameRound extends Entity {
     this.set("totalAllocatedAmount", Value.fromBigInt(value));
   }
 
+  get totalDistributedAmount(): BigInt {
+    let value = this.get("totalDistributedAmount");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalDistributedAmount(value: BigInt) {
+    this.set("totalDistributedAmount", Value.fromBigInt(value));
+  }
+
   get gameStatus(): i32 {
     let value = this.get("gameStatus");
     if (!value || value.kind == ValueKind.NULL) {
@@ -1369,6 +1382,53 @@ export class GameRound extends Entity {
 
   set ships(value: Array<Bytes>) {
     this.set("ships", Value.fromBytesArray(value));
+  }
+
+  get isGameActive(): boolean {
+    let value = this.get("isGameActive");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isGameActive(value: boolean) {
+    this.set("isGameActive", Value.fromBoolean(value));
+  }
+
+  get realStartTime(): BigInt | null {
+    let value = this.get("realStartTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set realStartTime(value: BigInt | null) {
+    if (!value) {
+      this.unset("realStartTime");
+    } else {
+      this.set("realStartTime", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get realEndTime(): BigInt | null {
+    let value = this.get("realEndTime");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set realEndTime(value: BigInt | null) {
+    if (!value) {
+      this.unset("realEndTime");
+    } else {
+      this.set("realEndTime", Value.fromBigInt(<BigInt>value));
+    }
   }
 }
 
