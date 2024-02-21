@@ -33,7 +33,7 @@ dataSources:
     name: GameManager
     network: arbitrum-sepolia
     source:
-      address: "0x2D484ee4395C5ec4c5F1dB5f5CdD7BB9DFeef9Ef"
+      address: "0x207a19CD7A968A2c62f592498a91a8B67E568D2b"
       abi: GameManager
       startBlock: 7823400
     mapping:
@@ -93,7 +93,7 @@ dataSources:
     name: GrantShipFactory
     network: arbitrum-sepolia
     source:
-      address: "0xB6f1d31D7e9f980c080b4d40FA36d90791275A9f"
+      address: "0x6567DF60EF1F2cCe4c547ac0A4083497aC773c1F"
       abi: GrantShipFactory
       startBlock: 7823400
     mapping:
@@ -125,8 +125,6 @@ templates:
         - name: GrantShipStrategy
           file: ./abis/GrantShipStrategy.json
       eventHandlers: 
-        # - event: Initialized(uint256,bytes)
-        #   handler: handleGrantShipEvent
         - event: PoolFunded(uint256,uint256,uint256)
           handler: handlePoolFundedEvent
         - event:  RecipientStatusChanged(address,uint8,(uint256,string))

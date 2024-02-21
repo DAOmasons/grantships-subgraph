@@ -11,13 +11,7 @@ import {
   Allocated as AllocatedEvent,
   Distributed as DistributedEvent,
 } from '../generated/GameManager/GameManager';
-import {
-  GrantShip,
-  GameManager,
-  GameRound,
-  Log,
-  GrantShipLookup,
-} from '../generated/schema';
+import { GrantShip, GameManager, GameRound, Log } from '../generated/schema';
 import { createRawMetadata } from './utils/rawMetadata';
 import { addTransaction } from './utils/addTransaction';
 import { GameStatus } from './utils/constants';
@@ -240,11 +234,6 @@ export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {
   grantShip.shipLaunched = true;
   grantShip.save();
   addTransaction(event.block, event.transaction);
-
-  let anchorToShipAddress = new GrantShipLookup(event.params.shipAddress);
-  anchorToShipAddress.anchorAddress = grantShip.id;
-
-  anchorToShipAddress.save();
 
   let context = new DataSourceContext();
 

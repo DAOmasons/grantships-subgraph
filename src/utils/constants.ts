@@ -1,10 +1,10 @@
-import { BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { Bytes } from '@graphprotocol/graph-ts';
 
 export const GAME_MANAGER_ADDRESS = Bytes.fromHexString(
-  '0x2D484ee4395C5ec4c5F1dB5f5CdD7BB9DFeef9Ef'
+  '0x207a19CD7A968A2c62f592498a91a8B67E568D2b'
 ) as Bytes;
 
-export const GAME_MANAGER_POOL_ID = BigInt.fromI32(224);
+// export const GAME_MANAGER_POOL_ID = BigInt.fromI32(224);
 
 export enum GameStatus {
   None = 0,

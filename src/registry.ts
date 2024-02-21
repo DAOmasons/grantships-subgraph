@@ -61,7 +61,7 @@ export function handleRoleGrantedEvent(event: RoleGrantedEvent): void {
 
 export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
   if (event.params.metadata.protocol == BigInt.fromString('103115010001003')) {
-    let entityId = event.params.profileId;
+    let entityId = event.params.anchor;
     let project = Project.load(entityId);
 
     if (project == null) {
@@ -154,6 +154,8 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     grantShip.blockNumber = event.block.number;
     grantShip.blockTimestamp = event.block.timestamp;
     grantShip.transactionHash = event.transaction.hash;
+    grantShip.poolFunded = false;
+    grantShip.balance = BigInt.fromI32(0);
 
     // Graph IPFS file-data-source API isn't ready for prime-time
     // ShipProfileMetadata.create(event.params.metadata.pointer);
