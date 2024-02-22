@@ -142,6 +142,48 @@ export class FlagResolvedResolutionReasonStruct extends ethereum.Tuple {
   }
 }
 
+export class GrantShipInitialized extends ethereum.Event {
+  get params(): GrantShipInitialized__Params {
+    return new GrantShipInitialized__Params(this);
+  }
+}
+
+export class GrantShipInitialized__Params {
+  _event: GrantShipInitialized;
+
+  constructor(event: GrantShipInitialized) {
+    this._event = event;
+  }
+
+  get poolId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get registryGating(): boolean {
+    return this._event.parameters[1].value.toBoolean();
+  }
+
+  get metadataRequired(): boolean {
+    return this._event.parameters[2].value.toBoolean();
+  }
+
+  get grantAmountRequired(): boolean {
+    return this._event.parameters[3].value.toBoolean();
+  }
+
+  get operatorHatId(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
+  }
+
+  get facilitatorHatId(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
+  }
+
+  get registryAnchor(): Address {
+    return this._event.parameters[6].value.toAddress();
+  }
+}
+
 export class Initialized extends ethereum.Event {
   get params(): Initialized__Params {
     return new Initialized__Params(this);
@@ -698,6 +740,25 @@ export class GrantShipStrategy extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  anchorAddress(): Address {
+    let result = super.call("anchorAddress", "anchorAddress():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_anchorAddress(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "anchorAddress",
+      "anchorAddress():(address)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   facilitatorHatId(): BigInt {
     let result = super.call(
       "facilitatorHatId",
@@ -1210,6 +1271,29 @@ export class GrantShipStrategy extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  shipRegistryAnchor(): Address {
+    let result = super.call(
+      "shipRegistryAnchor",
+      "shipRegistryAnchor():(address)",
+      [],
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_shipRegistryAnchor(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "shipRegistryAnchor",
+      "shipRegistryAnchor():(address)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   unresolvedRedFlags(): BigInt {

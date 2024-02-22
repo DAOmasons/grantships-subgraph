@@ -1197,6 +1197,19 @@ export class GameManager extends Entity {
     this.set("id", Value.fromBytes(value));
   }
 
+  get poolId(): BigInt {
+    let value = this.get("poolId");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set poolId(value: BigInt) {
+    this.set("poolId", Value.fromBigInt(value));
+  }
+
   get gameFacilitatorId(): BigInt {
     let value = this.get("gameFacilitatorId");
     if (!value || value.kind == ValueKind.NULL) {

@@ -120,6 +120,36 @@ export class GameManagerInitialized__Params {
   get token(): Address {
     return this._event.parameters[3].value.toAddress();
   }
+
+  get poolId(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
+  }
+}
+
+export class GameRoundTimesCreated extends ethereum.Event {
+  get params(): GameRoundTimesCreated__Params {
+    return new GameRoundTimesCreated__Params(this);
+  }
+}
+
+export class GameRoundTimesCreated__Params {
+  _event: GameRoundTimesCreated;
+
+  constructor(event: GameRoundTimesCreated) {
+    this._event = event;
+  }
+
+  get gameRoundIndex(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get startTime(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get endTime(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
 }
 
 export class Initialized extends ethereum.Event {
@@ -1003,21 +1033,6 @@ export class GameManager extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  isGameActive(): boolean {
-    let result = super.call("isGameActive", "isGameActive():(bool)", []);
-
-    return result[0].toBoolean();
-  }
-
-  try_isGameActive(): ethereum.CallResult<boolean> {
-    let result = super.tryCall("isGameActive", "isGameActive():(bool)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
   isGameFacilitator(_address: Address): boolean {
     let result = super.call(
       "isGameFacilitator",
@@ -1603,6 +1618,36 @@ export class ReviewRecipientCall_reasonStruct extends ethereum.Tuple {
 
   get pointer(): string {
     return this[1].toString();
+  }
+}
+
+export class SetPoolActiveCall extends ethereum.Call {
+  get inputs(): SetPoolActiveCall__Inputs {
+    return new SetPoolActiveCall__Inputs(this);
+  }
+
+  get outputs(): SetPoolActiveCall__Outputs {
+    return new SetPoolActiveCall__Outputs(this);
+  }
+}
+
+export class SetPoolActiveCall__Inputs {
+  _call: SetPoolActiveCall;
+
+  constructor(call: SetPoolActiveCall) {
+    this._call = call;
+  }
+
+  get _flag(): boolean {
+    return this._call.inputValues[0].value.toBoolean();
+  }
+}
+
+export class SetPoolActiveCall__Outputs {
+  _call: SetPoolActiveCall;
+
+  constructor(call: SetPoolActiveCall) {
+    this._call = call;
   }
 }
 

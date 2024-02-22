@@ -1,6 +1,6 @@
 import { DataSourceContext, Value } from '@graphprotocol/graph-ts';
 import { ShipCreated as ShipCreatedEvent } from '../generated/GrantShipFactory/GrantShipFactory';
-// import { GrantShipLookup } from '../generated/schema';
+
 import { GrantShipStrategyContract } from '../generated/templates';
 
 // One problem with using a shared entity for GrantShip is that we

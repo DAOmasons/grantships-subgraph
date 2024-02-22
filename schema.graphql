@@ -97,6 +97,7 @@ type ProjectIdByAnchor @entity {
 type GameManager @entity {
   # GameManager => GameManagerInitialized
   id: Bytes!
+  poolId: BigInt!
   gameFacilitatorId: BigInt!
   rootAccount: Bytes! # address
   tokenAddress: Bytes! # address

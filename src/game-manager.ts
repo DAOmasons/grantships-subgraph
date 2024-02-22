@@ -10,6 +10,7 @@ import {
   UpdatePosted as UpdatePostedEvent,
   Allocated as AllocatedEvent,
   Distributed as DistributedEvent,
+  GameRoundTimesCreated as GameRoundTimesCreatedEvent,
 } from '../generated/GameManager/GameManager';
 import { GrantShip, GameManager, GameRound, Log } from '../generated/schema';
 import { createRawMetadata } from './utils/rawMetadata';
@@ -27,6 +28,7 @@ export function handleGameManagerInitializedEvent(
   gameManager.tokenAddress = event.params.token;
   gameManager.currentRoundId = BigInt.fromI32(0);
   gameManager.poolFunds = BigInt.fromI32(0);
+  gameManager.poolId = event.params.poolId;
 
   gameManager.save();
 
@@ -425,6 +427,26 @@ export function handleGameActiveEvent(event: GameActiveEvent): void {
   }
   currentRound.save();
   gameManager.save();
+  addTransaction(event.block, event.transaction);
+}
+
+export function handleGameRoundTimesCreatedEvent(
+  event: GameRoundTimesCreatedEvent
+): void {
+  let gameManager = GameManager.load(event.address);
+  if (gameManager == null) {
+    return;
+  }
+
+  let currentRound = GameRound.load(gameManager.currentRound!);
+
+  if (currentRound == null) {
+    return;
+  }
+
+  currentRound.startTime = event.params.startTime;
+  currentRound.endTime = event.params.endTime;
+  currentRound.save();
   addTransaction(event.block, event.transaction);
 }
 

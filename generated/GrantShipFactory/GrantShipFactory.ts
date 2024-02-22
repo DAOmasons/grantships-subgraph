@@ -30,10 +30,6 @@ export class ShipCreated__Params {
   get anchorAddress(): Address {
     return this._event.parameters[1].value.toAddress();
   }
-
-  get sender(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
 }
 
 export class GrantShipFactory extends ethereum.SmartContract {

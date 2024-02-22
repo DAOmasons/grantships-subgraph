@@ -24,12 +24,6 @@
         "internalType": "address",
         "name": "anchorAddress",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
       }
     ],
     "name": "ShipCreated",
