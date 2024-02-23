@@ -26,3 +26,19 @@ export enum AlloStatus {
   InReview = 5,
   Canceled = 6,
 }
+
+export enum GrantStatus {
+  None,
+  Applied,
+  ShipRejected,
+  ShipApproved,
+  FacilitatorRejected,
+  FacilitatorApproved,
+  MilestonesProposed,
+  MilestonesRejected,
+  MilestonesApproved,
+  MilestoneSubmitted,
+  MilestoneRejected,
+  MilestoneApproved,
+  Completed,
+}

@@ -17,7 +17,7 @@ import {
   Allocated as AllocatedEvent,
   Distributed as DistributedEvent,
 } from '../generated/templates/GrantShipStrategyContract/GrantShipStrategy';
-import { AlloStatus } from './utils/constants';
+import { AlloStatus, GrantStatus } from './utils/constants';
 import { addTransaction } from './utils/addTransaction';
 import { addFeedItem } from './utils/feed';
 
@@ -56,7 +56,7 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
   grant.projectId = project.id;
   grant.shipId = grantShip.id;
   grant.lastUpdated = event.block.timestamp;
-  grant.grantStatus = AlloStatus.Pending;
+  grant.grantStatus = GrantStatus.Applied;
   grant.milestoneReviewStatus = AlloStatus.Pending;
 
   grant.save();
