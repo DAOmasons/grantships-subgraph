@@ -182,6 +182,14 @@ export class Project extends Entity {
     this.set("transactionHash", Value.fromBytes(value));
   }
 
+  get grants(): GrantLoader {
+    return new GrantLoader(
+      "Project",
+      this.get("id")!.toBytes().toHexString(),
+      "grants",
+    );
+  }
+
   get members(): Bytes | null {
     let value = this.get("members");
     if (!value || value.kind == ValueKind.NULL) {
@@ -780,6 +788,14 @@ export class GrantShip extends Entity {
     this.set("balance", Value.fromBigInt(value));
   }
 
+  get grants(): GrantLoader {
+    return new GrantLoader(
+      "GrantShip",
+      this.get("id")!.toBytes().toHexString(),
+      "grants",
+    );
+  }
+
   get alloProfileMembers(): Bytes | null {
     let value = this.get("alloProfileMembers");
     if (!value || value.kind == ValueKind.NULL) {
@@ -951,6 +967,23 @@ export class GrantShip extends Entity {
     }
   }
 
+  get hatId(): BigInt | null {
+    let value = this.get("hatId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set hatId(value: BigInt | null) {
+    if (!value) {
+      this.unset("hatId");
+    } else {
+      this.set("hatId", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
   get shipContractAddress(): Bytes | null {
     let value = this.get("shipContractAddress");
     if (!value || value.kind == ValueKind.NULL) {
@@ -979,6 +1012,19 @@ export class GrantShip extends Entity {
 
   set shipLaunched(value: boolean) {
     this.set("shipLaunched", Value.fromBoolean(value));
+  }
+
+  get poolActive(): boolean {
+    let value = this.get("poolActive");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set poolActive(value: boolean) {
+    this.set("poolActive", Value.fromBoolean(value));
   }
 
   get isAllocated(): boolean {
@@ -1068,63 +1114,6 @@ export class PoolIdLookup extends Entity {
 
   static load(id: string): PoolIdLookup | null {
     return changetype<PoolIdLookup | null>(store.get("PoolIdLookup", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get entityId(): Bytes {
-    let value = this.get("entityId");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set entityId(value: Bytes) {
-    this.set("entityId", Value.fromBytes(value));
-  }
-}
-
-export class ProjectIdByAnchor extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save ProjectIdByAnchor entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type ProjectIdByAnchor must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
-      );
-      store.set("ProjectIdByAnchor", id.toString(), this);
-    }
-  }
-
-  static loadInBlock(id: string): ProjectIdByAnchor | null {
-    return changetype<ProjectIdByAnchor | null>(
-      store.get_in_block("ProjectIdByAnchor", id),
-    );
-  }
-
-  static load(id: string): ProjectIdByAnchor | null {
-    return changetype<ProjectIdByAnchor | null>(
-      store.get("ProjectIdByAnchor", id),
-    );
   }
 
   get id(): string {
@@ -1560,6 +1549,19 @@ export class Grant extends Entity {
 
   set grantStatus(value: i32) {
     this.set("grantStatus", Value.fromI32(value));
+  }
+
+  get grantApplicationBytes(): Bytes {
+    let value = this.get("grantApplicationBytes");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set grantApplicationBytes(value: Bytes) {
+    this.set("grantApplicationBytes", Value.fromBytes(value));
   }
 
   get milestoneReviewStatus(): i32 {
@@ -2022,5 +2024,23 @@ export class Log extends Entity {
 
   set type(value: string) {
     this.set("type", Value.fromString(value));
+  }
+}
+
+export class GrantLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): Grant[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<Grant[]>(value);
   }
 }

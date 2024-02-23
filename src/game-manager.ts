@@ -231,20 +231,13 @@ export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {
   if (grantShip == null) {
     return;
   }
-  grantShip.poolId = event.params.shipPoolId;
-  grantShip.shipContractAddress = event.params.shipAddress;
+
+  // Pool Id and strategyContractAddress is set in GrantShipStrategy => GranShipInitialized
+  // We add shipLaunched and addTransaction to confirm the event has been handled
+
   grantShip.shipLaunched = true;
   grantShip.save();
   addTransaction(event.block, event.transaction);
-
-  let context = new DataSourceContext();
-
-  context.set('anchorAddress', Value.fromBytes(grantShip.id));
-
-  GrantShipStrategyContract.createWithContext(
-    event.params.shipAddress,
-    context
-  );
 
   addFeedItem({
     timestamp: event.block.timestamp,

@@ -16,10 +16,37 @@ import {
   Registered as RegisteredEvent,
   Allocated as AllocatedEvent,
   Distributed as DistributedEvent,
+  GrantShipInitialized as GrantShipInitializedEvent,
 } from '../generated/templates/GrantShipStrategyContract/GrantShipStrategy';
 import { AlloStatus, GrantStatus } from './utils/constants';
 import { addTransaction } from './utils/addTransaction';
 import { addFeedItem } from './utils/feed';
+
+export function handleGrantShipInitializedEvent(
+  event: GrantShipInitializedEvent
+): void {
+  let entityAddress = event.params.registryAnchor;
+  let grantShip = GrantShip.load(entityAddress);
+
+  let log = new Log('Grant Ship Initialized');
+  log.message = 'Grant Ship Initialized';
+  log.type = 'Info';
+  log.save();
+
+  if (grantShip === null) {
+    let log = new Log('Error: Grant Ship Not Found');
+    log.message = 'Grant Ship Not Found';
+    log.type = 'Error';
+    log.save();
+    return;
+  }
+
+  grantShip.poolId = event.params.poolId;
+  grantShip.hatId = event.params.operatorHatId;
+  grantShip.poolActive = true;
+
+  grantShip.save();
+}
 
 export function handlePoolFundedEvent(event: PoolFundedEvent): void {
   let anchorAddress = dataSource.context().getBytes('anchorAddress');
@@ -56,8 +83,9 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
   grant.projectId = project.id;
   grant.shipId = grantShip.id;
   grant.lastUpdated = event.block.timestamp;
+  grant.grantApplicationBytes = event.params.data;
   grant.grantStatus = GrantStatus.Applied;
-  grant.milestoneReviewStatus = AlloStatus.Pending;
+  grant.milestoneReviewStatus = AlloStatus.None;
 
   grant.save();
 
@@ -121,6 +149,7 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {}
 
 export function handleDistributedEvent(event: DistributedEvent): void {}
 export function handleInitializeEvent(event: InitializedEvent): void {}
+
 //   let anchorAddress = dataSource.context().getBytes('anchorAddress');
 
 //   // let log1 = new Log('Test Anchor/Ship Address Join');

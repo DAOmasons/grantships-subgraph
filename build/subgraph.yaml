@@ -155,4 +155,6 @@ templates:
           handler: handleAllocatedEvent
         - event: Distributed(indexed address,address,uint256,address)
           handler: handleDistributedEvent
+        - event: GrantShipInitialized(uint256,bool,bool,bool,uint256,uint256,address)
+          handler: handleGrantShipInitializedEvent
       file: templates/GrantShipStrategyContract/GrantShipStrategyContract.wasm

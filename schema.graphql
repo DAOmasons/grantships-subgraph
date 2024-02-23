@@ -10,6 +10,7 @@ type Project @entity {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  grants: [Grant!]! @derivedFrom(field: "projectId")
   members: ProfileMemberGroup
 }
 
@@ -58,6 +59,7 @@ type GrantShip @entity {
   status: Int!
   poolFunded: Boolean!
   balance: BigInt!
+  grants: [Grant!]! @derivedFrom(field: "shipId")
   # Registry => Role Granted
   alloProfileMembers: ProfileMemberGroup
   # Game Manager => Registered
@@ -73,9 +75,10 @@ type GrantShip @entity {
   applicationReviewReason: RawMetadata
   # Game Manager => ShipLaunched
   poolId: BigInt
+  hatId: BigInt
   shipContractAddress: Bytes # address
   shipLaunched: Boolean
-
+  poolActive: Boolean
   # Game Manager => Allocated
   isAllocated: Boolean
   allocatedAmount: BigInt
@@ -87,11 +90,6 @@ type GrantShip @entity {
 type PoolIdLookup @entity {
   id: ID! # profileId
   entityId: Bytes! # address
-}
-
-type ProjectIdByAnchor @entity {
-  id: ID! # anchor
-  entityId: Bytes! # bytes32
 }
 
 type GameManager @entity {
@@ -124,10 +122,11 @@ type GameRound @entity {
 
 type Grant @entity {
   id: ID!
-  projectId: Bytes! # bytes32
-  shipId: Bytes! # Address
+  projectId: Project! # bytes32
+  shipId: GrantShip! # Address
   lastUpdated: BigInt!
   grantStatus: Int!
+  grantApplicationBytes: Bytes!
   milestoneReviewStatus: Int!
   upcomingMilestone: BigInt
   milestonesAmount: BigInt
