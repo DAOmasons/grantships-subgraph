@@ -131,6 +131,7 @@ type Grant @entity {
   upcomingMilestone: BigInt
   milestonesAmount: BigInt
   milestones: [Milestone!]
+  shipApprovalReason: RawMetadata
 }
 
 type Milestone @entity {

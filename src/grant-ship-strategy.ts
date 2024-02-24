@@ -1,6 +1,12 @@
 import { BigInt, dataSource } from '@graphprotocol/graph-ts';
 import { Initialized as InitializedEvent } from '../generated/templates/GrantShipStrategyContract/GrantShipStrategy';
-import { Grant, GrantShip, Log, Project } from '../generated/schema';
+import {
+  Grant,
+  GrantShip,
+  Log,
+  Project,
+  RawMetadata,
+} from '../generated/schema';
 import {
   PoolFunded as PoolFundedEvent,
   RecipientStatusChanged as RecipientStatusChangedEvent,
@@ -144,12 +150,14 @@ export function handleMilestonesReviewedEvent(
 export function handlePoolWithdrawEvent(event: PoolWithdrawEvent): void {}
 
 export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
-  let anchorAddress = dataSource.context().getBytes('anchorAddress');
-
-  // `TAG:SHIP_REVIEW_GRANT:${grant.id}:${isApproved ? 'APPROVED' : 'REJECTED'}`;
   if (event.params.tag.startsWith('TAG:SHIP_REVIEW_GRANT')) {
+    // `TAG:SHIP_REVIEW_GRANT:${grant.id}:${isApproved ? 'APPROVED' : 'REJECTED'}`;
     const stringItems = event.params.tag.split(':');
     if (stringItems.length != 4) {
+      let log = new Log('Error: Invalid Tag');
+      log.message = 'Invalid Tag';
+      log.type = 'Error';
+      log.save();
       return;
     }
 
@@ -160,15 +168,77 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
     let grant = Grant.load(grantId);
 
     if (grant == null) {
+      let log = new Log('Error: Grant Not Found');
+      log.message = 'Grant Not Found';
+      log.type = 'Error';
+      log.save();
       return;
     }
+    let project = Project.load(grant.projectId);
+    let grantShip = GrantShip.load(grant.shipId);
+
+    if (project == null || grantShip == null) {
+      return;
+    }
+
+    let hasPermission = grantShip.hatId == event.params.role;
+
+    if (!hasPermission) {
+      let log = new Log('Error: Poster does not have permission');
+      log.message = 'Poster does not have permission';
+      log.type = 'Error';
+      log.save();
+      return;
+    }
+
+    let metadata = new RawMetadata(event.params.content.pointer);
+    metadata.protocol = event.params.content.protocol;
+    metadata.pointer = event.params.content.pointer;
+    metadata.save();
 
     if (isApproved) {
       grant.grantStatus = GrantStatus.ShipApproved;
     } else if (isRejected) {
       grant.grantStatus = GrantStatus.ShipRejected;
     }
+
+    grant.shipApprovalReason = metadata.id;
+    grant.save();
+    addTransaction(event.block, event.transaction);
+
+    addFeedItem({
+      timestamp: event.block.timestamp,
+      tx: event.transaction,
+      content: `${grantShip.name} approved ${project.name}'s Grant Application.`,
+      subjectMetadataPointer: grantShip.profileMetadata,
+      subject: {
+        id: grantShip.id.toHex(),
+        type: 'ship',
+        name: grantShip.name,
+      },
+      object: {
+        id: project.id.toHexString(),
+        type: 'project',
+        name: project.name,
+      },
+      embed: {
+        key: 'reason',
+        pointer: event.params.content.pointer,
+        protocol: event.params.content.protocol,
+        content: null,
+      },
+      details: null,
+      tag: `grant-${isApproved ? 'approved' : 'rejected'}`,
+      postIndex: 0,
+    });
+
+    return;
   }
+
+  let log = new Log('Error: Tag not recognized');
+  log.message = 'Tag not recognized';
+  log.type = 'Error';
+  log.save();
 }
 
 export function handleAllocatedEvent(event: AllocatedEvent): void {}

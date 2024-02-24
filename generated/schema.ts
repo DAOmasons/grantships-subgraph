@@ -1627,6 +1627,23 @@ export class Grant extends Entity {
       this.set("milestones", Value.fromStringArray(<Array<string>>value));
     }
   }
+
+  get shipApprovalReason(): string | null {
+    let value = this.get("shipApprovalReason");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set shipApprovalReason(value: string | null) {
+    if (!value) {
+      this.unset("shipApprovalReason");
+    } else {
+      this.set("shipApprovalReason", Value.fromString(<string>value));
+    }
+  }
 }
 
 export class Milestone extends Entity {

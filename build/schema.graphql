@@ -131,6 +131,7 @@ type Grant @entity {
   upcomingMilestone: BigInt
   milestonesAmount: BigInt
   milestones: [Milestone!]
+  shipApprovalReason: RawMetadata
 }
 
 type Milestone @entity {
@@ -166,28 +167,3 @@ type Log @entity {
   description: String
   type: String!
 }
-# type ProjectMetadata @entity(immutable: true) {
-#   id: String!
-#   name: String
-#   description: String
-#   avatarHash_IPFS: String
-#   email: String
-#   x: String
-#   github: String
-#   discord: String
-#   telegram: String
-#   website: String
-# }
-
-# type ShipProfileMetadata @entity(immutable: true) {
-#   id: String!
-#   name: String
-#   mission: String
-#   avatarHash_IPFS: String
-#   email: String
-#   x: String
-#   github: String
-#   discord: String
-#   telegram: String
-#   website: String
-# }
