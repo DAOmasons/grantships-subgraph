@@ -143,7 +143,33 @@ export function handleMilestonesReviewedEvent(
 
 export function handlePoolWithdrawEvent(event: PoolWithdrawEvent): void {}
 
-export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {}
+export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
+  let anchorAddress = dataSource.context().getBytes('anchorAddress');
+
+  // `TAG:SHIP_REVIEW_GRANT:${grant.id}:${isApproved ? 'APPROVED' : 'REJECTED'}`;
+  if (event.params.tag.startsWith('TAG:SHIP_REVIEW_GRANT')) {
+    const stringItems = event.params.tag.split(':');
+    if (stringItems.length != 4) {
+      return;
+    }
+
+    let grantId = stringItems[2];
+    let isApproved = stringItems[3] == 'APPROVED';
+    let isRejected = stringItems[3] == 'REJECTED';
+
+    let grant = Grant.load(grantId);
+
+    if (grant == null) {
+      return;
+    }
+
+    if (isApproved) {
+      grant.grantStatus = GrantStatus.ShipApproved;
+    } else if (isRejected) {
+      grant.grantStatus = GrantStatus.ShipRejected;
+    }
+  }
+}
 
 export function handleAllocatedEvent(event: AllocatedEvent): void {}
 
