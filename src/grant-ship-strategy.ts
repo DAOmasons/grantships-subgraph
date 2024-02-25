@@ -333,7 +333,7 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {
     )} for ${project.name}`,
     subjectMetadataPointer: grantShip.profileMetadata,
     subject: {
-      id: event.address.toHexString(),
+      id: grantShip.id.toHexString(),
       type: 'ship',
       name: grantShip.name,
     },
