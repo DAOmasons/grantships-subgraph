@@ -1644,6 +1644,74 @@ export class Grant extends Entity {
       this.set("shipApprovalReason", Value.fromString(<string>value));
     }
   }
+
+  get amtAllocated(): BigInt | null {
+    let value = this.get("amtAllocated");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set amtAllocated(value: BigInt | null) {
+    if (!value) {
+      this.unset("amtAllocated");
+    } else {
+      this.set("amtAllocated", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get amtDistributed(): BigInt | null {
+    let value = this.get("amtDistributed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set amtDistributed(value: BigInt | null) {
+    if (!value) {
+      this.unset("amtDistributed");
+    } else {
+      this.set("amtDistributed", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get allocatedBy(): Bytes | null {
+    let value = this.get("allocatedBy");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set allocatedBy(value: Bytes | null) {
+    if (!value) {
+      this.unset("allocatedBy");
+    } else {
+      this.set("allocatedBy", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get facilitatorReason(): string | null {
+    let value = this.get("facilitatorReason");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set facilitatorReason(value: string | null) {
+    if (!value) {
+      this.unset("facilitatorReason");
+    } else {
+      this.set("facilitatorReason", Value.fromString(<string>value));
+    }
+  }
 }
 
 export class Milestone extends Entity {

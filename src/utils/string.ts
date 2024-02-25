@@ -1,3 +1,5 @@
+import { Address, Bytes } from '@graphprotocol/graph-ts';
+
 function splitString(str: string, delimiter: string): string[] {
   let parts: string[] = [];
   let currentIndex: i32 = 0;
@@ -15,4 +17,15 @@ function splitString(str: string, delimiter: string): string[] {
   }
 
   return parts;
+}
+
+class GrantID {
+  shipId: Bytes;
+  projectId: Bytes;
+}
+
+export function createGrantId(params: GrantID): string {
+  let projectId = params.projectId;
+  let shipId = params.shipId;
+  return `${projectId.toHex()}-${shipId.toHex()}`;
 }

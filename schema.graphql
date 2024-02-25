@@ -132,6 +132,10 @@ type Grant @entity {
   milestonesAmount: BigInt
   milestones: [Milestone!]
   shipApprovalReason: RawMetadata
+  amtAllocated: BigInt
+  amtDistributed: BigInt
+  allocatedBy: Bytes # address
+  facilitatorReason: RawMetadata
 }
 
 type Milestone @entity {

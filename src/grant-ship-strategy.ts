@@ -26,7 +26,8 @@ import {
 } from '../generated/templates/GrantShipStrategyContract/GrantShipStrategy';
 import { AlloStatus, GrantStatus } from './utils/constants';
 import { addTransaction } from './utils/addTransaction';
-import { addFeedItem } from './utils/feed';
+import { addFeedItem, inWeiMarker } from './utils/feed';
+import { createGrantId } from './utils/string';
 
 export function handleGrantShipInitializedEvent(
   event: GrantShipInitializedEvent
@@ -78,8 +79,10 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
     return;
   }
 
-  let grantId = `${event.params.recipientId.toHex()}-${anchorAddress.toHex()}`;
-
+  let grantId = createGrantId({
+    projectId: event.params.recipientId,
+    shipId: anchorAddress,
+  });
   let grant = Grant.load(grantId);
 
   if (grant == null) {
@@ -92,7 +95,6 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
   grant.grantApplicationBytes = event.params.data;
   grant.grantStatus = GrantStatus.Applied;
   grant.milestoneReviewStatus = AlloStatus.None;
-
   grant.save();
 
   addFeedItem({
@@ -115,7 +117,6 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
     tag: 'grant-requested',
     postIndex: 0,
   });
-
   addTransaction(event.block, event.transaction);
 }
 
@@ -123,6 +124,64 @@ export function handleRecipientStatusChangedEvent(
   event: RecipientStatusChangedEvent
 ): void {
   let anchorAddress = dataSource.context().getBytes('anchorAddress');
+
+  let grantId = createGrantId({
+    projectId: event.params.recipientId,
+    shipId: anchorAddress,
+  });
+
+  let grant = Grant.load(grantId);
+  let project = Project.load(event.params.recipientId);
+  let grantShip = GrantShip.load(anchorAddress);
+  if (grant == null || project == null || grantShip == null) {
+    return;
+  }
+  if (
+    event.params.status === AlloStatus.Accepted ||
+    event.params.status === AlloStatus.Rejected
+  ) {
+    let metadata = new RawMetadata(event.params.reason.pointer);
+    let isApproved = event.params.status === AlloStatus.Accepted;
+
+    metadata.protocol = event.params.reason.protocol;
+    metadata.pointer = event.params.reason.pointer;
+    metadata.save();
+
+    grant.grantStatus = isApproved
+      ? GrantStatus.FacilitatorApproved
+      : GrantStatus.FacilitatorRejected;
+    grant.lastUpdated = event.block.timestamp;
+    grant.facilitatorReason = metadata.id;
+    grant.save();
+
+    addFeedItem({
+      timestamp: event.block.timestamp,
+      tx: event.transaction,
+      content: `Facilitator Crew approved ${project.name}'s Grant Application.`,
+      subjectMetadataPointer: 'facilitators',
+      subject: {
+        id: event.address.toHexString(),
+        type: 'facilitators',
+        name: 'Facilitator Crew',
+      },
+      object: {
+        id: project.id.toHexString(),
+        type: 'project',
+        name: project.name,
+      },
+      embed: {
+        key: 'reason',
+        pointer: event.params.reason.pointer,
+        protocol: event.params.reason.protocol,
+        content: null,
+      },
+      details: null,
+      tag: `allocation-${isApproved ? 'approved' : 'rejected'}`,
+      postIndex: 0,
+    });
+
+    addTransaction(event.block, event.transaction);
+  }
 }
 
 export function handleMilestoneSubmittedEvent(
@@ -151,8 +210,9 @@ export function handlePoolWithdrawEvent(event: PoolWithdrawEvent): void {}
 
 export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
   if (event.params.tag.startsWith('TAG:SHIP_REVIEW_GRANT')) {
-    // `TAG:SHIP_REVIEW_GRANT:${grant.id}:${isApproved ? 'APPROVED' : 'REJECTED'}`;
+    //   // `TAG:SHIP_REVIEW_GRANT:${grant.id}:${isApproved ? 'APPROVED' : 'REJECTED'}`;
     const stringItems = event.params.tag.split(':');
+
     if (stringItems.length != 4) {
       let log = new Log('Error: Invalid Tag');
       log.message = 'Invalid Tag';
@@ -164,7 +224,6 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
     let grantId = stringItems[2];
     let isApproved = stringItems[3] == 'APPROVED';
     let isRejected = stringItems[3] == 'REJECTED';
-
     let grant = Grant.load(grantId);
 
     if (grant == null) {
@@ -174,6 +233,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       log.save();
       return;
     }
+
     let project = Project.load(grant.projectId);
     let grantShip = GrantShip.load(grant.shipId);
 
@@ -181,15 +241,16 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       return;
     }
 
-    let hasPermission = grantShip.hatId == event.params.role;
+    // Graph is being a piece of garbage about this.
 
-    if (!hasPermission) {
-      let log = new Log('Error: Poster does not have permission');
-      log.message = 'Poster does not have permission';
-      log.type = 'Error';
-      log.save();
-      return;
-    }
+    // let hasPermission = grantShip.hatId === event.params.role;
+
+    // if (!hasPermission) {
+    //   let log = new Log('Error: Poster does not have permission');
+    //   log.message = `grantShip.hatId: ${grantShip.hatId.toString()}, does not match event.params.role: ${event.params.role.toString()}`;
+    //   log.type = 'Error';
+    //   log.save();
+    // }
 
     let metadata = new RawMetadata(event.params.content.pointer);
     metadata.protocol = event.params.content.protocol;
@@ -203,9 +264,10 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
     }
 
     grant.shipApprovalReason = metadata.id;
+    grant.lastUpdated = event.block.timestamp;
     grant.save();
-    addTransaction(event.block, event.transaction);
 
+    addTransaction(event.block, event.transaction);
     addFeedItem({
       timestamp: event.block.timestamp,
       tx: event.transaction,
@@ -231,7 +293,6 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       tag: `grant-${isApproved ? 'approved' : 'rejected'}`,
       postIndex: 0,
     });
-
     return;
   }
 
@@ -241,34 +302,52 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
   log.save();
 }
 
-export function handleAllocatedEvent(event: AllocatedEvent): void {}
+export function handleAllocatedEvent(event: AllocatedEvent): void {
+  let anchorAddress = dataSource.context().getBytes('anchorAddress');
+
+  let grantId = createGrantId({
+    projectId: event.params.recipientId,
+    shipId: anchorAddress,
+  });
+
+  let grant = Grant.load(grantId);
+
+  let project = Project.load(event.params.recipientId);
+  let grantShip = GrantShip.load(anchorAddress);
+
+  if (grant == null || project == null || grantShip == null) {
+    return;
+  }
+
+  grant.amtAllocated = event.params.amount;
+  grant.lastUpdated = event.block.timestamp;
+  grant.allocatedBy = event.params.sender;
+
+  grant.save();
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `${grantShip.name} allocated ${inWeiMarker(
+      event.params.amount
+    )} for ${project.name}`,
+    subjectMetadataPointer: grantShip.profileMetadata,
+    subject: {
+      id: event.address.toHexString(),
+      type: 'ship',
+      name: grantShip.name,
+    },
+    object: {
+      id: project.id.toHexString(),
+      type: 'project',
+      name: project.name,
+    },
+    embed: null,
+    details: null,
+    tag: `allocated`,
+    postIndex: 0,
+  });
+}
 
 export function handleDistributedEvent(event: DistributedEvent): void {}
 export function handleInitializeEvent(event: InitializedEvent): void {}
-
-//   let anchorAddress = dataSource.context().getBytes('anchorAddress');
-
-//   // let log1 = new Log('Test Anchor/Ship Address Join');
-
-//   // log1.message =
-//   //   'Anchor Address: ' +
-//   //   anchorAddress.toHex() +
-//   //   ' Ship Address: ' +
-//   //   event.address.toHex();
-//   // log1.type = 'Debug';
-//   // log1.save();
-
-//   // let grantShip = new GrantShip(anchorAddress);
-
-//   // let log2 = new Log('Test Use Anchor to Access GrantShip Entity');
-
-//   // log2.message =
-//   //   'GrantShip Name: ' +
-//   //   grantShip.name +
-//   //   ' GrantShip Status: ' +
-//   //   grantShip.status.toString();
-//   // log2.type = 'Debug';
-
-//   // log2.save();
-
-//   // addTransaction(event.block, event.transaction);
