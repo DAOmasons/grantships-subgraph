@@ -1738,6 +1738,36 @@ export class Grant extends Entity {
   set hasFacilitatorApproved(value: boolean) {
     this.set("hasFacilitatorApproved", Value.fromBoolean(value));
   }
+
+  get milestonesApproved(): boolean {
+    let value = this.get("milestonesApproved");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set milestonesApproved(value: boolean) {
+    this.set("milestonesApproved", Value.fromBoolean(value));
+  }
+
+  get milestonesApprovedReason(): string | null {
+    let value = this.get("milestonesApprovedReason");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set milestonesApprovedReason(value: string | null) {
+    if (!value) {
+      this.unset("milestonesApprovedReason");
+    } else {
+      this.set("milestonesApprovedReason", Value.fromString(<string>value));
+    }
+  }
 }
 
 export class Milestone extends Entity {

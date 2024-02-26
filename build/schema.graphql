@@ -138,6 +138,8 @@ type Grant @entity {
   allocatedBy: Bytes # address
   facilitatorReason: RawMetadata
   hasFacilitatorApproved: Boolean
+  milestonesApproved: Boolean
+  milestonesApprovedReason: RawMetadata
 }
 
 type Milestone @entity {

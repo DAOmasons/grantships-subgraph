@@ -254,7 +254,72 @@ export function handleFlagResolvedEvent(event: FlagResolvedEvent): void {}
 
 export function handleMilestonesReviewedEvent(
   event: MilestonesReviewedEvent
-): void {}
+): void {
+  let anchorAddress = dataSource.context().getBytes('anchorAddress');
+
+  let grantId = createGrantId({
+    projectId: event.params.recipientId,
+    shipId: anchorAddress,
+  });
+
+  let grant = Grant.load(grantId);
+  let project = Project.load(event.params.recipientId);
+  let grantShip = GrantShip.load(anchorAddress);
+
+  if (grant == null || project == null || grantShip == null) {
+    return;
+  }
+
+  let isApproved = event.params.status === AlloStatus.Accepted;
+
+  grant.milestonesApproved = isApproved;
+
+  if (isApproved) {
+    grant.grantStatus = GrantStatus.MilestonesApproved;
+  } else if (event.params.status === AlloStatus.Rejected) {
+    grant.grantStatus = GrantStatus.MilestonesRejected;
+  }
+
+  let reason = new RawMetadata(event.params.reason.pointer);
+  reason.protocol = event.params.reason.protocol;
+  reason.pointer = event.params.reason.pointer;
+  reason.save();
+
+  grant.lastUpdated = event.block.timestamp;
+  grant.milestonesApprovedReason = reason.id;
+
+  grant.save();
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `${grantShip.name} has ${isApproved ? 'approved' : 'rejected'} ${
+      project.name
+    }'s milestones.`,
+    subjectMetadataPointer: grantShip.profileMetadata,
+    subject: {
+      id: grantShip.id.toHex(),
+      type: 'ship',
+      name: grantShip.name,
+    },
+    object: {
+      id: project.id.toHexString(),
+      type: 'project',
+      name: project.name,
+    },
+    embed: {
+      key: 'reason',
+      pointer: event.params.reason.pointer,
+      protocol: event.params.reason.protocol,
+      content: null,
+    },
+    details: null,
+    tag: `milestones-${isApproved ? 'approved' : 'rejected'}`,
+    postIndex: 0,
+  });
+
+  addTransaction(event.block, event.transaction);
+}
 
 export function handlePoolWithdrawEvent(event: PoolWithdrawEvent): void {}
 
