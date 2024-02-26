@@ -216,6 +216,7 @@ export function handleMilestonesSetEvent(event: MilestonesSetEvent): void {
 
   grant.milestonesAmount = event.params.milestonesLength;
   grant.grantStatus = GrantStatus.MilestonesProposed;
+  grant.currentMilestoneIndex = BigInt.fromI32(0);
 
   grant.save();
 
@@ -224,7 +225,7 @@ export function handleMilestonesSetEvent(event: MilestonesSetEvent): void {
     tx: event.transaction,
     content: `${
       project.name
-    } has proposed ${event.params.milestonesLength.toString()} to ${
+    } has proposed ${event.params.milestonesLength.toString()} milestones to ${
       grantShip.name
     }`,
     subjectMetadataPointer: project.metadata,

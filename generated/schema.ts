@@ -1577,8 +1577,8 @@ export class Grant extends Entity {
     this.set("milestoneReviewStatus", Value.fromI32(value));
   }
 
-  get upcomingMilestone(): BigInt | null {
-    let value = this.get("upcomingMilestone");
+  get currentMilestoneIndex(): BigInt | null {
+    let value = this.get("currentMilestoneIndex");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -1586,11 +1586,11 @@ export class Grant extends Entity {
     }
   }
 
-  set upcomingMilestone(value: BigInt | null) {
+  set currentMilestoneIndex(value: BigInt | null) {
     if (!value) {
-      this.unset("upcomingMilestone");
+      this.unset("currentMilestoneIndex");
     } else {
-      this.set("upcomingMilestone", Value.fromBigInt(<BigInt>value));
+      this.set("currentMilestoneIndex", Value.fromBigInt(<BigInt>value));
     }
   }
 
