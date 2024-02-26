@@ -1645,6 +1645,19 @@ export class Grant extends Entity {
     }
   }
 
+  get hasShipApproved(): boolean {
+    let value = this.get("hasShipApproved");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set hasShipApproved(value: boolean) {
+    this.set("hasShipApproved", Value.fromBoolean(value));
+  }
+
   get amtAllocated(): BigInt | null {
     let value = this.get("amtAllocated");
     if (!value || value.kind == ValueKind.NULL) {
@@ -1711,6 +1724,19 @@ export class Grant extends Entity {
     } else {
       this.set("facilitatorReason", Value.fromString(<string>value));
     }
+  }
+
+  get hasFacilitatorApproved(): boolean {
+    let value = this.get("hasFacilitatorApproved");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set hasFacilitatorApproved(value: boolean) {
+    this.set("hasFacilitatorApproved", Value.fromBoolean(value));
   }
 }
 

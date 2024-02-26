@@ -152,6 +152,7 @@ export function handleRecipientStatusChangedEvent(
       : GrantStatus.FacilitatorRejected;
     grant.lastUpdated = event.block.timestamp;
     grant.facilitatorReason = metadata.id;
+    grant.hasFacilitatorApproved = isApproved;
     grant.save();
 
     addFeedItem({
@@ -196,7 +197,55 @@ export function handleMilestoneRejectedEvent(
   event: MilestoneRejectedEvent
 ): void {}
 
-export function handleMilestonesSetEvent(event: MilestonesSetEvent): void {}
+export function handleMilestonesSetEvent(event: MilestonesSetEvent): void {
+  let anchorAddress = dataSource.context().getBytes('anchorAddress');
+
+  let grantId = createGrantId({
+    projectId: event.params.recipientId,
+    shipId: anchorAddress,
+  });
+
+  let project = Project.load(event.params.recipientId);
+  let grantShip = GrantShip.load(anchorAddress);
+
+  let grant = Grant.load(grantId);
+
+  if (grant == null || project == null || grantShip == null) {
+    return;
+  }
+
+  grant.milestonesAmount = event.params.milestonesLength;
+  grant.grantStatus = GrantStatus.MilestonesProposed;
+
+  grant.save();
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `${
+      project.name
+    } has proposed ${event.params.milestonesLength.toString()} to ${
+      grantShip.name
+    }`,
+    subjectMetadataPointer: project.metadata,
+    subject: {
+      id: project.id.toHex(),
+      type: 'project',
+      name: project.name,
+    },
+    object: {
+      id: grantShip.id.toHexString(),
+      type: 'ship',
+      name: grantShip.name,
+    },
+    embed: null,
+    details: null,
+    tag: `milestones-set`,
+    postIndex: 0,
+  });
+
+  addTransaction(event.block, event.transaction);
+}
 
 export function handleFlagIssuedEvent(event: FlagIssuedEvent): void {}
 
@@ -264,6 +313,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
     }
 
     grant.shipApprovalReason = metadata.id;
+    grant.hasShipApproved = isApproved;
     grant.lastUpdated = event.block.timestamp;
     grant.save();
 
