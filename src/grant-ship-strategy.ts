@@ -457,10 +457,10 @@ export function handleMilestoneSubmittedEvent(
   });
 
   let grant = Grant.load(grantId);
-
   let project = Project.load(event.params.recipientId);
+  let grantShip = GrantShip.load(anchorAddress);
 
-  if (grant == null || project == null) {
+  if (grant == null || project == null || grantShip == null) {
     return;
   }
 
@@ -470,14 +470,35 @@ export function handleMilestoneSubmittedEvent(
 
   grant.save();
 
+  let incrementedMilestone = event.params.milestoneId.plus(BigInt.fromI32(1));
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `${project.name} has submitted milestone ${incrementedMilestone} to ${grantShip.name}`,
+    subjectMetadataPointer: project.metadata,
+    subject: {
+      id: project.id.toHexString(),
+      type: 'project',
+      name: project.name,
+    },
+    object: {
+      id: grantShip.id.toHexString(),
+      type: 'ship',
+      name: grantShip.name,
+    },
+    embed: null,
+    details: null,
+    tag: `milestone-submitted`,
+    postIndex: 0,
+  });
+
   addTransaction(event.block, event.transaction);
 }
 
 export function handleMilestoneRejectedEvent(
   event: MilestoneRejectedEvent
 ): void {
-  //  emit MilestoneRejected(_recipientId, _milestoneId, _reason);
-
   let anchorAddress = dataSource.context().getBytes('anchorAddress');
 
   let grantId = createGrantId({
