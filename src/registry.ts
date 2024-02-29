@@ -87,6 +87,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     project.status = AlloStatus.None;
     project.owner = event.params.owner;
     project.anchor = event.params.anchor;
+    project.totalAmountReceived = BigInt.fromI32(0);
 
     project.blockNumber = event.block.number;
     project.blockTimestamp = event.block.timestamp;

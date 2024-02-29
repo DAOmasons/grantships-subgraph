@@ -140,6 +140,8 @@ type Grant @entity {
   hasFacilitatorApproved: Boolean
   milestonesApproved: Boolean
   milestonesApprovedReason: RawMetadata
+  currentMilestoneApproveReason: RawMetadata
+  currentMilestoneRejectedReason: RawMetadata
 }
 
 type Milestone @entity {

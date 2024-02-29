@@ -12,6 +12,7 @@ type Project @entity {
   transactionHash: Bytes!
   grants: [Grant!]! @derivedFrom(field: "projectId")
   members: ProfileMemberGroup
+  totalAmountReceived: BigInt!
 }
 
 type FeedItem @entity {
@@ -127,7 +128,7 @@ type Grant @entity {
   lastUpdated: BigInt!
   grantStatus: Int!
   grantApplicationBytes: Bytes!
-  milestoneReviewStatus: Int!
+
   currentMilestoneIndex: BigInt
   milestonesAmount: BigInt
   milestones: [Milestone!]
@@ -140,6 +141,7 @@ type Grant @entity {
   hasFacilitatorApproved: Boolean
   milestonesApproved: Boolean
   milestonesApprovedReason: RawMetadata
+  currentMilestoneRejectedReason: RawMetadata
 }
 
 type Milestone @entity {

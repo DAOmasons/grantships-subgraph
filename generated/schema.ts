@@ -206,6 +206,19 @@ export class Project extends Entity {
       this.set("members", Value.fromBytes(<Bytes>value));
     }
   }
+
+  get totalAmountReceived(): BigInt {
+    let value = this.get("totalAmountReceived");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalAmountReceived(value: BigInt) {
+    this.set("totalAmountReceived", Value.fromBigInt(value));
+  }
 }
 
 export class FeedItem extends Entity {
@@ -1564,19 +1577,6 @@ export class Grant extends Entity {
     this.set("grantApplicationBytes", Value.fromBytes(value));
   }
 
-  get milestoneReviewStatus(): i32 {
-    let value = this.get("milestoneReviewStatus");
-    if (!value || value.kind == ValueKind.NULL) {
-      return 0;
-    } else {
-      return value.toI32();
-    }
-  }
-
-  set milestoneReviewStatus(value: i32) {
-    this.set("milestoneReviewStatus", Value.fromI32(value));
-  }
-
   get currentMilestoneIndex(): BigInt | null {
     let value = this.get("currentMilestoneIndex");
     if (!value || value.kind == ValueKind.NULL) {
@@ -1766,6 +1766,46 @@ export class Grant extends Entity {
       this.unset("milestonesApprovedReason");
     } else {
       this.set("milestonesApprovedReason", Value.fromString(<string>value));
+    }
+  }
+
+  get currentMilestoneApproveReason(): string | null {
+    let value = this.get("currentMilestoneApproveReason");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set currentMilestoneApproveReason(value: string | null) {
+    if (!value) {
+      this.unset("currentMilestoneApproveReason");
+    } else {
+      this.set(
+        "currentMilestoneApproveReason",
+        Value.fromString(<string>value),
+      );
+    }
+  }
+
+  get currentMilestoneRejectedReason(): string | null {
+    let value = this.get("currentMilestoneRejectedReason");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set currentMilestoneRejectedReason(value: string | null) {
+    if (!value) {
+      this.unset("currentMilestoneRejectedReason");
+    } else {
+      this.set(
+        "currentMilestoneRejectedReason",
+        Value.fromString(<string>value),
+      );
     }
   }
 }
