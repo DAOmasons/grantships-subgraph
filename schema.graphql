@@ -128,9 +128,8 @@ type Grant @entity {
   lastUpdated: BigInt!
   grantStatus: Int!
   grantApplicationBytes: Bytes!
-
-  currentMilestoneIndex: BigInt
-  milestonesAmount: BigInt
+  currentMilestoneIndex: BigInt!
+  milestonesAmount: BigInt!
   milestones: [Milestone!]
   shipApprovalReason: RawMetadata
   hasShipApproved: Boolean

@@ -1577,21 +1577,17 @@ export class Grant extends Entity {
     this.set("grantApplicationBytes", Value.fromBytes(value));
   }
 
-  get currentMilestoneIndex(): BigInt | null {
+  get currentMilestoneIndex(): BigInt {
     let value = this.get("currentMilestoneIndex");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toBigInt();
     }
   }
 
-  set currentMilestoneIndex(value: BigInt | null) {
-    if (!value) {
-      this.unset("currentMilestoneIndex");
-    } else {
-      this.set("currentMilestoneIndex", Value.fromBigInt(<BigInt>value));
-    }
+  set currentMilestoneIndex(value: BigInt) {
+    this.set("currentMilestoneIndex", Value.fromBigInt(value));
   }
 
   get milestonesAmount(): BigInt | null {
@@ -1766,26 +1762,6 @@ export class Grant extends Entity {
       this.unset("milestonesApprovedReason");
     } else {
       this.set("milestonesApprovedReason", Value.fromString(<string>value));
-    }
-  }
-
-  get currentMilestoneApproveReason(): string | null {
-    let value = this.get("currentMilestoneApproveReason");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set currentMilestoneApproveReason(value: string | null) {
-    if (!value) {
-      this.unset("currentMilestoneApproveReason");
-    } else {
-      this.set(
-        "currentMilestoneApproveReason",
-        Value.fromString(<string>value),
-      );
     }
   }
 
