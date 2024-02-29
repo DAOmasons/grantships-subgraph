@@ -1590,21 +1590,17 @@ export class Grant extends Entity {
     this.set("currentMilestoneIndex", Value.fromBigInt(value));
   }
 
-  get milestonesAmount(): BigInt | null {
+  get milestonesAmount(): BigInt {
     let value = this.get("milestonesAmount");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toBigInt();
     }
   }
 
-  set milestonesAmount(value: BigInt | null) {
-    if (!value) {
-      this.unset("milestonesAmount");
-    } else {
-      this.set("milestonesAmount", Value.fromBigInt(<BigInt>value));
-    }
+  set milestonesAmount(value: BigInt) {
+    this.set("milestonesAmount", Value.fromBigInt(value));
   }
 
   get milestones(): Array<string> | null {

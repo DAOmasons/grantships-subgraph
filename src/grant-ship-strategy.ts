@@ -527,6 +527,35 @@ export function handleMilestoneRejectedEvent(
   grant.grantStatus = GrantStatus.MilestoneRejected;
 
   grant.save();
+
+  let incrementedMilestone = event.params.milestoneId.plus(BigInt.fromI32(1));
+
+  addFeedItem({
+    timestamp: event.block.timestamp,
+    tx: event.transaction,
+    content: `${grantShip.name} has rejected milestone ${incrementedMilestone} for ${project.name}`,
+    subjectMetadataPointer: grantShip.profileMetadata,
+    subject: {
+      id: grantShip.id.toHexString(),
+      type: 'ship',
+      name: grantShip.name,
+    },
+    object: {
+      id: project.id.toHexString(),
+      type: 'project',
+      name: project.name,
+    },
+    embed: {
+      key: 'reason',
+      pointer: event.params.reason.pointer,
+      protocol: event.params.reason.protocol,
+      content: null,
+    },
+    details: null,
+    tag: `milestone-rejected`,
+    postIndex: 0,
+  });
+  addTransaction(event.block, event.transaction);
 }
 
 export function handleDistributedEvent(event: DistributedEvent): void {
@@ -588,49 +617,49 @@ export function handleDistributedEvent(event: DistributedEvent): void {
     postIndex: 0,
   });
 
-  // const isGrantComplete =
-  //   grant.currentMilestoneIndex.plus(BigInt.fromI32(1)) >=
-  //   grant.milestonesAmount;
+  const isGrantComplete =
+    grant.currentMilestoneIndex.plus(BigInt.fromI32(1)) >=
+    grant.milestonesAmount;
 
-  // if (isGrantComplete) {
-  //   grant.grantStatus = GrantStatus.Completed;
-  //   grant.currentMilestoneIndex = BigInt.fromI32(0);
-  //   addFeedItem({
-  //     timestamp: event.block.timestamp,
-  //     tx: event.transaction,
-  //     content: `${project.name} has completed their grant from ${grantShip.name}`,
-  //     subjectMetadataPointer: project.metadata,
-  //     subject: {
-  //       id: project.id.toHexString(),
-  //       type: 'project',
-  //       name: project.name,
-  //     },
-  //     object: {
-  //       id: grantShip.id.toHexString(),
-  //       type: 'ship',
-  //       name: grantShip.name,
-  //     },
-  //     embed: null,
-  //     details: null,
-  //     tag: `grant-completed`,
-  //     postIndex: 1,
-  //   });
-  // } else {
-  //   grant.grantStatus = GrantStatus.MilestoneApproved;
-  // }
+  if (isGrantComplete) {
+    grant.grantStatus = GrantStatus.Completed;
+    grant.currentMilestoneIndex = BigInt.fromI32(0);
+    addFeedItem({
+      timestamp: event.block.timestamp,
+      tx: event.transaction,
+      content: `${project.name} has completed their grant from ${grantShip.name}`,
+      subjectMetadataPointer: project.metadata,
+      subject: {
+        id: project.id.toHexString(),
+        type: 'project',
+        name: project.name,
+      },
+      object: {
+        id: grantShip.id.toHexString(),
+        type: 'ship',
+        name: grantShip.name,
+      },
+      embed: null,
+      details: null,
+      tag: `grant-completed`,
+      postIndex: 1,
+    });
+  } else {
+    grant.grantStatus = GrantStatus.MilestoneApproved;
+  }
 
-  // grant.save();
-  // addTransaction(event.block, event.transaction);
+  grant.save();
+  addTransaction(event.block, event.transaction);
 }
 
-// export function handleInitializeEvent(event: InitializedEvent): void {}
+export function handleInitializeEvent(event: InitializedEvent): void {}
 
-// export function handleMilestoneStatusChangedEvent(
-//   event: MilestoneStatusChangedEvent
-// ): void {}
+export function handleMilestoneStatusChangedEvent(
+  event: MilestoneStatusChangedEvent
+): void {}
 
-// export function handleFlagIssuedEvent(event: FlagIssuedEvent): void {}
+export function handleFlagIssuedEvent(event: FlagIssuedEvent): void {}
 
-// export function handleFlagResolvedEvent(event: FlagResolvedEvent): void {}
+export function handleFlagResolvedEvent(event: FlagResolvedEvent): void {}
 
-// export function handlePoolWithdrawEvent(event: PoolWithdrawEvent): void {}
+export function handlePoolWithdrawEvent(event: PoolWithdrawEvent): void {}
