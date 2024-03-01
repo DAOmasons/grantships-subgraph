@@ -595,11 +595,9 @@ export function handleDistributedEvent(event: DistributedEvent): void {
     tx: event.transaction,
     content: `${grantShip.name} distributed ${inWeiMarker(
       event.params.amount
-    )} to ${
-      project.name
-    } for completing milestone ${grant.currentMilestoneIndex.plus(
-      BigInt.fromI32(1)
-    )}`,
+    )} to ${project.name} for completing milestone ${
+      grant.currentMilestoneIndex
+    }`,
     subjectMetadataPointer: grantShip.profileMetadata,
     subject: {
       id: grantShip.id.toHexString(),
@@ -617,9 +615,7 @@ export function handleDistributedEvent(event: DistributedEvent): void {
     postIndex: 0,
   });
 
-  const isGrantComplete =
-    grant.currentMilestoneIndex.plus(BigInt.fromI32(1)) ==
-    grant.milestonesAmount;
+  const isGrantComplete = grant.currentMilestoneIndex >= grant.milestonesAmount;
 
   if (isGrantComplete) {
     grant.grantStatus = GrantStatus.Completed;
