@@ -618,7 +618,7 @@ export function handleDistributedEvent(event: DistributedEvent): void {
   });
 
   const isGrantComplete =
-    grant.currentMilestoneIndex.plus(BigInt.fromI32(1)) >=
+    grant.currentMilestoneIndex.plus(BigInt.fromI32(1)) ==
     grant.milestonesAmount;
 
   if (isGrantComplete) {
