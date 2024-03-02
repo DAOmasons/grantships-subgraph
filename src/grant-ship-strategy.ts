@@ -248,6 +248,9 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {
   grantShip.totalAvailableFunds = grantShip.totalAvailableFunds.minus(
     event.params.amount
   );
+  grantShip.totalAllocated = grantShip.totalAllocated.plus(event.params.amount);
+
+  grantShip.save();
 
   addFeedItem({
     timestamp: event.block.timestamp,
@@ -594,6 +597,12 @@ export function handleDistributedEvent(event: DistributedEvent): void {
   );
 
   grantShip.balance = grantShip.balance.minus(event.params.amount);
+  grantShip.totalAllocated = grantShip.totalAllocated.minus(
+    event.params.amount
+  );
+  grantShip.totalDistributed = grantShip.totalDistributed.plus(
+    event.params.amount
+  );
   grantShip.save();
 
   project.totalAmountReceived = project.totalAmountReceived.plus(
