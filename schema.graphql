@@ -60,6 +60,9 @@ type GrantShip @entity {
   status: Int!
   poolFunded: Boolean!
   balance: BigInt!
+  totalAvailableFunds: BigInt!
+  totalAllocated: BigInt!
+  totalDistributed: BigInt!
   grants: [Grant!]! @derivedFrom(field: "shipId")
   # Registry => Role Granted
   alloProfileMembers: ProfileMemberGroup
@@ -82,10 +85,8 @@ type GrantShip @entity {
   poolActive: Boolean
   # Game Manager => Allocated
   isAllocated: Boolean
-  allocatedAmount: BigInt
   # Game Manager => Distributed
   isDistributed: Boolean
-  distributedAmount: BigInt
 }
 
 type PoolIdLookup @entity {

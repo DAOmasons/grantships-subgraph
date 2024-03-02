@@ -801,6 +801,45 @@ export class GrantShip extends Entity {
     this.set("balance", Value.fromBigInt(value));
   }
 
+  get totalAvailableFunds(): BigInt {
+    let value = this.get("totalAvailableFunds");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalAvailableFunds(value: BigInt) {
+    this.set("totalAvailableFunds", Value.fromBigInt(value));
+  }
+
+  get totalAllocated(): BigInt {
+    let value = this.get("totalAllocated");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalAllocated(value: BigInt) {
+    this.set("totalAllocated", Value.fromBigInt(value));
+  }
+
+  get totalDistributed(): BigInt {
+    let value = this.get("totalDistributed");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalDistributed(value: BigInt) {
+    this.set("totalDistributed", Value.fromBigInt(value));
+  }
+
   get grants(): GrantLoader {
     return new GrantLoader(
       "GrantShip",
@@ -1053,23 +1092,6 @@ export class GrantShip extends Entity {
     this.set("isAllocated", Value.fromBoolean(value));
   }
 
-  get allocatedAmount(): BigInt | null {
-    let value = this.get("allocatedAmount");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set allocatedAmount(value: BigInt | null) {
-    if (!value) {
-      this.unset("allocatedAmount");
-    } else {
-      this.set("allocatedAmount", Value.fromBigInt(<BigInt>value));
-    }
-  }
-
   get isDistributed(): boolean {
     let value = this.get("isDistributed");
     if (!value || value.kind == ValueKind.NULL) {
@@ -1081,23 +1103,6 @@ export class GrantShip extends Entity {
 
   set isDistributed(value: boolean) {
     this.set("isDistributed", Value.fromBoolean(value));
-  }
-
-  get distributedAmount(): BigInt | null {
-    let value = this.get("distributedAmount");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set distributedAmount(value: BigInt | null) {
-    if (!value) {
-      this.unset("distributedAmount");
-    } else {
-      this.set("distributedAmount", Value.fromBigInt(<BigInt>value));
-    }
   }
 }
 

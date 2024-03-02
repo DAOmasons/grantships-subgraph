@@ -65,6 +65,10 @@ export function handlePoolFundedEvent(event: PoolFundedEvent): void {
   }
 
   grantShip.balance = grantShip.balance.plus(event.params.amount);
+  grantShip.totalAvailableFunds = grantShip.totalAvailableFunds.plus(
+    event.params.amount
+  );
+
   grantShip.poolFunded = true;
 
   grantShip.save();
@@ -240,6 +244,10 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {
   grant.allocatedBy = event.params.sender;
 
   grant.save();
+
+  grantShip.totalAvailableFunds = grantShip.totalAvailableFunds.minus(
+    event.params.amount
+  );
 
   addFeedItem({
     timestamp: event.block.timestamp,

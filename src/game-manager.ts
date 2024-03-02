@@ -17,7 +17,6 @@ import { createRawMetadata } from './utils/rawMetadata';
 import { addTransaction } from './utils/addTransaction';
 import { GameStatus } from './utils/constants';
 import { addFeedItem, inWeiMarker } from './utils/feed';
-import { GrantShipStrategyContract } from '../generated/templates';
 
 export function handleGameManagerInitializedEvent(
   event: GameManagerInitializedEvent
@@ -265,7 +264,7 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {
   }
   grantShip.status = GameStatus.Allocated; // 4 = Allocated
   grantShip.isAllocated = true;
-  grantShip.allocatedAmount = event.params.amount;
+
   grantShip.save();
   if (gameManager.currentRound == null) {
     return;
@@ -313,10 +312,13 @@ export function handleDistributedEvent(event: DistributedEvent): void {
   if (grantShip == null || gameManager == null) {
     return;
   }
-  grantShip.status = GameStatus.Funded;
+
   grantShip.isDistributed = true;
-  grantShip.distributedAmount = event.params.amount;
   grantShip.status = GameStatus.Active;
+  grantShip.balance = grantShip.balance.plus(event.params.amount);
+  grantShip.totalAvailableFunds = grantShip.totalAvailableFunds.plus(
+    event.params.amount
+  );
 
   grantShip.save();
   if (gameManager.currentRound == null) {

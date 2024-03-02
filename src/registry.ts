@@ -157,6 +157,9 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     grantShip.transactionHash = event.transaction.hash;
     grantShip.poolFunded = false;
     grantShip.balance = BigInt.fromI32(0);
+    grantShip.totalAllocated = BigInt.fromI32(0);
+    grantShip.totalDistributed = BigInt.fromI32(0);
+    grantShip.totalAvailableFunds = BigInt.fromI32(0);
 
     // Graph IPFS file-data-source API isn't ready for prime-time
     // ShipProfileMetadata.create(event.params.metadata.pointer);
