@@ -814,6 +814,19 @@ export class GrantShip extends Entity {
     this.set("totalAvailableFunds", Value.fromBigInt(value));
   }
 
+  get totalRoundAmount(): BigInt {
+    let value = this.get("totalRoundAmount");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalRoundAmount(value: BigInt) {
+    this.set("totalRoundAmount", Value.fromBigInt(value));
+  }
+
   get totalAllocated(): BigInt {
     let value = this.get("totalAllocated");
     if (!value || value.kind == ValueKind.NULL) {

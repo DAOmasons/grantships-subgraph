@@ -315,10 +315,7 @@ export function handleDistributedEvent(event: DistributedEvent): void {
 
   grantShip.isDistributed = true;
   grantShip.status = GameStatus.Active;
-  grantShip.balance = grantShip.balance.plus(event.params.amount);
-  grantShip.totalAvailableFunds = grantShip.totalAvailableFunds.plus(
-    event.params.amount
-  );
+  grantShip.totalRoundAmount = event.params.amount;
 
   grantShip.save();
   if (gameManager.currentRound == null) {

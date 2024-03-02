@@ -61,6 +61,7 @@ type GrantShip @entity {
   poolFunded: Boolean!
   balance: BigInt!
   totalAvailableFunds: BigInt!
+  totalRoundAmount: BigInt!
   totalAllocated: BigInt!
   totalDistributed: BigInt!
   grants: [Grant!]! @derivedFrom(field: "shipId")
