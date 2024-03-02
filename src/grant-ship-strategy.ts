@@ -96,6 +96,8 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
   grant.grantStatus = GrantStatus.Applied;
   grant.currentMilestoneIndex = BigInt.fromI32(0);
   grant.milestonesAmount = BigInt.fromI32(0);
+  grant.amtAllocated = BigInt.fromI32(0);
+  grant.amtDistributed = BigInt.fromI32(0);
   grant.save();
 
   addFeedItem({
@@ -261,6 +263,8 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {
     tag: `allocated`,
     postIndex: 0,
   });
+
+  addTransaction(event.block, event.transaction);
 }
 
 export function handleRecipientStatusChangedEvent(
@@ -575,7 +579,7 @@ export function handleDistributedEvent(event: DistributedEvent): void {
     return;
   }
 
-  grant.amtDistributed = event.params.amount;
+  grant.amtDistributed = grant.amtDistributed.plus(event.params.amount);
   grant.lastUpdated = event.block.timestamp;
   grant.currentMilestoneIndex = grant.currentMilestoneIndex.plus(
     BigInt.fromI32(1)

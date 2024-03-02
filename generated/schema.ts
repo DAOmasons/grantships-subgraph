@@ -1650,38 +1650,30 @@ export class Grant extends Entity {
     this.set("hasShipApproved", Value.fromBoolean(value));
   }
 
-  get amtAllocated(): BigInt | null {
+  get amtAllocated(): BigInt {
     let value = this.get("amtAllocated");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toBigInt();
     }
   }
 
-  set amtAllocated(value: BigInt | null) {
-    if (!value) {
-      this.unset("amtAllocated");
-    } else {
-      this.set("amtAllocated", Value.fromBigInt(<BigInt>value));
-    }
+  set amtAllocated(value: BigInt) {
+    this.set("amtAllocated", Value.fromBigInt(value));
   }
 
-  get amtDistributed(): BigInt | null {
+  get amtDistributed(): BigInt {
     let value = this.get("amtDistributed");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toBigInt();
     }
   }
 
-  set amtDistributed(value: BigInt | null) {
-    if (!value) {
-      this.unset("amtDistributed");
-    } else {
-      this.set("amtDistributed", Value.fromBigInt(<BigInt>value));
-    }
+  set amtDistributed(value: BigInt) {
+    this.set("amtDistributed", Value.fromBigInt(value));
   }
 
   get allocatedBy(): Bytes | null {
