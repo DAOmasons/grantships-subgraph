@@ -142,6 +142,28 @@ export class FlagResolvedResolutionReasonStruct extends ethereum.Tuple {
   }
 }
 
+export class GrantComplete extends ethereum.Event {
+  get params(): GrantComplete__Params {
+    return new GrantComplete__Params(this);
+  }
+}
+
+export class GrantComplete__Params {
+  _event: GrantComplete;
+
+  constructor(event: GrantComplete) {
+    this._event = event;
+  }
+
+  get recipientId(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
 export class GrantShipInitialized extends ethereum.Event {
   get params(): GrantShipInitialized__Params {
     return new GrantShipInitialized__Params(this);
@@ -203,6 +225,48 @@ export class Initialized__Params {
 
   get data(): Bytes {
     return this._event.parameters[1].value.toBytes();
+  }
+}
+
+export class MilestoneCreated extends ethereum.Event {
+  get params(): MilestoneCreated__Params {
+    return new MilestoneCreated__Params(this);
+  }
+}
+
+export class MilestoneCreated__Params {
+  _event: MilestoneCreated;
+
+  constructor(event: MilestoneCreated) {
+    this._event = event;
+  }
+
+  get recipientId(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get milestoneId(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get amountPercentage(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get metadata(): MilestoneCreatedMetadataStruct {
+    return changetype<MilestoneCreatedMetadataStruct>(
+      this._event.parameters[3].value.toTuple(),
+    );
+  }
+}
+
+export class MilestoneCreatedMetadataStruct extends ethereum.Tuple {
+  get protocol(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get pointer(): string {
+    return this[1].toString();
   }
 }
 
@@ -587,7 +651,7 @@ export class GrantShipStrategy__getRecipientResultValue0Struct extends ethereum.
     return this[0].toBoolean();
   }
 
-  get recipientAddress(): Address {
+  get receivingAddress(): Address {
     return this[1].toAddress();
   }
 
@@ -738,25 +802,6 @@ export class GrantShipStrategy extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  anchorAddress(): Address {
-    let result = super.call("anchorAddress", "anchorAddress():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_anchorAddress(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "anchorAddress",
-      "anchorAddress():(address)",
-      [],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   facilitatorHatId(): BigInt {
@@ -1033,6 +1078,29 @@ export class GrantShipStrategy extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  getUpcomingMilestone(_recipientId: Address): BigInt {
+    let result = super.call(
+      "getUpcomingMilestone",
+      "getUpcomingMilestone(address):(uint256)",
+      [ethereum.Value.fromAddress(_recipientId)],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getUpcomingMilestone(_recipientId: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getUpcomingMilestone",
+      "getUpcomingMilestone(address):(uint256)",
+      [ethereum.Value.fromAddress(_recipientId)],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   grantAmountRequired(): boolean {
