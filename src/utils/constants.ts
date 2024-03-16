@@ -42,3 +42,26 @@ export enum GrantStatus {
   MilestoneApproved,
   Completed,
 }
+
+export enum UpdateScope {
+  Game,
+  Ship,
+}
+
+export enum PosterRole {
+  Project,
+  Ship,
+  Facilitator,
+  Reviewer,
+  RootAccount,
+}
+
+export enum PostDecorator {
+  Update,
+  Clarify,
+  Appeal,
+}
+
+export enum ContentSchema {
+  BasicUpdate, // JSON title: string, description: string, image: string (CID), link: url
+}

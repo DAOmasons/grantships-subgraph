@@ -6,6 +6,7 @@ import {
   Log,
   Project,
   RawMetadata,
+  Update,
 } from '../generated/schema';
 import {
   PoolFunded as PoolFundedEvent,
@@ -24,7 +25,13 @@ import {
   Distributed as DistributedEvent,
   GrantShipInitialized as GrantShipInitializedEvent,
 } from '../generated/templates/GrantShipStrategyContract/GrantShipStrategy';
-import { AlloStatus, GrantStatus } from './utils/constants';
+import {
+  AlloStatus,
+  GrantStatus,
+  PostDecorator,
+  PosterRole,
+  UpdateScope,
+} from './utils/constants';
 import { addTransaction } from './utils/addTransaction';
 import { addFeedItem, inWeiMarker } from './utils/feed';
 import { createGrantId } from './utils/string';
@@ -49,7 +56,7 @@ export function handleGrantShipInitializedEvent(
   }
 
   grantShip.poolId = event.params.poolId;
-  grantShip.hatId = event.params.operatorHatId;
+  grantShip.hatId = event.params.operatorHatId.toString();
   grantShip.poolActive = true;
 
   grantShip.save();
@@ -128,8 +135,15 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
 }
 
 export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
+  let anchorAddress = dataSource.context().getBytes('anchorAddress');
+  let grantShip = GrantShip.load(anchorAddress);
+
+  if (grantShip == null) {
+    return;
+  }
+
   if (event.params.tag.startsWith('TAG:SHIP_REVIEW_GRANT')) {
-    //   // `TAG:SHIP_REVIEW_GRANT:${grant.id}:${isApproved ? 'APPROVED' : 'REJECTED'}`;
+    // `TAG:SHIP_REVIEW_GRANT:${grant.id}:${isApproved ? 'APPROVED' : 'REJECTED'}`;
     const stringItems = event.params.tag.split(':');
 
     if (stringItems.length != 4) {
@@ -154,22 +168,26 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
     }
 
     let project = Project.load(grant.projectId);
-    let grantShip = GrantShip.load(grant.shipId);
 
     if (project == null || grantShip == null) {
       return;
     }
 
-    // Graph is being a piece of garbage about this.
+    if (grantShip.hatId == null) {
+      return;
+    }
 
-    // let hasPermission = grantShip.hatId === event.params.role;
+    let hasPermission = grantShip.hatId == event.params.role.toString();
 
-    // if (!hasPermission) {
-    //   let log = new Log('Error: Poster does not have permission');
-    //   log.message = `grantShip.hatId: ${grantShip.hatId.toString()}, does not match event.params.role: ${event.params.role.toString()}`;
-    //   log.type = 'Error';
-    //   log.save();
-    // }
+    if (!hasPermission) {
+      let log = new Log('Error: Poster does not have permission');
+      log.message =
+        `Event.params.role: ${event.params.role}. GrantShip.hatId: ` +
+        (grantShip.hatId as string);
+      log.type = 'Error';
+      log.save();
+      return;
+    }
 
     let metadata = new RawMetadata(event.params.content.pointer);
     metadata.protocol = event.params.content.protocol;
@@ -214,6 +232,94 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       postIndex: 0,
     });
     return;
+  }
+
+  if (event.params.tag.startsWith('TAG:SHIP_POST_UPDATE')) {
+    let hasPermission = grantShip.hatId == event.params.role.toString();
+
+    if (!hasPermission) {
+      return;
+    }
+
+    let metadata = new RawMetadata(event.params.content.pointer);
+
+    metadata.pointer = event.params.content.pointer;
+    metadata.protocol = event.params.content.protocol;
+    metadata.save();
+
+    let update = new Update(event.transaction.hash.toHexString());
+
+    update.timestamp = event.block.timestamp;
+    update.scope = UpdateScope.Ship;
+    update.posterRole = PosterRole.Ship;
+    update.entityAddress = anchorAddress;
+    update.content = event.params.content.pointer;
+    update.postDecorator = PostDecorator.Update;
+
+    update.save();
+
+    addFeedItem({
+      timestamp: event.block.timestamp,
+      tx: event.transaction,
+      content: `${grantShip.name} posted an update.`,
+      subjectMetadataPointer: metadata.id,
+      subject: {
+        name: grantShip.name,
+        id: anchorAddress.toHexString(),
+        type: 'ship',
+      },
+      object: null,
+      embed: {
+        key: 'title',
+        pointer: event.params.content.pointer,
+        protocol: event.params.content.protocol,
+        content: null,
+      },
+      details: null,
+      tag: `ship-update`,
+      postIndex: 0,
+    });
+  }
+
+  if (event.params.tag.startsWith('TAG:PROJECT_POST_UPDATE')) {
+    let metadata = new RawMetadata(event.params.content.pointer);
+
+    metadata.pointer = event.params.content.pointer;
+    metadata.protocol = event.params.content.protocol;
+    metadata.save();
+
+    let update = new Update(event.transaction.hash.toHexString());
+
+    update.timestamp = event.block.timestamp;
+    update.scope = UpdateScope.Ship;
+    update.posterRole = PosterRole.Ship;
+    update.entityAddress = anchorAddress;
+    update.content = event.params.content.pointer;
+    update.postDecorator = PostDecorator.Update;
+
+    update.save();
+
+    addFeedItem({
+      timestamp: event.block.timestamp,
+      tx: event.transaction,
+      content: `${grantShip.name} posted an update.`,
+      subjectMetadataPointer: metadata.id,
+      subject: {
+        name: grantShip.name,
+        id: anchorAddress.toHexString(),
+        type: 'ship',
+      },
+      object: null,
+      embed: {
+        key: 'title',
+        pointer: event.params.content.pointer,
+        protocol: event.params.content.protocol,
+        content: null,
+      },
+      details: null,
+      tag: `ship-update`,
+      postIndex: 0,
+    });
   }
 
   let log = new Log('Error: Tag not recognized');

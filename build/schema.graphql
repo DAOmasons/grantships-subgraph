@@ -45,6 +45,17 @@ type FeedItemEmbed @entity {
   content: String
 }
 
+type Update @entity {
+  id: ID!
+  scope: Int!
+  posterRole: Int!
+  entityAddress: Bytes! # address
+  postedBy: Bytes! # address
+  content: RawMetadata!
+  postDecorator: Int!
+  timestamp: BigInt!
+}
+
 type GrantShip @entity {
   # Registry => ProfileCreated
   id: Bytes!
@@ -80,7 +91,7 @@ type GrantShip @entity {
   applicationReviewReason: RawMetadata
   # Game Manager => ShipLaunched
   poolId: BigInt
-  hatId: BigInt
+  hatId: String
   shipContractAddress: Bytes # address
   shipLaunched: Boolean
   poolActive: Boolean
