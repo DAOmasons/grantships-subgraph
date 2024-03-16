@@ -442,4 +442,7 @@ export function handleGameRoundTimesCreatedEvent(
   addTransaction(event.block, event.transaction);
 }
 
-export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {}
+export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
+  if (event.params.tag.toString().startsWith('TAG:FACILITATOR_POST_UPDATE')) {
+  }
+}
