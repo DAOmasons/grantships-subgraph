@@ -383,6 +383,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       tag: `facilitator-update`,
       postIndex: 0,
     });
+    return;
   }
 
   let log = new Log('Error: Tag not recognized');

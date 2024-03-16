@@ -12,10 +12,23 @@ import {
   Distributed as DistributedEvent,
   GameRoundTimesCreated as GameRoundTimesCreatedEvent,
 } from '../generated/GameManager/GameManager';
-import { GrantShip, GameManager, GameRound, Log } from '../generated/schema';
+import {
+  GrantShip,
+  GameManager,
+  GameRound,
+  Log,
+  RawMetadata,
+  Update,
+} from '../generated/schema';
 import { createRawMetadata } from './utils/rawMetadata';
 import { addTransaction } from './utils/addTransaction';
-import { GameStatus } from './utils/constants';
+import {
+  ContentSchema,
+  GameStatus,
+  PostDecorator,
+  PosterRole,
+  UpdateScope,
+} from './utils/constants';
 import { addFeedItem, inWeiMarker } from './utils/feed';
 
 export function handleGameManagerInitializedEvent(
@@ -444,5 +457,44 @@ export function handleGameRoundTimesCreatedEvent(
 
 export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
   if (event.params.tag.toString().startsWith('TAG:FACILITATOR_POST_UPDATE')) {
+    let metadata = new RawMetadata(event.params.content.pointer);
+
+    metadata.pointer = event.params.content.pointer;
+    metadata.protocol = event.params.content.protocol;
+    metadata.save();
+
+    let update = new Update(event.transaction.hash.toHexString());
+
+    update.timestamp = event.block.timestamp;
+    update.scope = UpdateScope.Game;
+    update.posterRole = PosterRole.Facilitator;
+    update.entityAddress = event.address;
+    update.content = event.params.content.pointer;
+    update.postDecorator = PostDecorator.Update;
+    update.contentSchema = ContentSchema.BasicUpdate;
+
+    update.save();
+
+    addFeedItem({
+      timestamp: event.block.timestamp,
+      tx: event.transaction,
+      content: `Facilitator Crew posted an update.`,
+      subjectMetadataPointer: 'facilitators',
+      subject: {
+        name: 'Facilitator Crew',
+        id: event.address.toHexString(),
+        type: 'facilitators',
+      },
+      object: null,
+      embed: {
+        key: 'title',
+        pointer: event.params.content.pointer,
+        protocol: event.params.content.protocol,
+        content: null,
+      },
+      details: null,
+      tag: `facilitator-game-update`,
+      postIndex: 0,
+    });
   }
 }
