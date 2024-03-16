@@ -1,6 +1,7 @@
 import { BigInt, dataSource } from '@graphprotocol/graph-ts';
 import { Initialized as InitializedEvent } from '../generated/templates/GrantShipStrategyContract/GrantShipStrategy';
 import {
+  GameManager,
   Grant,
   GrantShip,
   Log,
@@ -28,6 +29,7 @@ import {
 import {
   AlloStatus,
   ContentSchema,
+  GAME_MANAGER_ADDRESS,
   GrantStatus,
   PostDecorator,
   PosterRole,
@@ -264,7 +266,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       timestamp: event.block.timestamp,
       tx: event.transaction,
       content: `${grantShip.name} posted an update.`,
-      subjectMetadataPointer: metadata.id,
+      subjectMetadataPointer: grantShip.profileMetadata,
       subject: {
         name: grantShip.name,
         id: anchorAddress.toHexString(),
@@ -322,7 +324,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       timestamp: event.block.timestamp,
       tx: event.transaction,
       content: `${project.name} posted an update.`,
-      subjectMetadataPointer: metadata.id,
+      subjectMetadataPointer: project.metadata,
       subject: {
         name: project.name,
         id: project.id.toHexString(),
@@ -343,6 +345,44 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
   }
 
   if (event.params.tag.startsWith('TAG:FACILITATOR_POST_UPDATE')) {
+    let metadata = new RawMetadata(event.params.content.pointer);
+
+    metadata.pointer = event.params.content.pointer;
+    metadata.protocol = event.params.content.protocol;
+    metadata.save();
+
+    let update = new Update(event.transaction.hash.toHexString());
+
+    update.timestamp = event.block.timestamp;
+    update.scope = UpdateScope.Ship;
+    update.posterRole = PosterRole.Facilitator;
+    update.entityAddress = anchorAddress;
+    update.content = event.params.content.pointer;
+    update.contentSchema = ContentSchema.BasicUpdate;
+    update.postDecorator = PostDecorator.Update;
+    update.save();
+
+    addFeedItem({
+      timestamp: event.block.timestamp,
+      tx: event.transaction,
+      content: `Facilitator Crew posted an update.`,
+      subjectMetadataPointer: 'facilitators',
+      subject: {
+        name: 'Facilitator Crew',
+        id: GAME_MANAGER_ADDRESS.toHexString(),
+        type: 'facilitators',
+      },
+      object: null,
+      embed: {
+        key: 'title',
+        pointer: event.params.content.pointer,
+        protocol: event.params.content.protocol,
+        content: null,
+      },
+      details: null,
+      tag: `facilitator-update`,
+      postIndex: 0,
+    });
   }
 
   let log = new Log('Error: Tag not recognized');
