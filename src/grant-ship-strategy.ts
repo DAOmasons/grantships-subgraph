@@ -27,6 +27,7 @@ import {
 } from '../generated/templates/GrantShipStrategyContract/GrantShipStrategy';
 import {
   AlloStatus,
+  ContentSchema,
   GrantStatus,
   PostDecorator,
   PosterRole,
@@ -255,6 +256,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
     update.entityAddress = anchorAddress;
     update.content = event.params.content.pointer;
     update.postDecorator = PostDecorator.Update;
+    update.contentSchema = ContentSchema.BasicUpdate;
 
     update.save();
 
@@ -279,9 +281,25 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       tag: `ship-update`,
       postIndex: 0,
     });
+
+    return;
   }
 
   if (event.params.tag.startsWith('TAG:PROJECT_POST_UPDATE')) {
+    // checking grant entity and project entity will confirm
+    // if the grant is associated with the project
+    let grantId = createGrantId({
+      projectId: event.params.recipientId,
+      shipId: anchorAddress,
+    });
+
+    let grant = Grant.load(grantId);
+    let project = Project.load(event.params.recipientId);
+
+    if (grant == null || project == null) {
+      return;
+    }
+
     let metadata = new RawMetadata(event.params.content.pointer);
 
     metadata.pointer = event.params.content.pointer;
@@ -292,22 +310,23 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
 
     update.timestamp = event.block.timestamp;
     update.scope = UpdateScope.Ship;
-    update.posterRole = PosterRole.Ship;
-    update.entityAddress = anchorAddress;
+    update.posterRole = PosterRole.Project;
+    update.entityAddress = project.id;
     update.content = event.params.content.pointer;
     update.postDecorator = PostDecorator.Update;
+    update.contentSchema = ContentSchema.BasicUpdate;
 
     update.save();
 
     addFeedItem({
       timestamp: event.block.timestamp,
       tx: event.transaction,
-      content: `${grantShip.name} posted an update.`,
+      content: `${project.name} posted an update.`,
       subjectMetadataPointer: metadata.id,
       subject: {
-        name: grantShip.name,
-        id: anchorAddress.toHexString(),
-        type: 'ship',
+        name: project.name,
+        id: project.id.toHexString(),
+        type: 'project',
       },
       object: null,
       embed: {
@@ -317,9 +336,13 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
         content: null,
       },
       details: null,
-      tag: `ship-update`,
+      tag: `project-update`,
       postIndex: 0,
     });
+    return;
+  }
+
+  if (event.params.tag.startsWith('TAG:FACILITATOR_POST_UPDATE')) {
   }
 
   let log = new Log('Error: Tag not recognized');

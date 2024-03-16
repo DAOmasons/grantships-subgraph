@@ -52,6 +52,7 @@ type Update @entity {
   entityAddress: Bytes! # address
   postedBy: Bytes! # address
   content: RawMetadata!
+  contentSchema: Int!
   postDecorator: Int!
   timestamp: BigInt!
 }

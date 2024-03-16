@@ -706,6 +706,19 @@ export class Update extends Entity {
     this.set("content", Value.fromString(value));
   }
 
+  get contentSchema(): i32 {
+    let value = this.get("contentSchema");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set contentSchema(value: i32) {
+    this.set("contentSchema", Value.fromI32(value));
+  }
+
   get postDecorator(): i32 {
     let value = this.get("postDecorator");
     if (!value || value.kind == ValueKind.NULL) {
