@@ -255,6 +255,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
     update.timestamp = event.block.timestamp;
     update.scope = UpdateScope.Ship;
     update.posterRole = PosterRole.Ship;
+    update.postedBy = event.transaction.from;
     update.entityAddress = anchorAddress;
     update.content = event.params.content.pointer;
     update.postDecorator = PostDecorator.Update;
@@ -262,6 +263,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
 
     update.save();
 
+    addTransaction(event.block, event.transaction);
     addFeedItem({
       timestamp: event.block.timestamp,
       tx: event.transaction,
@@ -313,6 +315,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
     update.timestamp = event.block.timestamp;
     update.scope = UpdateScope.Ship;
     update.posterRole = PosterRole.Project;
+    update.postedBy = event.transaction.from;
     update.entityAddress = project.id;
     update.content = event.params.content.pointer;
     update.postDecorator = PostDecorator.Update;
@@ -320,6 +323,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
 
     update.save();
 
+    addTransaction(event.block, event.transaction);
     addFeedItem({
       timestamp: event.block.timestamp,
       tx: event.transaction,
@@ -355,6 +359,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
 
     update.timestamp = event.block.timestamp;
     update.scope = UpdateScope.Ship;
+    update.postedBy = event.transaction.from;
     update.posterRole = PosterRole.Facilitator;
     update.entityAddress = anchorAddress;
     update.content = event.params.content.pointer;
@@ -362,6 +367,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
     update.postDecorator = PostDecorator.Update;
     update.save();
 
+    addTransaction(event.block, event.transaction);
     addFeedItem({
       timestamp: event.block.timestamp,
       tx: event.transaction,

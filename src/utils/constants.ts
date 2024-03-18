@@ -63,5 +63,5 @@ export enum PostDecorator {
 }
 
 export enum ContentSchema {
-  BasicUpdate, // JSON title: string, description: string, image: string (CID), link: url
+  BasicUpdate, // { text: string }
 }
