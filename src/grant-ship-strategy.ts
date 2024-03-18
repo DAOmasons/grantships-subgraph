@@ -1,7 +1,6 @@
 import { BigInt, dataSource } from '@graphprotocol/graph-ts';
 import { Initialized as InitializedEvent } from '../generated/templates/GrantShipStrategyContract/GrantShipStrategy';
 import {
-  GameManager,
   Grant,
   GrantShip,
   Log,
@@ -225,7 +224,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
         name: project.name,
       },
       embed: {
-        key: 'reason',
+        key: 'text',
         pointer: event.params.content.pointer,
         protocol: event.params.content.protocol,
         content: null,
@@ -276,7 +275,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       },
       object: null,
       embed: {
-        key: 'title',
+        key: 'text',
         pointer: event.params.content.pointer,
         protocol: event.params.content.protocol,
         content: null,
@@ -336,7 +335,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       },
       object: null,
       embed: {
-        key: 'title',
+        key: 'text',
         pointer: event.params.content.pointer,
         protocol: event.params.content.protocol,
         content: null,
@@ -380,7 +379,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       },
       object: null,
       embed: {
-        key: 'title',
+        key: 'text',
         pointer: event.params.content.pointer,
         protocol: event.params.content.protocol,
         content: null,
