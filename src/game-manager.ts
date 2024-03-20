@@ -1,4 +1,4 @@
-import { BigInt, DataSourceContext, Value } from '@graphprotocol/graph-ts';
+import { BigInt } from '@graphprotocol/graph-ts';
 import {
   Registered as RegisteredEvent,
   GameManagerInitialized as GameManagerInitializedEvent,
@@ -456,7 +456,8 @@ export function handleGameRoundTimesCreatedEvent(
 }
 
 export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
-  if (event.params.tag.toString().startsWith('TAG:FACILITATOR_POST_UPDATE')) {
+  // keccak of TAG:FACILITATOR_POST_UPDATE converts to 0xb02b7f97
+  if (event.params.tag.toHexString().startsWith('0xb02b7f97')) {
     let metadata = new RawMetadata(event.params.content.pointer);
 
     metadata.pointer = event.params.content.pointer;
@@ -471,10 +472,12 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
     update.entityAddress = event.address;
     update.content = event.params.content.pointer;
     update.postDecorator = PostDecorator.Update;
+    update.postedBy = event.transaction.from;
     update.contentSchema = ContentSchema.BasicUpdate;
 
     update.save();
 
+    addTransaction(event.block, event.transaction);
     addFeedItem({
       timestamp: event.block.timestamp,
       tx: event.transaction,
@@ -487,7 +490,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       },
       object: null,
       embed: {
-        key: 'title',
+        key: 'text',
         pointer: event.params.content.pointer,
         protocol: event.params.content.protocol,
         content: null,
@@ -496,5 +499,13 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       tag: `facilitator-game-update`,
       postIndex: 0,
     });
+
+    return;
   }
+
+  let log = new Log(event.transaction.hash.toHexString());
+  log.message =
+    'Update Tag not recognized. Update tag: ' + event.params.tag.toHexString();
+  log.type = 'Error';
+  log.save();
 }

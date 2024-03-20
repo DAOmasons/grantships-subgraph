@@ -190,3 +190,18 @@ type Log @entity {
   description: String
   type: String!
 }
+
+type GmVersion @entity {
+  id: ID!
+  name: String!
+  address: Bytes! # address
+}
+
+type Deployments @entity {
+  id: ID!
+  address: Bytes! # address
+  version: GmVersion!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+  timestamp: BigInt!
+}
