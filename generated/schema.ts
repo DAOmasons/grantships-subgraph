@@ -2400,7 +2400,7 @@ export class GmVersion extends Entity {
   }
 }
 
-export class GmDeployments extends Entity {
+export class GmDeployment extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -2408,24 +2408,24 @@ export class GmDeployments extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save GmDeployments entity without an ID");
+    assert(id != null, "Cannot save GmDeployment entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        `Entities of type GmDeployments must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+        `Entities of type GmDeployment must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
       );
-      store.set("GmDeployments", id.toString(), this);
+      store.set("GmDeployment", id.toString(), this);
     }
   }
 
-  static loadInBlock(id: string): GmDeployments | null {
-    return changetype<GmDeployments | null>(
-      store.get_in_block("GmDeployments", id),
+  static loadInBlock(id: string): GmDeployment | null {
+    return changetype<GmDeployment | null>(
+      store.get_in_block("GmDeployment", id),
     );
   }
 
-  static load(id: string): GmDeployments | null {
-    return changetype<GmDeployments | null>(store.get("GmDeployments", id));
+  static load(id: string): GmDeployment | null {
+    return changetype<GmDeployment | null>(store.get("GmDeployment", id));
   }
 
   get id(): string {
@@ -2547,6 +2547,32 @@ export class GmDeployments extends Entity {
 
   set profileId(value: Bytes) {
     this.set("profileId", Value.fromBytes(value));
+  }
+
+  get poolMetadata(): string {
+    let value = this.get("poolMetadata");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set poolMetadata(value: string) {
+    this.set("poolMetadata", Value.fromString(value));
+  }
+
+  get poolProfileMetadata(): string {
+    let value = this.get("poolProfileMetadata");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set poolProfileMetadata(value: string) {
+    this.set("poolProfileMetadata", Value.fromString(value));
   }
 }
 

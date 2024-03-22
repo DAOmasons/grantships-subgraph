@@ -197,7 +197,9 @@ type GmVersion @entity {
   address: Bytes! # address
 }
 
-type GmDeployments @entity {
+# Temporary entity type until we have a better way to handle multiple game managers
+
+type GmDeployment @entity {
   id: ID!
   address: Bytes! # address
   version: GmVersion!
@@ -207,4 +209,6 @@ type GmDeployments @entity {
   hasPool: Boolean!
   poolId: BigInt
   profileId: Bytes! # bytes32
+  poolMetadata: RawMetadata! # PoolMetadata
+  poolProfileMetadata: RawMetadata! # PoolProfileMetadata
 }
