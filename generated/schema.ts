@@ -2400,7 +2400,7 @@ export class GmVersion extends Entity {
   }
 }
 
-export class Deployments extends Entity {
+export class GmDeployments extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -2408,24 +2408,24 @@ export class Deployments extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save Deployments entity without an ID");
+    assert(id != null, "Cannot save GmDeployments entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        `Entities of type Deployments must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+        `Entities of type GmDeployments must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
       );
-      store.set("Deployments", id.toString(), this);
+      store.set("GmDeployments", id.toString(), this);
     }
   }
 
-  static loadInBlock(id: string): Deployments | null {
-    return changetype<Deployments | null>(
-      store.get_in_block("Deployments", id),
+  static loadInBlock(id: string): GmDeployments | null {
+    return changetype<GmDeployments | null>(
+      store.get_in_block("GmDeployments", id),
     );
   }
 
-  static load(id: string): Deployments | null {
-    return changetype<Deployments | null>(store.get("Deployments", id));
+  static load(id: string): GmDeployments | null {
+    return changetype<GmDeployments | null>(store.get("GmDeployments", id));
   }
 
   get id(): string {
@@ -2504,6 +2504,49 @@ export class Deployments extends Entity {
 
   set timestamp(value: BigInt) {
     this.set("timestamp", Value.fromBigInt(value));
+  }
+
+  get hasPool(): boolean {
+    let value = this.get("hasPool");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set hasPool(value: boolean) {
+    this.set("hasPool", Value.fromBoolean(value));
+  }
+
+  get poolId(): BigInt | null {
+    let value = this.get("poolId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set poolId(value: BigInt | null) {
+    if (!value) {
+      this.unset("poolId");
+    } else {
+      this.set("poolId", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get profileId(): Bytes {
+    let value = this.get("profileId");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set profileId(value: Bytes) {
+    this.set("profileId", Value.fromBytes(value));
   }
 }
 

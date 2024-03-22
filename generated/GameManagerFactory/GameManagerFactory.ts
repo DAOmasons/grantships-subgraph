@@ -44,6 +44,10 @@ export class GameManagerDeployed__Params {
   get gameManagerAddress(): Address {
     return this._event.parameters[0].value.toAddress();
   }
+
+  get templateName(): string {
+    return this._event.parameters[1].value.toString();
+  }
 }
 
 export class GameManagerDeployedWithPool extends ethereum.Event {
@@ -69,6 +73,18 @@ export class GameManagerDeployedWithPool__Params {
 
   get poolId(): BigInt {
     return this._event.parameters[2].value.toBigInt();
+  }
+
+  get templateName(): string {
+    return this._event.parameters[3].value.toString();
+  }
+
+  get tokenAddress(): Address {
+    return this._event.parameters[4].value.toAddress();
+  }
+
+  get initData(): Bytes {
+    return this._event.parameters[5].value.toBytes();
   }
 }
 

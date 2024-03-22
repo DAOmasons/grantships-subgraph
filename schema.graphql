@@ -197,11 +197,14 @@ type GmVersion @entity {
   address: Bytes! # address
 }
 
-type Deployments @entity {
+type GmDeployments @entity {
   id: ID!
   address: Bytes! # address
   version: GmVersion!
   blockNumber: BigInt!
   transactionHash: Bytes!
   timestamp: BigInt!
+  hasPool: Boolean!
+  poolId: BigInt
+  profileId: Bytes! # bytes32
 }

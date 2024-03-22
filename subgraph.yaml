@@ -33,7 +33,7 @@ dataSources:
     name: GameManagerFactory
     network: arbitrum-sepolia
     source: 
-      address: "0x15172A945DC083eCEbe98E1Ab197F1eFfD171c55"
+      address: "0xe703e3C74a2fe424054Ff6D59dEC0db91afC057c"
       abi: GameManagerFactory
       startBlock: 19749131    
     mapping:
@@ -48,9 +48,9 @@ dataSources:
       eventHandlers:
         - event: FactoryInitialized(address)
           handler: handleFactoryInitializedEvent
-        - event: GameManagerDeployed(address)
+        - event: GameManagerDeployed(address,string)
           handler: handleGameManagerDeployedEvent
-        - event: GameManagerDeployedWithPool(address,bytes32,uint256)
+        - event: GameManagerDeployedWithPool(address,bytes32,uint256,string,address,bytes)
           handler: handleGameManagerDeployedWithPoolEvent
         - event: RootAccountSwitched(address)
           handler: handleRootAccountSwitchedEvent

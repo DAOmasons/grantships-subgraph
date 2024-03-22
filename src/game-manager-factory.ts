@@ -6,28 +6,31 @@ import {
   TemplateCreated as TemplateCreatedEvent,
 } from '../generated/GameManagerFactory/GameManagerFactory';
 import { GmVersion } from '../generated/schema';
+import { addTransaction } from './utils/addTransaction';
 
-export const handleFactoryInitializedEvent = (
+export function handleFactoryInitializedEvent(
   event: FactoryInitializedEvent
-) => {};
+): void {}
 
-export const handleGameManagerDeployedEvent = (
+export function handleGameManagerDeployedEvent(
   event: GameManagerDeployedEvent
-) => {};
+): void {}
 
-export const handleGameManagerDeployedWithPoolEvent = (
+export function handleGameManagerDeployedWithPoolEvent(
   event: GameManagerDeployedWithPoolEvent
-) => {};
+): void {}
 
-export const handleRootAccountSwitchedEvent = (
+export function handleRootAccountSwitchedEvent(
   event: RootAccountSwitchedEvent
-) => {};
+): void {}
 
-export const handleTemplateCreatedEvent = (event: TemplateCreatedEvent) => {
-  let template = new GmVersion(event.params.name);
+export function handleTemplateCreatedEvent(event: TemplateCreatedEvent): void {
+  let gnVersion = new GmVersion(event.params.name);
 
-  template.name = event.params.name;
-  template.address = event.params.templateAddress;
+  gnVersion.name = event.params.name;
+  gnVersion.address = event.params.templateAddress;
 
-  template.save();
-};
+  gnVersion.save();
+
+  addTransaction(event.block, event.transaction);
+}
