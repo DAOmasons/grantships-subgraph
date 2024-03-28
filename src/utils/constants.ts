@@ -1,7 +1,7 @@
 import { Bytes } from '@graphprotocol/graph-ts';
 
 export const GAME_MANAGER_ADDRESS = Bytes.fromHexString(
-  '0x06E068784e4fbc89fea8b30198A918E9adfbD5FF'
+  '0xCbc875c0F1c060539C601AE3ED1aA563f1f21359'
 ) as Bytes;
 
 // export const GAME_MANAGER_POOL_ID = BigInt.fromI32(224);
