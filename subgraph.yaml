@@ -50,7 +50,7 @@ dataSources:
           handler: handleFactoryInitializedEvent
         - event: GameManagerDeployed(address,string)
           handler: handleGameManagerDeployedEvent
-        - event: GameManagerDeployedWithPool(address,bytes32,uint256,string,address,bytes)
+        - event: GameManagerDeployedWithPool(address,bytes32,uint256,string,address,bytes,(uint256,string),(uint256,string))
           handler: handleGameManagerDeployedWithPoolEvent
         - event: RootAccountSwitched(address)
           handler: handleRootAccountSwitchedEvent

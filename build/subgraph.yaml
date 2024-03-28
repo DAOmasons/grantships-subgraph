@@ -33,7 +33,11 @@ dataSources:
     name: GameManagerFactory
     network: arbitrum-one
     source:
+<<<<<<< HEAD
       address: "0xdc9787b869e22256a4f4f49f484586fcff0d351f"
+=======
+      address: "0x14e32E7893D6A1fA5f852d8B2fE8c57A2aB670ba"
+>>>>>>> 52bb78011a00e4f26a5e90dc67a8cd5c6d7e7f42
       abi: GameManagerFactory
       startBlock: 194976545
     mapping:
@@ -50,7 +54,11 @@ dataSources:
           handler: handleFactoryInitializedEvent
         - event: GameManagerDeployed(address,string)
           handler: handleGameManagerDeployedEvent
+<<<<<<< HEAD
         - event: GameManagerDeployedWithPool(address,bytes32,uint256,string,address,bytes)
+=======
+        - event: GameManagerDeployedWithPool(address,bytes32,uint256,string,address,bytes,(uint256,string),(uint256,string))
+>>>>>>> 52bb78011a00e4f26a5e90dc67a8cd5c6d7e7f42
           handler: handleGameManagerDeployedWithPoolEvent
         - event: RootAccountSwitched(address)
           handler: handleRootAccountSwitchedEvent

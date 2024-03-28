@@ -244,7 +244,7 @@ export function handleShipLaunchedEvent(event: ShipLaunchedEvent): void {
     return;
   }
 
-  // Pool Id and strategyContractAddress is set in GrantShipStrategy => GranShipInitialized
+  // Pool Id and strategyContractAddress is set in GrantShipStrategy => GrantShipInitialized
   // We add shipLaunched and addTransaction to confirm the event has been handled
 
   grantShip.shipLaunched = true;
@@ -322,6 +322,7 @@ export function handleDistributedEvent(event: DistributedEvent): void {
   let shipId = event.params.recipientId;
   let grantShip = GrantShip.load(shipId);
   let gameManager = GameManager.load(event.address);
+
   if (grantShip == null || gameManager == null) {
     return;
   }

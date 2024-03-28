@@ -67,7 +67,7 @@ export class GameManagerDeployedWithPool__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get profileAddress(): Bytes {
+  get profileId(): Bytes {
     return this._event.parameters[1].value.toBytes();
   }
 
@@ -85,6 +85,38 @@ export class GameManagerDeployedWithPool__Params {
 
   get initData(): Bytes {
     return this._event.parameters[5].value.toBytes();
+  }
+
+  get poolMetadata(): GameManagerDeployedWithPoolPoolMetadataStruct {
+    return changetype<GameManagerDeployedWithPoolPoolMetadataStruct>(
+      this._event.parameters[6].value.toTuple(),
+    );
+  }
+
+  get profileMetadata(): GameManagerDeployedWithPoolProfileMetadataStruct {
+    return changetype<GameManagerDeployedWithPoolProfileMetadataStruct>(
+      this._event.parameters[7].value.toTuple(),
+    );
+  }
+}
+
+export class GameManagerDeployedWithPoolPoolMetadataStruct extends ethereum.Tuple {
+  get protocol(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get pointer(): string {
+    return this[1].toString();
+  }
+}
+
+export class GameManagerDeployedWithPoolProfileMetadataStruct extends ethereum.Tuple {
+  get protocol(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get pointer(): string {
+    return this[1].toString();
   }
 }
 
