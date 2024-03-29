@@ -277,6 +277,7 @@ export function handleAllocatedEvent(event: AllocatedEvent): void {
   }
   grantShip.status = GameStatus.Allocated; // 4 = Allocated
   grantShip.isAllocated = true;
+  grantShip.shipAllocation = event.params.amount;
 
   grantShip.save();
   if (gameManager.currentRound == null) {

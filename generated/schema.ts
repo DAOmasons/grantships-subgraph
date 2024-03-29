@@ -945,6 +945,19 @@ export class GrantShip extends Entity {
     this.set("balance", Value.fromBigInt(value));
   }
 
+  get shipAllocation(): BigInt {
+    let value = this.get("shipAllocation");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set shipAllocation(value: BigInt) {
+    this.set("shipAllocation", Value.fromBigInt(value));
+  }
+
   get totalAvailableFunds(): BigInt {
     let value = this.get("totalAvailableFunds");
     if (!value || value.kind == ValueKind.NULL) {

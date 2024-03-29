@@ -161,6 +161,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     grantShip.totalDistributed = BigInt.fromI32(0);
     grantShip.totalAvailableFunds = BigInt.fromI32(0);
     grantShip.totalRoundAmount = BigInt.fromI32(0);
+    grantShip.shipAllocation = BigInt.fromI32(0);
 
     // Graph IPFS file-data-source API isn't ready for prime-time
     // ShipProfileMetadata.create(event.params.metadata.pointer);
