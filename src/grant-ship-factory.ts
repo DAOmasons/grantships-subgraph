@@ -32,6 +32,7 @@ export function handleShipCreatedEvent(event: ShipCreatedEvent): void {
 
   let context = new DataSourceContext();
   context.set('anchorAddress', Value.fromBytes(event.params.anchorAddress));
+
   GrantShipStrategyContract.createWithContext(
     event.params.strategyAddress,
     context

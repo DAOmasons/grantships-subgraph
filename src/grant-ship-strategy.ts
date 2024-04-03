@@ -28,7 +28,6 @@ import {
 import {
   AlloStatus,
   ContentSchema,
-  GAME_MANAGER_ADDRESS,
   GrantStatus,
   PostDecorator,
   PosterRole,
@@ -374,7 +373,7 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       subjectMetadataPointer: 'facilitators',
       subject: {
         name: 'Facilitator Crew',
-        id: GAME_MANAGER_ADDRESS.toHexString(),
+        id: event.address.toHexString(),
         type: 'facilitators',
       },
       object: null,
