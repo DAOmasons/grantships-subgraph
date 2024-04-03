@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Registry
-    network: arbitrum-one
+    network: arbitrum-sepolia
     source:
-      address: "0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3"
       abi: Registry
-      startBlock: 195499276  
+      address: "0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3"
+      startBlock: 19749131
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -22,7 +22,8 @@ dataSources:
         - name: Registry
           file: ./abis/Registry.json
       eventHandlers:
-        - event: ProfileCreated(indexed bytes32,uint256,string,(uint256,string),address,address)
+        - event: ProfileCreated(indexed
+            bytes32,uint256,string,(uint256,string),address,address)
           handler: handleProfileCreatedEvent
         - event: RoleGranted(indexed bytes32,indexed address,indexed address)
           handler: handleRoleGrantedEvent
@@ -31,11 +32,11 @@ dataSources:
       file: ./src/registry.ts
   - kind: ethereum
     name: GameManagerFactory
-    network: arbitrum-one
-    source: 
-      address: "0xdc9787b869e22256a4f4f49f484586fcff0d351f"
+    network: arbitrum-sepolia
+    source:
       abi: GameManagerFactory
-      startBlock: 194979041
+      address: "0x14e32E7893D6A1fA5f852d8B2fE8c57A2aB670ba"
+      startBlock: 25869413
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -59,11 +60,11 @@ dataSources:
       file: ./src/game-manager-factory.ts
   - kind: ethereum
     name: GameManager
-    network: arbitrum-one
+    network: arbitrum-sepolia
     source:
-      address: "0x4b42362fcbbcdc7b8f35d73288039cad6cb4e9ef"
       abi: GameManager
-      startBlock: 195499276  
+      address: "0x06E068784e4fbc89fea8b30198A918E9adfbD5FF"
+      startBlock: 19749131
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -89,7 +90,8 @@ dataSources:
           handler: handleRecipientAcceptedEvent
         - event: GameActive(bool,uint256)
           handler: handleGameActiveEvent
-        - event: UpdatePosted(indexed string,indexed uint256,indexed address,(uint256,string))
+        - event: UpdatePosted(indexed string,indexed uint256,indexed
+            address,(uint256,string))
           handler: handleUpdatePostedEvent
         - event: Allocated(indexed address,uint256,address,address)
           handler: handleAllocatedEvent
@@ -100,11 +102,11 @@ dataSources:
       file: ./src/game-manager.ts
   - kind: ethereum
     name: Allo
-    network: arbitrum-one
+    network: arbitrum-sepolia
     source:
-      address: "0x1133eA7Af70876e64665ecD07C0A0476d09465a1"
       abi: Allo
-      startBlock: 195499276  
+      address: "0x1133eA7Af70876e64665ecD07C0A0476d09465a1"
+      startBlock: 19749131
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -121,11 +123,11 @@ dataSources:
       file: ./src/allo.ts
   - kind: ethereum
     name: GrantShipFactory
-    network: arbitrum-one
+    network: arbitrum-sepolia
     source:
-      address: "0xb130175b648d4ce92ca6153eaa138cc69eb1cf4c"
       abi: GrantShipFactory
-      startBlock: 195499276  
+      address: "0x8D994BEef251e30C858e44eCE3670feb998CA77a"
+      startBlock: 19749131
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -138,12 +140,12 @@ dataSources:
       eventHandlers:
         - event: ShipCreated(address,address)
           handler: handleShipCreatedEvent
-      file: ./src/grant-ship-factory.ts    
+      file: ./src/grant-ship-factory.ts
 templates:
   - kind: ethereum/contract
     name: GrantShipStrategyContract
-    network: arbitrum-one
-    source: 
+    network: arbitrum-sepolia
+    source:
       abi: GrantShipStrategy
     mapping:
       kind: ethereum/events
@@ -154,18 +156,18 @@ templates:
       abis:
         - name: GrantShipStrategy
           file: ./abis/GrantShipStrategy.json
-      eventHandlers: 
+      eventHandlers:
         - event: PoolFunded(uint256,uint256,uint256)
           handler: handlePoolFundedEvent
-        - event:  RecipientStatusChanged(address,uint8,(uint256,string))
+        - event: RecipientStatusChanged(address,uint8,(uint256,string))
           handler: handleRecipientStatusChangedEvent
         - event: MilestoneSubmitted(address,uint256,(uint256,string))
           handler: handleMilestoneSubmittedEvent
         - event: MilestoneStatusChanged(address,uint256,uint8)
           handler: handleMilestoneStatusChangedEvent
-        - event:  MilestoneRejected(address,uint256,(uint256,string))
-          handler: handleMilestoneRejectedEvent  
-        - event:  MilestonesSet(address,uint256)
+        - event: MilestoneRejected(address,uint256,(uint256,string))
+          handler: handleMilestoneRejectedEvent
+        - event: MilestonesSet(address,uint256)
           handler: handleMilestonesSetEvent
         - event: FlagIssued(uint256,uint8,(uint256,string))
           handler: handleFlagIssuedEvent
@@ -182,7 +184,7 @@ templates:
         - event: Allocated(indexed address,uint256,address,address)
           handler: handleAllocatedEvent
         - event: Distributed(indexed address,address,uint256,address)
-          handler: handleDistributedEvent  
+          handler: handleDistributedEvent
         - event: GrantShipInitialized(uint256,bool,bool,bool,uint256,uint256,address)
           handler: handleGrantShipInitializedEvent
       file: ./src/grant-ship-strategy.ts
