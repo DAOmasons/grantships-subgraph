@@ -1,7 +1,3 @@
-import { Bytes } from '@graphprotocol/graph-ts';
-
-// export const GAME_MANAGER_POOL_ID = BigInt.fromI32(224);
-
 export enum GameStatus {
   None = 0,
   Pending = 1,

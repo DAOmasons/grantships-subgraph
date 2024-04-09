@@ -71,7 +71,6 @@ type GrantShip @entity {
   transactionHash: Bytes!
   status: Int!
   poolFunded: Boolean!
-  gameManagerAddress: Bytes! # address
   balance: BigInt!
   shipAllocation: BigInt!
   totalAvailableFunds: BigInt!
