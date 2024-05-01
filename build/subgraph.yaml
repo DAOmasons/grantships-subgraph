@@ -10,7 +10,7 @@ dataSources:
     source:
       abi: Registry
       address: "0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3"
-      startBlock: 31049164
+      startBlock: 39353224
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -62,8 +62,8 @@ dataSources:
     network: arbitrum-sepolia
     source:
       abi: GameManager
-      address: "0x9def44fb019a4dd0d31bcc9de6092610e2f831f2"
-      startBlock: 31049164
+      address: "0x3fAcD1E1B5Ec733110AfB4c575ae6fd963e1De18"
+      startBlock: 39353224
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -104,7 +104,7 @@ dataSources:
     source:
       abi: Allo
       address: "0x1133eA7Af70876e64665ecD07C0A0476d09465a1"
-      startBlock: 31049164
+      startBlock: 39353224
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -125,7 +125,7 @@ dataSources:
     source:
       abi: GrantShipFactory
       address: "0x8D994BEef251e30C858e44eCE3670feb998CA77a"
-      startBlock: 31049164
+      startBlock: 39353224
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

@@ -167,6 +167,12 @@ type Milestone @entity {
   lastUpdated: BigInt!
 }
 
+type ProfileIdToAnchor @entity {
+  id: ID!
+  profileId: Bytes! # bytes32
+  anchor: Bytes! # address
+}
+
 type ProfileMemberGroup @entity {
   id: Bytes!
   addresses: [Bytes!]

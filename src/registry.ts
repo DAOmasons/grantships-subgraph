@@ -10,7 +10,12 @@ import {
   RoleRevoked as RoleRevokedEvent,
 } from '../generated/Registry/Registry';
 
-import { Project, GrantShip, ProfileMemberGroup } from '../generated/schema';
+import {
+  Project,
+  GrantShip,
+  ProfileMemberGroup,
+  ProfileIdToAnchor,
+} from '../generated/schema';
 import { BigInt, ethereum } from '@graphprotocol/graph-ts';
 import { addTransaction } from './utils/addTransaction';
 import { createRawMetadata } from './utils/rawMetadata';
@@ -93,9 +98,14 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     project.blockTimestamp = event.block.timestamp;
     project.transactionHash = event.transaction.hash;
 
-    // Graph IPFS file-data-source API isn't ready for prime-time
-    // ProjectMetadata.create(event.params.metadata.pointer);
+    let profileIdJoin = new ProfileIdToAnchor(
+      event.params.profileId.toHexString()
+    );
 
+    profileIdJoin.anchor = event.params.anchor;
+    profileIdJoin.profileId = event.params.profileId;
+
+    profileIdJoin.save();
     project.save();
 
     addTransaction(event.block, event.transaction);
@@ -168,6 +178,15 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
 
     grantShip.save();
 
+    let profileIdJoin = new ProfileIdToAnchor(
+      event.params.profileId.toHexString()
+    );
+
+    profileIdJoin.anchor = event.params.anchor;
+    profileIdJoin.profileId = event.params.profileId;
+
+    profileIdJoin.save();
+
     addTransaction(event.block, event.transaction);
 
     addFeedItem({
@@ -191,6 +210,78 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
       tag: 'ship-profile-created',
       postIndex: 0,
     });
+  }
+}
+
+export function handleProfileMetadataUpdatedEvent(
+  event: ProfileMetadataUpdatedEvent
+): void {
+  let profileJoin = ProfileIdToAnchor.load(
+    event.params.profileId.toHexString()
+  );
+
+  if (profileJoin == null) {
+    return;
+  }
+
+  let entityId = profileJoin.anchor;
+
+  let project = Project.load(entityId);
+
+  if (project) {
+    project.metadata = createRawMetadata(
+      event.params.metadata.protocol,
+      event.params.metadata.pointer
+    );
+    project.save();
+
+    addFeedItem({
+      tx: event.transaction,
+      timestamp: event.block.timestamp,
+      content: `Project ${project.name} has updated their profile`,
+      subjectMetadataPointer: event.params.metadata.pointer,
+      subject: {
+        id: project.id.toHexString(),
+        type: 'ship',
+        name: project.name,
+      },
+      object: null,
+      embed: null,
+      details: null,
+      tag: 'project-profile-updated',
+      postIndex: 0,
+    });
+
+    addTransaction(event.block, event.transaction);
+  }
+
+  let grantShip = GrantShip.load(entityId);
+
+  if (grantShip) {
+    grantShip.profileMetadata = createRawMetadata(
+      event.params.metadata.protocol,
+      event.params.metadata.pointer
+    );
+    grantShip.save();
+
+    addFeedItem({
+      tx: event.transaction,
+      timestamp: event.block.timestamp,
+      content: `Grant Ship ${grantShip.name} has updated their profile`,
+      subjectMetadataPointer: event.params.metadata.pointer,
+      subject: {
+        id: grantShip.id.toHexString(),
+        type: 'ship',
+        name: grantShip.name,
+      },
+      object: null,
+      embed: null,
+      details: null,
+      tag: 'ship-profile-updated',
+      postIndex: 0,
+    });
+
+    addTransaction(event.block, event.transaction);
   }
 }
 

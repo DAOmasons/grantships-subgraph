@@ -14,11 +14,6 @@ import { GrantShip, Log } from '../generated/schema';
 export function handleShipCreatedEvent(event: ShipCreatedEvent): void {
   let grantShip = GrantShip.load(event.params.anchorAddress);
 
-  let log = new Log('Grant Ship Created');
-  log.message = 'Grant Ship Created';
-  log.type = 'Info';
-  log.save();
-
   if (grantShip == null) {
     let log = new Log('Error: Grant Ship Not Found');
     log.message = 'Grant Ship Not Found';
