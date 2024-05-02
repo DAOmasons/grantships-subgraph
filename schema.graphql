@@ -195,7 +195,7 @@ type Log @entity {
   id: ID!
   message: String!
   description: String
-  type: String!
+  type: String
 }
 
 type GmVersion @entity {

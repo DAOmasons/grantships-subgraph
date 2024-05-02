@@ -29,6 +29,8 @@ dataSources:
           handler: handleRoleGrantedEvent
         - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
           handler: handleRoleRevokedEvent
+        - event: ProfileMetadataUpdated(indexed bytes32,(uint256,string))
+          handler: handleProfileMetadataUpdatedEvent
       file: ./src/registry.ts
   - kind: ethereum
     name: GameManagerFactory
@@ -36,7 +38,7 @@ dataSources:
     source:
       abi: GameManagerFactory
       address: "0x14e32E7893D6A1fA5f852d8B2fE8c57A2aB670ba"
-      startBlock: 25869413
+      startBlock: 39353224
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

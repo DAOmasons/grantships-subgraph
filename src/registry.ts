@@ -15,6 +15,7 @@ import {
   GrantShip,
   ProfileMemberGroup,
   ProfileIdToAnchor,
+  Log,
 } from '../generated/schema';
 import { BigInt, ethereum } from '@graphprotocol/graph-ts';
 import { addTransaction } from './utils/addTransaction';
@@ -225,15 +226,28 @@ export function handleProfileMetadataUpdatedEvent(
   }
 
   let entityId = profileJoin.anchor;
-
   let project = Project.load(entityId);
 
-  if (project) {
-    project.metadata = createRawMetadata(
-      event.params.metadata.protocol,
-      event.params.metadata.pointer
-    );
-    project.save();
+  if (project != null) {
+    let withName = event.params.metadata.pointer.includes('##name##');
+
+    if (withName) {
+      let pointer = event.params.metadata.pointer.split('##name##')[0];
+      let name = event.params.metadata.pointer.split('##name##')[1];
+
+      project.name = name;
+      project.metadata = createRawMetadata(
+        event.params.metadata.protocol,
+        pointer
+      );
+      project.save();
+    } else {
+      project.metadata = createRawMetadata(
+        event.params.metadata.protocol,
+        event.params.metadata.pointer
+      );
+      project.save();
+    }
 
     addFeedItem({
       tx: event.transaction,
@@ -253,6 +267,7 @@ export function handleProfileMetadataUpdatedEvent(
     });
 
     addTransaction(event.block, event.transaction);
+    return;
   }
 
   let grantShip = GrantShip.load(entityId);
@@ -282,6 +297,7 @@ export function handleProfileMetadataUpdatedEvent(
     });
 
     addTransaction(event.block, event.transaction);
+    return;
   }
 }
 
