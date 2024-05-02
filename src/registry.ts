@@ -263,7 +263,7 @@ export function handleProfileMetadataUpdatedEvent(
       subjectMetadataPointer: project.metadata,
       subject: {
         id: project.id.toHexString(),
-        type: 'ship',
+        type: 'project',
         name: project.name,
       },
       object: null,

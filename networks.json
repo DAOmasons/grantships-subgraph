@@ -24,11 +24,11 @@
   "arbitrum-sepolia": {
     "Registry": {
       "address": "0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3",
-      "startBlock": 25869413
+      "startBlock": 39353224
     },
     "GameManagerFactory": {
       "address": "0x14e32E7893D6A1fA5f852d8B2fE8c57A2aB670ba",
-      "startBlock": 25869413
+      "startBlock": 39353224
     },
     "GameManager": {
       "address": "0x3fAcD1E1B5Ec733110AfB4c575ae6fd963e1De18",
