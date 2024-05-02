@@ -235,6 +235,14 @@ export function handleProfileMetadataUpdatedEvent(
       let pointer = event.params.metadata.pointer.split('##name##')[0];
       let name = event.params.metadata.pointer.split('##name##')[1];
 
+      let nameLog = new Log('Name Change');
+      nameLog.message = `Project ${project.name} has changed their name to ${name}. Withname is ${withName}`;
+      nameLog.save();
+
+      let pointerLog = new Log('Pointer Change');
+      pointerLog.message = `Project ${project.name} has changed their metadata pointer to ${pointer}`;
+      pointerLog.save();
+
       project.name = name;
       project.metadata = createRawMetadata(
         event.params.metadata.protocol,
@@ -242,6 +250,10 @@ export function handleProfileMetadataUpdatedEvent(
       );
       project.save();
     } else {
+      let notDetectedLog = new Log('Not Detected');
+      notDetectedLog.message = `No name change detected in metadata pointer ${event.params.metadata.pointer}`;
+      notDetectedLog.save();
+
       project.metadata = createRawMetadata(
         event.params.metadata.protocol,
         event.params.metadata.pointer
@@ -253,7 +265,7 @@ export function handleProfileMetadataUpdatedEvent(
       tx: event.transaction,
       timestamp: event.block.timestamp,
       content: `Project ${project.name} has updated their profile`,
-      subjectMetadataPointer: event.params.metadata.pointer,
+      subjectMetadataPointer: project.metadata,
       subject: {
         id: project.id.toHexString(),
         type: 'ship',

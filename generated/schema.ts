@@ -2403,17 +2403,21 @@ export class Log extends Entity {
     }
   }
 
-  get type(): string {
+  get type(): string | null {
     let value = this.get("type");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return null;
     } else {
       return value.toString();
     }
   }
 
-  set type(value: string) {
-    this.set("type", Value.fromString(value));
+  set type(value: string | null) {
+    if (!value) {
+      this.unset("type");
+    } else {
+      this.set("type", Value.fromString(<string>value));
+    }
   }
 }
 
