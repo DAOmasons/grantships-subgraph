@@ -61,8 +61,6 @@ export function handleRoleGrantedEvent(event: RoleGrantedEvent): void {
   tempAddresses.push(event.params.account);
   memberGroup.addresses = tempAddresses;
   memberGroup.save();
-
-  // Don't need to use addTransaction here, as it's already added in the handleProfileCreatedEvent
 }
 
 export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
@@ -114,7 +112,7 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     addFeedItem({
       timestamp: event.block.timestamp,
       tx: event.transaction,
-      content: `Project ${project.name} has created a Grant Ships profile`,
+      content: `Project ${project.name} has created a Project profile`,
       subjectMetadataPointer: event.params.metadata.pointer,
       subject: {
         id: project.id.toHexString(),
@@ -173,9 +171,6 @@ export function handleProfileCreatedEvent(event: ProfileCreatedEvent): void {
     grantShip.totalAvailableFunds = BigInt.fromI32(0);
     grantShip.totalRoundAmount = BigInt.fromI32(0);
     grantShip.shipAllocation = BigInt.fromI32(0);
-
-    // Graph IPFS file-data-source API isn't ready for prime-time
-    // ShipProfileMetadata.create(event.params.metadata.pointer);
 
     grantShip.save();
 
@@ -285,40 +280,29 @@ export function handleProfileMetadataUpdatedEvent(
   let grantShip = GrantShip.load(entityId);
 
   if (grantShip) {
-    grantShip.profileMetadata = createRawMetadata(
-      event.params.metadata.protocol,
-      event.params.metadata.pointer
-    );
-    grantShip.save();
-
-    addFeedItem({
-      tx: event.transaction,
-      timestamp: event.block.timestamp,
-      content: `Grant Ship ${grantShip.name} has updated their profile`,
-      subjectMetadataPointer: event.params.metadata.pointer,
-      subject: {
-        id: grantShip.id.toHexString(),
-        type: 'ship',
-        name: grantShip.name,
-      },
-      object: null,
-      embed: null,
-      details: null,
-      tag: 'ship-profile-updated',
-      postIndex: 0,
-    });
-
-    addTransaction(event.block, event.transaction);
-    return;
+    // needs to be implemented
+    // grantShip.profileMetadata = createRawMetadata(
+    //   event.params.metadata.protocol,
+    //   event.params.metadata.pointer
+    // );
+    // grantShip.save();
+    // addFeedItem({
+    //   tx: event.transaction,
+    //   timestamp: event.block.timestamp,
+    //   content: `Grant Ship ${grantShip.name} has updated their profile`,
+    //   subjectMetadataPointer: event.params.metadata.pointer,
+    //   subject: {
+    //     id: grantShip.id.toHexString(),
+    //     type: 'ship',
+    //     name: grantShip.name,
+    //   },
+    //   object: null,
+    //   embed: null,
+    //   details: null,
+    //   tag: 'ship-profile-updated',
+    //   postIndex: 0,
+    // });
+    // addTransaction(event.block, event.transaction);
+    // return;
   }
 }
-
-// Check duplicate metadatas?
-// add alloProfileMembers to shipProfile
-// find roleRevoked event in the registry contract
-
-// update the ships
-// theres enough sample data to populate a feed - how do we want to model the feed schema
-// Add the member entities
-
-//find role revoked in those contracts
