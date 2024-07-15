@@ -1,6 +1,7 @@
 import { BigInt, dataSource } from '@graphprotocol/graph-ts';
 import { Initialized as InitializedEvent } from '../generated/templates/GrantShipStrategyContract/GrantShipStrategy';
 import {
+  ApplicationHistory,
   Grant,
   GrantShip,
   Log,
@@ -97,12 +98,32 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
   });
   let grant = Grant.load(grantId);
 
+  let isResubmission = grant != null;
+
   if (grant == null) {
     grant = new Grant(grantId);
   }
 
+  if (isResubmission) {
+    let originalApplicationSubmit = grant.applicationSubmitted;
+    let historyId = `history-${grantId}-${grant.resubmitHistory.length}`;
+
+    let history = new ApplicationHistory(historyId);
+    history.grantApplicationBytes = grant.grantApplicationBytes;
+    history.applicationSubmitted = originalApplicationSubmit;
+    history.save();
+
+    grant.wenResubmitted = event.block.timestamp;
+    grant.hasResubmittedAfterShipApproval = !!grant.hasShipApproved;
+    grant.resubmitHistory.push(historyId);
+  } else {
+    grant.resubmitHistory = [];
+  }
+
   grant.projectId = project.id;
   grant.shipId = grantShip.id;
+  grant.hasResubmitted = isResubmission;
+  grant.applicationSubmitted = event.block.timestamp;
   grant.lastUpdated = event.block.timestamp;
   grant.grantApplicationBytes = event.params.data;
   grant.grantStatus = GrantStatus.Applied;
@@ -110,12 +131,17 @@ export function handleRegisteredEvent(event: RegisteredEvent): void {
   grant.milestonesAmount = BigInt.fromI32(0);
   grant.amtAllocated = BigInt.fromI32(0);
   grant.amtDistributed = BigInt.fromI32(0);
+
   grant.save();
 
   addFeedItem({
     timestamp: event.block.timestamp,
     tx: event.transaction,
-    content: `${project.name} has submitted an application to ${grantShip.name} for a grant.`,
+    content: `${project.name} has ${
+      isResubmission ? 'resubmitted' : 'submitted'
+    } an application to ${grantShip.name} ${
+      isResubmission ? '' : 'for a grant'
+    }.`,
     subjectMetadataPointer: project.metadata,
     subject: {
       id: project.id.toHex(),
@@ -201,16 +227,20 @@ export function handleUpdatePostedEvent(event: UpdatePostedEvent): void {
       grant.grantStatus = GrantStatus.ShipRejected;
     }
 
+    grant.wenShipApproved = event.block.timestamp;
     grant.shipApprovalReason = metadata.id;
     grant.hasShipApproved = isApproved;
     grant.lastUpdated = event.block.timestamp;
+
     grant.save();
 
     addTransaction(event.block, event.transaction);
     addFeedItem({
       timestamp: event.block.timestamp,
       tx: event.transaction,
-      content: `${grantShip.name} approved ${project.name}'s Grant Application.`,
+      content: `${grantShip.name} ${isApproved ? 'approved' : 'rejected'} ${
+        project.name
+      }'s Grant Application.`,
       subjectMetadataPointer: grantShip.profileMetadata,
       subject: {
         id: grantShip.id.toHex(),

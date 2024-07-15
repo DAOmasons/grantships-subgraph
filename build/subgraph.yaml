@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Registry
-    network: arbitrum-one
+    network: arbitrum-sepolia
     source:
       abi: Registry
       address: "0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3"
-      startBlock: 195499276
+      startBlock: 39353224
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -33,11 +33,11 @@ dataSources:
       file: Registry/Registry.wasm
   - kind: ethereum
     name: GameManagerFactory
-    network: arbitrum-one
+    network: arbitrum-sepolia
     source:
       abi: GameManagerFactory
-      address: "0xdc9787b869e22256a4f4f49f484586fcff0d351f"
-      startBlock: 194979041
+      address: "0x14e32E7893D6A1fA5f852d8B2fE8c57A2aB670ba"
+      startBlock: 39353224
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -61,11 +61,11 @@ dataSources:
       file: GameManagerFactory/GameManagerFactory.wasm
   - kind: ethereum
     name: GameManager
-    network: arbitrum-one
+    network: arbitrum-sepolia
     source:
       abi: GameManager
-      address: "0x4b42362fcbbcdc7b8f35d73288039cad6cb4e9ef"
-      startBlock: 195499276
+      address: "0x3fAcD1E1B5Ec733110AfB4c575ae6fd963e1De18"
+      startBlock: 39353224
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -102,11 +102,11 @@ dataSources:
       file: GameManager/GameManager.wasm
   - kind: ethereum
     name: Allo
-    network: arbitrum-one
+    network: arbitrum-sepolia
     source:
       abi: Allo
       address: "0x1133eA7Af70876e64665ecD07C0A0476d09465a1"
-      startBlock: 195499276
+      startBlock: 39353224
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -123,11 +123,11 @@ dataSources:
       file: Allo/Allo.wasm
   - kind: ethereum
     name: GrantShipFactory
-    network: arbitrum-one
+    network: arbitrum-sepolia
     source:
       abi: GrantShipFactory
-      address: "0xb130175b648d4ce92ca6153eaa138cc69eb1cf4c"
-      startBlock: 195499276
+      address: "0x8D994BEef251e30C858e44eCE3670feb998CA77a"
+      startBlock: 39353224
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -144,7 +144,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: GrantShipStrategyContract
-    network: arbitrum-one
+    network: arbitrum-sepolia
     source:
       abi: GrantShipStrategy
     mapping:

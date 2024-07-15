@@ -1648,6 +1648,76 @@ export class GameRound extends Entity {
   }
 }
 
+export class ApplicationHistory extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save ApplicationHistory entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type ApplicationHistory must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("ApplicationHistory", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): ApplicationHistory | null {
+    return changetype<ApplicationHistory | null>(
+      store.get_in_block("ApplicationHistory", id),
+    );
+  }
+
+  static load(id: string): ApplicationHistory | null {
+    return changetype<ApplicationHistory | null>(
+      store.get("ApplicationHistory", id),
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get grantApplicationBytes(): Bytes {
+    let value = this.get("grantApplicationBytes");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set grantApplicationBytes(value: Bytes) {
+    this.set("grantApplicationBytes", Value.fromBytes(value));
+  }
+
+  get applicationSubmitted(): BigInt {
+    let value = this.get("applicationSubmitted");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set applicationSubmitted(value: BigInt) {
+    this.set("applicationSubmitted", Value.fromBigInt(value));
+  }
+}
+
 export class Grant extends Entity {
   constructor(id: string) {
     super();
@@ -1726,6 +1796,19 @@ export class Grant extends Entity {
     this.set("lastUpdated", Value.fromBigInt(value));
   }
 
+  get hasResubmitted(): boolean {
+    let value = this.get("hasResubmitted");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set hasResubmitted(value: boolean) {
+    this.set("hasResubmitted", Value.fromBoolean(value));
+  }
+
   get grantStatus(): i32 {
     let value = this.get("grantStatus");
     if (!value || value.kind == ValueKind.NULL) {
@@ -1750,6 +1833,19 @@ export class Grant extends Entity {
 
   set grantApplicationBytes(value: Bytes) {
     this.set("grantApplicationBytes", Value.fromBytes(value));
+  }
+
+  get applicationSubmitted(): BigInt {
+    let value = this.get("applicationSubmitted");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set applicationSubmitted(value: BigInt) {
+    this.set("applicationSubmitted", Value.fromBigInt(value));
   }
 
   get currentMilestoneIndex(): BigInt {
@@ -1823,6 +1919,53 @@ export class Grant extends Entity {
 
   set hasShipApproved(value: boolean) {
     this.set("hasShipApproved", Value.fromBoolean(value));
+  }
+
+  get wenShipApproved(): BigInt | null {
+    let value = this.get("wenShipApproved");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set wenShipApproved(value: BigInt | null) {
+    if (!value) {
+      this.unset("wenShipApproved");
+    } else {
+      this.set("wenShipApproved", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get wenResubmitted(): BigInt | null {
+    let value = this.get("wenResubmitted");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set wenResubmitted(value: BigInt | null) {
+    if (!value) {
+      this.unset("wenResubmitted");
+    } else {
+      this.set("wenResubmitted", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get hasResubmittedAfterShipApproval(): boolean {
+    let value = this.get("hasResubmittedAfterShipApproval");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set hasResubmittedAfterShipApproval(value: boolean) {
+    this.set("hasResubmittedAfterShipApproval", Value.fromBoolean(value));
   }
 
   get amtAllocated(): BigInt {
@@ -1946,6 +2089,19 @@ export class Grant extends Entity {
         Value.fromString(<string>value),
       );
     }
+  }
+
+  get resubmitHistory(): Array<string> {
+    let value = this.get("resubmitHistory");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set resubmitHistory(value: Array<string>) {
+    this.set("resubmitHistory", Value.fromStringArray(value));
   }
 }
 

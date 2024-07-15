@@ -136,18 +136,29 @@ type GameRound @entity {
   realEndTime: BigInt
 }
 
+type ApplicationHistory @entity {
+  id: ID!
+  grantApplicationBytes: Bytes!
+  applicationSubmitted: BigInt!
+}
+
 type Grant @entity {
   id: ID!
   projectId: Project! # bytes32
   shipId: GrantShip! # Address
   lastUpdated: BigInt!
+  hasResubmitted: Boolean!
   grantStatus: Int!
   grantApplicationBytes: Bytes!
+  applicationSubmitted: BigInt!
   currentMilestoneIndex: BigInt!
   milestonesAmount: BigInt!
   milestones: [Milestone!]
   shipApprovalReason: RawMetadata
   hasShipApproved: Boolean
+  wenShipApproved: BigInt
+  wenResubmitted: BigInt
+  hasResubmittedAfterShipApproval: Boolean
   amtAllocated: BigInt!
   amtDistributed: BigInt!
   allocatedBy: Bytes # address
@@ -156,6 +167,7 @@ type Grant @entity {
   milestonesApproved: Boolean
   milestonesApprovedReason: RawMetadata
   currentMilestoneRejectedReason: RawMetadata
+  resubmitHistory: [ApplicationHistory!]!
 }
 
 type Milestone @entity {
